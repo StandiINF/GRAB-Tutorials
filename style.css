@@ -570,7 +570,7 @@ h1 {
     }
 
     #sliderGroup:hover #sliderDial {
-        left: 191px;
+        left: 202px;
         transform: translateX(0);
     }
 }
