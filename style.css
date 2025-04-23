@@ -1,23 +1,29 @@
 @import "https://fonts.googleapis.com/css2?family=Nunito:ital,wght@0,200..1000;1,200..1000&display=swap";
 
 :root {
-    --vh: 100%;
+    --light: #fff;
+    --dark: #000;
+    --background: rgb(4,47,27);
+    --alt: #2a3439;
+    --gradient: linear-gradient(43deg, rgba(4,47,27,1) 0%, rgba(8,26,44,1) 100%, rgba(8,26,44,1) 100%);
+    --font: 'Nunito', sans-serif;
 }
 
-.cardMain {
-    transition: filter 1s linear;
-    pointer-events: none;
+* {
+    /* box-sizing: border-box; */
+    margin: 0;
+    padding: 0;
 }
 
 html, body {
     height: 100%;
-    margin: 0;
-    padding: 0;
-    overflow-x: hidden;
-    background: rgb(4,47,27);
-    background: #2a3439;
+    font-family: var(--font);
+    color: var(--light);
+    /* overflow: hidden; */
+    background: var(--alt);
+    background-image: var(--gradient);
     background-size: cover;
-    background-position: 50% 50%;
+    background-position: center;
     -webkit-tap-highlight-color: transparent;
     -webkit-user-select: none;
     -ms-user-select: none;
@@ -27,15 +33,8 @@ html, body {
     touch-action: manipulation;
 }
 
-body {
-    position: fixed;
-    width: 100%;
-    height: 100%;
-    padding-top: env(safe-area-inset-top);
-    padding-top: 0;
-    -ms-flex-direction: column;
-    flex-direction: column;
-    display: flex;
+*::-webkit-scrollbar {
+    display: none;
 }
 
 img {
@@ -46,27 +45,88 @@ img {
     user-select: none;
 }
 
-#mainScreen {
-    background: rgb(4,47,27);
-    background: linear-gradient(43deg, rgba(4,47,27,1) 0%, rgba(8,26,44,1) 100%, rgba(8,26,44,1) 100%);
-    background-size: cover;
-    background-repeat: no-repeat;
-    display: flex;
-    -ms-flex-direction: column;
-    flex-direction: column;
-    -ms-flex-align: center;
-    align-items: center;
-    justify-content: flex-start;
-    text-align: center;
-    width: 100%;
-    height: 100vh;
-    position: absolute;
-    top: 0;
-    left: 0;
-    padding: 2rem 1rem;
-    box-sizing: border-box;
+.cardMain {
+    transition: filter 1s linear;
+    pointer-events: none;
 }
 
+/*MARK: HOME*/
+#mainContainer {
+    box-sizing: border-box;
+    padding-top: 64px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    height: 100%;
+    text-align: center;
+
+    #mainContent {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        height: 100%;
+
+        img {
+            width: 40%;
+            height: auto;
+            margin-block: 1rem;
+            margin-inline: auto;
+        }
+        h1 {
+            font-size: 2.5rem;
+            margin: 0.5rem 0;
+        }
+        h2 {
+            font-size: 1.5rem;
+            margin: 0.5rem 0;
+        }
+    }
+    #bottomLinks {
+        padding: 1rem 0;
+        box-sizing: border-box;
+        justify-self: flex-end;
+        position: relative;
+
+        #links {
+            display: flex;
+            flex-direction: row;
+            justify-content: center;
+            gap: 1rem;
+            padding-bottom: 1rem;
+
+            a {
+                font-size: 1.5rem;
+                color: rgb(255, 255, 255);
+                font-weight: 500;
+
+                img {
+                    width: 3rem;
+                    height: 3rem;
+                    transition: scale 0.3s ease;
+
+                    &:hover {
+                        scale: 1.1;
+                    }
+                }
+            }
+        }
+        &::after {
+            content: "^ Have feedback? Join our Discord!";
+            position: absolute;
+            bottom: 1rem;
+            left: 0;
+            width: 0;
+            height: 1rem;
+            white-space: nowrap;
+            overflow: visible;
+            font-size: small;
+            text-align: left;
+        }
+    }
+}
+/*END HOME*/
 #title {
     margin-bottom: 2rem;
 }
@@ -664,41 +724,8 @@ h1 {
     transform: translate(-50%, -50%);
 }
 
-.menuContainer, #mainContainer {
-    display: none;
-    -ms-flex-direction: column;
-    flex-direction: column;
-    -ms-flex-align: center;
-    align-items: center;
-    justify-content: flex-start;
-    align-items: center;
-    width: 100%;
-    height: 100%;
-    position: relative;
-    overflow: scroll;
-    background: rgb(4,47,27);
-    background: linear-gradient(43deg, rgba(4,47,27,1) 0%, rgba(8,26,44,1) 100%, rgba(8,26,44,1) 100%);
-    top: 64px;
-    opacity: 1;
-    transition: none;
-}
-
 .menuContainer[style*="display: block"] {
     opacity: 1;
-}
-
-#mainContainer {
-    display: block;
-    position: absolute;
-    top: 64px;
-    bottom: 0;
-    height: auto;
-    overflow: hidden;
-}
-
-.menuContainer::-webkit-scrollbar,
-#mainContainer::-webkit-scrollbar {
-    display: none;
 }
 
 .menu::before {
@@ -1003,20 +1030,6 @@ h1 {
     margin-top: 100px;
 }
 
-#standiServer {
-    color: rgb(122, 122, 122);
-    position: absolute;
-    bottom: -15px;
-    left: 50%;
-    transform: translateX(-50%);
-    text-align: center;
-    font-family: 'nunito', sans-serif;
-    font-weight: 700;
-    font-size: 0.875rem;
-    margin-top: 1rem;
-}
-
-
 #menuButtons {
     display: flex;
     justify-content: center;
@@ -1152,122 +1165,6 @@ h1 {
 
 .menuContainer[style*="display: block"] {
     opacity: 1;
-}
-
-#bottomLinks {
-    position: fixed;
-    bottom: 5vw;
-    width: 100%;
-    text-align: center;
-    background-color: rgba(0, 0, 0, 0.5);
-    padding: 0rem 0;
-    box-sizing: border-box;
-    z-index: 1000;
-}
-
-#standiServer {
-    font-size: 0.875rem;
-    color: rgb(197, 197, 197);
-    margin-bottom: 0.5rem;
-}
-
-#links {
-    -ms-flex-direction: flex;
-    display: flex;
-    flex-direction: row;
-    justify-content: center;
-    position: absolute;
-    bottom: 2%;
-    left: 50%;
-    transform: translateX(-50%);
-    -ms-flex-wrap: wrap;
-    flex-wrap: wrap;
-    gap: 1rem;
-    margin: 0.5rem 0;
-}
-
-#links a {
-    font-size: 1.5rem;
-    color: rgb(255, 255, 255);
-    font-family: 'nunito', sans-serif;
-    font-weight: 500;
-}
-
-#links a img {
-    width: auto;
-    height: 3.125rem;
-    margin: 0;
-    transition: transform 0.3s ease;
-}
-
-#links a img#discord {
-    height: 2.5rem;
-    margin-top: 0.2rem;
-}
-
-#links a img:hover {
-    transform: scale(1.1);
-}
-
-@media (max-width: 767px) {
-    #standiServer {
-        font-size: 0.6rem;
-        margin-bottom: 2.1rem;
-    }
-
-    #links {
-        bottom: 5vw
-    }
-
-    #links a img {
-        height: 1.9rem
-    }
-
-    #links a img#discord {
-        height: 1.5rem;
-    }
-}
-
-#mainContent {
-    text-align: center;
-    color: rgb(255, 255, 255);
-    font-family: 'nunito', sans-serif;
-    font-weight: 200;
-    position: absolute;
-    left: 50%;
-    transform: translateX(-50%);
-    font-size: 0.9rem;
-    padding: 0rem 0;
-    top: 5vw;
-
-    h1 {
-        margin-bottom: 15%;
-    }
-
-    img {
-        width: 60%;
-        height: auto;
-        margin-bottom: 1vw;
-    }
-}
-
-@media (max-width: 767px) {
-    #mainContent {
-        top: 10vw;
-    }
-
-    #mainContent img {
-        width: 100%;
-    }
-
-    #mainContent h1 {
-        font-size: 0.8rem;
-        top: 10vw;
-    }
-
-    #mainContent h2 {
-        font-size: 0.7rem;
-    }
 }
 
 #patchNotesContainer {
