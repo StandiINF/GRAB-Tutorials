@@ -141,6 +141,12 @@ function openTutorial(element, tutorialName, totalSteps, safetyNet) {
 
     if (safetyNet === "no") {
         oneCardSafetyNet(container);
+        
+    } else {
+        moveSafetyNets(container);
+    }
+
+    if (Array.from(document.getElementsByClassName("cardOne")).some(el => el.classList.contains("active")) && safetyNet === "no") {
         setTimeout(() => {
             const secretMessage = document.getElementById("secretMessage");
             container.appendChild(secretMessage);
@@ -149,8 +155,6 @@ function openTutorial(element, tutorialName, totalSteps, safetyNet) {
             secretMessage.style.zIndex = "-1";
             secretMessage.style.position = "absolute";
         }, 300);
-    } else {
-        moveSafetyNets(container);
     }
 
     document.getElementById("safetyNetMiddle").style.display = "block";
@@ -384,6 +388,7 @@ function showHelp(helpId) {
         element.addEventListener("click", () => showHelp(helpId));
     });
 });
+
 // randomiser hover changey thingy
 
 document.getElementById("TRandomiserGroup").addEventListener("mouseenter", () => {
