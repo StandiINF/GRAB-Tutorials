@@ -379,38 +379,11 @@ function showHelp(helpId) {
     });
 }
 
-document.querySelectorAll(".helpOne").forEach(element => {
-    element.addEventListener("click", () => showHelp("helpOne"));
+["helpOne", "helpTwo", "helpThree", "helpFour", "helpFive", "helpSix", "helpSeven", "helpEight"].forEach(helpId => {
+    document.querySelectorAll(`.${helpId}`).forEach(element => {
+        element.addEventListener("click", () => showHelp(helpId));
+    });
 });
-
-document.querySelectorAll(".helpTwo").forEach(element => {
-    element.addEventListener("click", () => showHelp("helpTwo"));
-});
-
-document.querySelectorAll(".helpThree").forEach(element => {
-    element.addEventListener("click", () => showHelp("helpThree"));
-});
-
-document.querySelectorAll(".helpFour").forEach(element => {
-    element.addEventListener("click", () => showHelp("helpFour"));
-});
-
-document.querySelectorAll(".helpFive").forEach(element => {
-    element.addEventListener("click", () => showHelp("helpFive"));
-});
-
-document.querySelectorAll(".helpSix").forEach(element => {
-    element.addEventListener("click", () => showHelp("helpSix"));
-});
-
-document.querySelectorAll(".helpSeven").forEach(element => {
-    element.addEventListener("click", () => showHelp("helpSeven"));
-});
-
-document.querySelectorAll(".helpEight").forEach(element => {
-    element.addEventListener("click", () => showHelp("helpEight"));
-});
-
 // randomiser hover changey thingy
 
 document.getElementById("TRandomiserGroup").addEventListener("mouseenter", () => {
