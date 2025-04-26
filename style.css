@@ -487,6 +487,8 @@ img {
 
 /* mobile cards are blurry and i dont know why! */
 
+/* this is here because something above is conflicting and i cant be bothered to fix it */
+
 .indexOne {
     z-index: 0;
 }

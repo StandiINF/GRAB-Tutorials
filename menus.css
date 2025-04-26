@@ -145,10 +145,6 @@
     background: linear-gradient(to top, rgba(177, 65, 65, 0) 0%, rgb(248, 153, 0) 100%);
 }
 
-#FMenu::before {
-    background: linear-gradient(to top, rgba(177, 65, 65, 0) 0%, rgb(172, 53, 162) 100%);
-}
-
 .cardMain {
     width: 100%;
     height: auto;
@@ -334,16 +330,6 @@
     z-index: 2;
 }
 
-#featureOne {
-    top: 55%;
-    width: 600px;
-}
-
-#featureTwo {
-    top: 602%;
-    width: 600px;
-}
-
 #TRandomiserPurple, #TRandomiserRed, #TRandomiserGreen, #TRandomiserYellow {
     position: absolute;
     top: -2px;
@@ -387,14 +373,6 @@
     display: block;
 }
 
-#featureContainer > div {
-    margin-bottom: 50px;
-}
-
-#featureContainer > div:first-child {
-    margin-top: 100px;
-}
-
 #menuButtons {
     display: flex;
     justify-content: center;
@@ -421,7 +399,6 @@
     background: var(--button-gradient);
     pointer-events: none;
 }
-
 
 #menuButtons button {
     padding: 0.5rem 1rem;
@@ -488,14 +465,6 @@
     background: #638DDD;
 }
 
-#FMenu {
-    background: rgb(172, 53, 162);
-}
-
-#F {
-    background: rgb(172, 53, 162);
-}
-
 #TMenu {
     background: rgb(248, 153, 0);
 }
@@ -522,11 +491,6 @@
 #T:hover {
     background-color: rgb(199, 123, 0);
     box-shadow: 0 0 10px rgb(199, 123, 0);
-}
-
-#F:hover {
-    background-color: rgb(138, 43, 130);
-    box-shadow: 0 0 10px rgb(138, 43, 130);
 }
 
 .menuContainer {
@@ -576,4 +540,21 @@
     font-weight: 800;
 }
 
-/* END MENUS */
+.new {
+    position: relative;
+}
+
+.new::after {
+    content: "NEW";
+    position: absolute;
+    top: 5px;
+    right: 5px;
+    background-color: #0D723B;
+    color: white;
+    font-size: 0.8rem;
+    font-weight: bold;
+    padding: 2px 5px;
+    border-radius: 90px;
+    z-index: 10;
+    font-family: 'nunito', sans-serif;
+}
