@@ -425,49 +425,17 @@ img {
     z-index: -100;
 }
 
-.indexOne {
-    z-index: 0;
-}
-
-.indexTwo {
-    z-index: -1;
-}
-
-.indexThree {
-    z-index: -2;
-}
-
-.indexFour {
-    z-index: -3;
-}
-
-.indexFive {
-    z-index: -4;
-}
-
-.indexSix {
-    z-index: -5;
-}
-
-.indexSeven {
-    z-index: -6;
-}
-
-.indexEight {
-    z-index: -7;
-}
-
-.indexNine {
-    z-index: -8;
-}
-
-.indexTen {
-    z-index: -9;
-}
-
-.indexEleven {
-    z-index: -10;
-}
+.indexOne { z-index: -10; }
+.indexTwo { z-index: -9; }
+.indexThree { z-index: -8; }
+.indexFour { z-index: -7; }
+.indexFive { z-index: -6; }
+.indexSix { z-index: -5; }
+.indexSeven { z-index: -4; }
+.indexEight { z-index: -3; }
+.indexNine { z-index: -2; }
+.indexTen { z-index: -1; }
+.indexEleven { z-index: 0; }
 
 /* END CARD MENU */
 
