@@ -52,7 +52,7 @@ document.addEventListener("keydown", (event) => {
 
 function openMenu(menuId) {
     const menus = ["TMenu", "BMenu", "AMenu", "EMenu"];
-    const buttons = ["T", "B", "A", "E", "F"];
+    const buttons = ["T", "B", "A", "E"];
     const colors = {
         TMenu: { background: "rgb(248, 153, 0)", gradient: "linear-gradient(to top, rgba(177, 65, 65, 0) 0%, rgb(248, 153, 0) 100%)", buttonGradient: "linear-gradient(to top, rgb(248, 153, 0), transparent)" },
         BMenu: { background: "rgb(144, 207, 144)", gradient: "linear-gradient(to top, rgba(177, 65, 65, 0) 0%, rgb(144, 207, 144) 100%)", buttonGradient: "linear-gradient(to top, rgb(144, 207, 144), transparent)" },
