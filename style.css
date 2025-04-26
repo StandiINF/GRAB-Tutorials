@@ -338,7 +338,6 @@ img {
     transform: translate(-50%, -50%);
     transition: transform 0.3s, left 0.3s, top 0.3s;
     pointer-events: auto;
-    z-index: 3;
 }
 
 .cardOne {
