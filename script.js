@@ -482,13 +482,3 @@ const cardGroups = document.querySelectorAll('.cardGroup:not(.FeedbackLink)');
 console.log(`Total cards: ${cardElements.length}`);
 console.log(`Total decks: ${cardGroups.length}`);
 console.log(`To open Patch Notes, press Numpad +`);
-
-// Debugging z-index values
-document.querySelectorAll(".card, .cardOne").forEach((card) => {
-    console.log(`Card: ${card.className}, z-index: ${window.getComputedStyle(card).zIndex}`);
-});
-
-// Ensure no JavaScript is overriding z-index values
-document.querySelectorAll(".card, .cardOne").forEach((card) => {
-    card.style.zIndex = ""; // Reset any inline z-index styles
-});
