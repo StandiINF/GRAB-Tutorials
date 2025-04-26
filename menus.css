@@ -540,7 +540,8 @@
     font-weight: 800;
 }
 
-.new {
+.new
+.newFeature {
     position: relative;
 }
 
@@ -558,3 +559,19 @@
     z-index: 10;
     font-family: 'nunito', sans-serif;
 }
+
+.newFeature::after {
+    content: "NEW FEATURE";
+    position: absolute;
+    top: 5px;
+    right: 5px;
+    background-color: #FF5733;
+    color: white;
+    font-size: 0.7rem;
+    font-weight: bold;
+    padding: 2px 5px;
+    border-radius: 90px;
+    z-index: 10;
+    font-family: 'nunito', sans-serif;
+}
+
