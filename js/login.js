@@ -4,7 +4,7 @@ window.addEventListener('DOMContentLoaded', () => {
   if (fragment) {
     let decodedData;
     try {
-
+      // Decode the fragment and parse as JSON
       const decodedFragment = atob(fragment);
       decodedData = JSON.parse(decodedFragment);
     } catch (e) {
@@ -12,7 +12,8 @@ window.addEventListener('DOMContentLoaded', () => {
       return;
     }
 
-    fetch('https://api.grab-tutorials.live/login', {
+    // Send the decoded data to your Cloudflare Worker
+    fetch('https://api.grab-tutorials.live/login', {  // Updated URL here
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -22,17 +23,28 @@ window.addEventListener('DOMContentLoaded', () => {
       .then(response => response.json())
       .then(data => {
         console.log('Worker Response:', data);
-
-        if (data && data.alias) {
-
-          localStorage.setItem('userAlias', data.alias);
-          console.log('Alias stored in localStorage:', data.alias);
-        } else {
-          console.error('Alias not found in the response.');
-        }
       })
       .catch(error => {
         console.error('Error sending fragment:', error);
       });
   }
+
+  // Fetch the alias from the secure cookie
+  fetch('https://api.grab-tutorials.live/getAlias', {
+    method: 'GET',
+    credentials: 'include', // Send the HTTP-only cookie with the request
+  })
+    .then(response => response.json())
+    .then(data => {
+      if (data.alias) {
+        // Store alias in localStorage
+        localStorage.setItem('userAlias', data.alias);
+        console.log('User alias:', data.alias);
+      } else {
+        console.error('Alias not found or not authenticated.');
+      }
+    })
+    .catch(error => {
+      console.error('Error fetching alias:', error);
+    });
 });
