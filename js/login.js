@@ -25,11 +25,24 @@ window.addEventListener('DOMContentLoaded', () => {
         console.log('Worker Response (login):', data);
 
         if (data.alias && data.token) {
-          // Step 2: Store alias and token safely in localStorage
-          localStorage.setItem('alias', data.alias);
-          localStorage.setItem('aliasToken', data.token);
+          // Step 2: Send token to backend to store it
+          fetch('https://api.grab-tutorials.live/storeToken', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            credentials: 'include', // Ensure cookies/auth tokens are included
+            body: JSON.stringify({ alias: data.alias, token: data.token })
+          })
+            .then(response => response.json())
+            .then(storeData => {
+              console.log('Token stored in backend:', storeData);
+            })
+            .catch(error => {
+              console.error('Error storing token:', error);
+            });
 
-          console.log('Alias and token saved to localStorage.');
+          console.log('Alias and token sent to backend.');
 
           // Step 3: (Optional) Verify by calling /getAlias
           fetch(`https://api.grab-tutorials.live/getAlias?alias=${encodeURIComponent(data.alias)}&token=${encodeURIComponent(data.token)}`, {
