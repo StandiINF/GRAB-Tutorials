@@ -52,6 +52,9 @@ window.addEventListener('DOMContentLoaded', () => {
 
             console.log('Session ID saved to localStorage.');
 
+            // Step 3: Redirect to the homepage (without the fragment in the URL)
+            window.location.replace('https://grab-tutorials.live/');
+
             // Optionally, call /getAlias to verify session and restore user data
             fetch(`https://api.grab-tutorials.live/getAlias?sessionId=${encodeURIComponent(data.sessionId)}`)
               .then(response => response.json())
