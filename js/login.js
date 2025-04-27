@@ -1,6 +1,7 @@
 window.addEventListener('DOMContentLoaded', () => {
   // Check if there's a sessionId in localStorage on page load
   const sessionId = localStorage.getItem('sessionId');
+  const loginMetaElement = document.getElementById('loginMeta'); // Select the element to display alias
   
   if (sessionId) {
     // If sessionId exists, attempt to verify the session by calling the backend
@@ -9,7 +10,8 @@ window.addEventListener('DOMContentLoaded', () => {
       .then(data => {
         if (data.alias) {
           console.log(`User is logged in as ${data.alias}`);
-          // Handle the UI updates for a logged-in user
+          // Update the loginMeta element with the user's alias
+          loginMetaElement.textContent = `Logged in as ${data.alias}`;
         } else {
           console.log('Session expired or invalid');
           // Handle the case where the session is not valid
@@ -62,7 +64,8 @@ window.addEventListener('DOMContentLoaded', () => {
                 console.log('Session verified:', verifyData);
                 if (verifyData.alias) {
                   console.log(`User is logged in as ${verifyData.alias}`);
-                  // Handle UI updates for the logged-in user
+                  // Update the loginMeta element with the user's alias
+                  loginMetaElement.textContent = `Logged in as ${verifyData.alias}`;
                 }
               })
               .catch(error => {
