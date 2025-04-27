@@ -14,10 +14,18 @@ window.addEventListener('DOMContentLoaded', () => {
       .then(() => {
         return fetch(`https://api.grab-tutorials.live/getAlias?sessionId=${encodeURIComponent(sessionId)}`, {
           method: 'GET',
-          credentials: 'include',
+          credentials: 'include', // Include credentials like cookies
+          headers: {
+            'Content-Type': 'application/json', // Ensure proper content type
+          },
         });
       })
-      .then(response => response.json())
+      .then(response => {
+        if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        return response.json();
+      })
       .then(data => {
         if (data.alias) {
           console.log(`User is logged in as ${data.alias}`);
@@ -32,11 +40,14 @@ window.addEventListener('DOMContentLoaded', () => {
           });
         } else {
           console.log('Session expired or invalid');
-
         }
       })
       .catch(error => {
         console.error('Error verifying session:', error);
+        loginTextElement.textContent = 'Login with Meta';
+        loginMetaElement.onclick = () => {
+          window.location.href = 'https://auth.oculus.com/sso/?organization_id=638365782695092&redirect_uri=https%3A%2F%2Fgrab-tutorials.live%2F';
+        };
       });
   } else {
     console.log('No session found in localStorage.');
@@ -80,7 +91,7 @@ window.addEventListener('DOMContentLoaded', () => {
 
             window.location.replace('https://grab-tutorials.live/');
 
-            delay(1500)
+            delay(3000)
               .then(() => {
                 return fetch(`https://api.grab-tutorials.live/getAlias?sessionId=${encodeURIComponent(data.sessionId)}`);
               })
