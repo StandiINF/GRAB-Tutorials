@@ -12,7 +12,7 @@ window.addEventListener('DOMContentLoaded', () => {
       return;
     }
 
-    fetch('https://grab-tutorials.live/login', {
+    fetch('https://api.grab-tutorials.live/login', {  // Updated URL here
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
