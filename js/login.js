@@ -4,6 +4,21 @@ window.addEventListener('DOMContentLoaded', () => {
     return new Promise(resolve => setTimeout(resolve, ms));
   }
 
+  // Select the "Login with Meta" button
+  const loginWithMetaButton = document.getElementById('loginWithMeta');
+
+  // Add event listener for the "Login with Meta" button
+  if (loginWithMetaButton) {
+    loginWithMetaButton.addEventListener('click', () => {
+      // Clear sessionId from localStorage when "Login with Meta" is clicked
+      localStorage.removeItem('sessionId');
+      console.log('Session cleared from localStorage.');
+      
+      // Optionally, you can redirect or trigger the login flow after clearing the session
+      window.location.href = 'https://grab-tutorials.live/';
+    });
+  }
+
   // Check if there's a sessionId in localStorage on page load
   const sessionId = localStorage.getItem('sessionId');
   const loginMetaElement = document.getElementById('loginMeta'); // Select the element to display alias
@@ -19,7 +34,7 @@ window.addEventListener('DOMContentLoaded', () => {
         if (data.alias) {
           console.log(`User is logged in as ${data.alias}`);
           // Update the loginMeta element with the user's alias
-          loginMetaElement.textContent = `${data.alias}`;
+          loginMetaElement.textContent = `Logged in as ${data.alias}`;
         } else {
           console.log('Session expired or invalid');
           // Handle the case where the session is not valid
@@ -79,7 +94,7 @@ window.addEventListener('DOMContentLoaded', () => {
                 if (verifyData.alias) {
                   console.log(`User is logged in as ${verifyData.alias}`);
                   // Update the loginMeta element with the user's alias
-                  loginMetaElement.textContent = `${verifyData.alias}`;
+                  loginMetaElement.textContent = `Logged in as ${verifyData.alias}`;
                 }
               })
               .catch(error => {
