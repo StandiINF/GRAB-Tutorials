@@ -10,11 +10,11 @@ window.addEventListener('DOMContentLoaded', () => {
   
   if (sessionId) {
 
-    delay(1000)
+    delay(1500)
       .then(() => {
         return fetch(`https://api.grab-tutorials.live/getAlias?sessionId=${encodeURIComponent(sessionId)}`, {
           method: 'GET',
-          credentials: 'include', // Include credentials like cookies
+          credentials: 'include',
         });
       })
       .then(response => response.json())
@@ -25,6 +25,9 @@ window.addEventListener('DOMContentLoaded', () => {
           loginMetaElement.addEventListener('click', () => {
             localStorage.removeItem('sessionId');
             loginTextElement.textContent = 'Login with Meta';
+            loginMetaElement.onclick = () => {
+              window.location.href = 'https://auth.oculus.com/sso/?organization_id=638365782695092&redirect_uri=https%3A%2F%2Fgrab-tutorials.live%2F';
+            };
             console.log('Logged out successfully.');
           });
         } else {
@@ -54,7 +57,7 @@ window.addEventListener('DOMContentLoaded', () => {
         return;
       }
 
-      delay(1000)
+      delay(1500)
         .then(() => {
           return fetch('https://api.grab-tutorials.live/login', {
             method: 'POST',
