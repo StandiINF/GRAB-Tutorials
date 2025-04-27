@@ -11,40 +11,53 @@ window.addEventListener('DOMContentLoaded', () => {
       return;
     }
 
+    // Step 1: POST the code and org_scoped_id to /login
     fetch('https://api.grab-tutorials.live/login', {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      credentials: 'include', // Make sure cookies and auth tokens are included
       body: JSON.stringify(decodedData),
-      credentials: 'include', // include cookies!
     })
-      .then(response => response.text())
-      .then(text => {
-        console.log('Login result:', text);
-        fetchAlias();
+      .then(response => response.json())
+      .then(data => {
+        console.log('Worker Response (login):', data);
+
+        if (data.alias && data.token) {
+          // Step 2: Store alias and token safely in localStorage
+          localStorage.setItem('alias', data.alias);
+          localStorage.setItem('aliasToken', data.token);
+
+          console.log('Alias and token saved to localStorage.');
+
+          // Step 3: (Optional) Verify by calling /getAlias
+          fetch(`https://api.grab-tutorials.live/getAlias?alias=${encodeURIComponent(data.alias)}&token=${encodeURIComponent(data.token)}`, {
+            method: 'GET',
+            credentials: 'include',
+          })
+            .then(response => response.json())
+            .then(verifyData => {
+              console.log('Verification from /getAlias:', verifyData);
+
+              if (verifyData.alias) {
+                console.log(`Alias verified: ${verifyData.alias}`);
+              } else {
+                console.error('Alias verification failed.', verifyData);
+              }
+            })
+            .catch(error => {
+              console.error('Error verifying alias:', error);
+            });
+
+        } else {
+          console.error('Alias or token missing in response.', data);
+        }
       })
       .catch(error => {
         console.error('Error sending fragment:', error);
       });
   } else {
-    fetchAlias();
-  }
-
-  function fetchAlias() {
-    fetch('https://api.grab-tutorials.live/getAlias', {
-      method: 'GET',
-      credentials: 'include', // VERY important!
-    })
-      .then(response => response.json())
-      .then(data => {
-        if (data.alias) {
-          localStorage.setItem('userAlias', data.alias);
-          console.log('Alias stored:', data.alias);
-        } else {
-          console.log('No alias found.');
-        }
-      })
-      .catch(error => {
-        console.error('Error fetching alias:', error);
-      });
+    console.log('No fragment found in URL.');
   }
 });
