@@ -17,7 +17,7 @@ window.addEventListener('DOMContentLoaded', () => {
       headers: {
         'Content-Type': 'application/json',
       },
-      credentials: 'include', // Make sure cookies and auth tokens are included
+      credentials: 'include', // Ensure cookies/auth tokens are included
       body: JSON.stringify(decodedData),
     })
       .then(response => response.json())
@@ -34,7 +34,7 @@ window.addEventListener('DOMContentLoaded', () => {
           // Step 3: (Optional) Verify by calling /getAlias
           fetch(`https://api.grab-tutorials.live/getAlias?alias=${encodeURIComponent(data.alias)}&token=${encodeURIComponent(data.token)}`, {
             method: 'GET',
-            credentials: 'include',
+            credentials: 'include', // Ensure credentials are included
           })
             .then(response => response.json())
             .then(verifyData => {
