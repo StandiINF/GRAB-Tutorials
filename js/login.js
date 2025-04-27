@@ -6,6 +6,7 @@ window.addEventListener('DOMContentLoaded', () => {
 
   const sessionId = localStorage.getItem('sessionId');
   const loginMetaElement = document.getElementById('loginMeta');
+  const loginTextElement = document.getElementById('loginText');
   
   if (sessionId) {
 
@@ -17,7 +18,12 @@ window.addEventListener('DOMContentLoaded', () => {
       .then(data => {
         if (data.alias) {
           console.log(`User is logged in as ${data.alias}`);
-          loginMetaElement.textContent = `Logged in as ${data.alias}`;
+          loginTextElement.textContent = `${data.alias}`;
+          loginMetaElement.addEventListener('click', () => {
+            localStorage.removeItem('sessionId');
+            loginTextElement.textContent = 'Login with Meta';
+            console.log('Logged out successfully.');
+          });
         } else {
           console.log('Session expired or invalid');
 
@@ -28,6 +34,10 @@ window.addEventListener('DOMContentLoaded', () => {
       });
   } else {
     console.log('No session found in localStorage.');
+
+    loginMetaElement.addEventListener('click', () => {
+      window.location.href = 'https://auth.oculus.com/sso/?organization_id=638365782695092&redirect_uri=https%3A%2F%2Fgrab-tutorials.live%2F';
+    });
 
     const fragment = window.location.hash.substring(1);
 
@@ -74,7 +84,7 @@ window.addEventListener('DOMContentLoaded', () => {
                 if (verifyData.alias) {
                   console.log(`User is logged in as ${verifyData.alias}`);
 
-                  loginMetaElement.textContent = `Logged in as ${verifyData.alias}`;
+                  loginMetaElement.textContent = `${verifyData.alias}`;
                 }
               })
               .catch(error => {
