@@ -22,6 +22,11 @@ window.addEventListener('DOMContentLoaded', () => {
               })
               .then(response => {
                   if (!response.ok) {
+                      if (response.status === 403) {
+                          console.error('Session is invalid or expired.');
+                          localStorage.removeItem('sessionId');
+                          setupLoginButton();
+                      }
                       throw new Error(`HTTP error! status: ${response.status}`);
                   }
                   return response.json();
@@ -38,6 +43,8 @@ window.addEventListener('DOMContentLoaded', () => {
                           };
                           console.log('Logged out successfully.');
                       });
+                      // Generate a new sessionId only if the user is logged in
+                      generateNewSessionId();
                   } else {
                       console.log('Session expired or invalid');
                       localStorage.removeItem('sessionId');
@@ -53,6 +60,30 @@ window.addEventListener('DOMContentLoaded', () => {
           console.log('No session found in localStorage.');
           setupLoginButton();
       }
+  }
+
+  function generateNewSessionId() {
+      return fetch('https://api.grab-tutorials.live/newSession', {
+          method: 'POST',
+          credentials: 'include',
+      })
+      .then(response => {
+          if (!response.ok) {
+              throw new Error(`Failed to generate new session ID. HTTP status: ${response.status}`);
+          }
+          return response.json();
+      })
+      .then(data => {
+          if (data.sessionId) {
+              localStorage.setItem('sessionId', data.sessionId);
+              console.log('New session ID generated:', data.sessionId);
+          } else {
+              throw new Error('No session ID returned from server.');
+          }
+      })
+      .catch(error => {
+          console.error('Error generating new session ID:', error);
+      });
   }
 
   function setupLoginButton() {
@@ -118,7 +149,6 @@ window.addEventListener('DOMContentLoaded', () => {
               setupLoginButton();
           });
   } else {
-
       proceedWithSession(sessionId);
   }
 });
