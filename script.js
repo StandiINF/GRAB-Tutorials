@@ -16,9 +16,6 @@ let lastPressedCard = null;
 
 const patchNotesContainer = document.getElementById("patchNotesContainer");
 const patchNotesToggle = document.getElementById("patchNotesToggle");
-
-import("./login.js")
-
 // patch notes appear thing
 
 patchNotesToggle.addEventListener("click", () => {
