@@ -1,11 +1,19 @@
 window.addEventListener('DOMContentLoaded', () => {
+  // Function to add a delay (in milliseconds)
+  function delay(ms) {
+    return new Promise(resolve => setTimeout(resolve, ms));
+  }
+
   // Check if there's a sessionId in localStorage on page load
   const sessionId = localStorage.getItem('sessionId');
   const loginMetaElement = document.getElementById('loginMeta'); // Select the element to display alias
   
   if (sessionId) {
     // If sessionId exists, attempt to verify the session by calling the backend
-    fetch(`https://api.grab-tutorials.live/getAlias?sessionId=${encodeURIComponent(sessionId)}`)
+    delay(3000) // Wait 3 seconds before calling /getAlias
+      .then(() => {
+        return fetch(`https://api.grab-tutorials.live/getAlias?sessionId=${encodeURIComponent(sessionId)}`);
+      })
       .then(response => response.json())
       .then(data => {
         if (data.alias) {
@@ -35,15 +43,18 @@ window.addEventListener('DOMContentLoaded', () => {
         return;
       }
 
-      // Step 1: POST the code and org_scoped_id to /login
-      fetch('https://api.grab-tutorials.live/login', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        credentials: 'include', // Ensure cookies/auth tokens are included
-        body: JSON.stringify(decodedData),
-      })
+      // Step 1: Wait 3 seconds before posting to /login
+      delay(3000)
+        .then(() => {
+          return fetch('https://api.grab-tutorials.live/login', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            credentials: 'include', // Ensure cookies/auth tokens are included
+            body: JSON.stringify(decodedData),
+          });
+        })
         .then(response => response.json())
         .then(data => {
           console.log('Login Response:', data);
@@ -57,8 +68,11 @@ window.addEventListener('DOMContentLoaded', () => {
             // Step 3: Redirect to the homepage (without the fragment in the URL)
             window.location.replace('https://grab-tutorials.live/');
 
-            // Optionally, call /getAlias to verify session and restore user data
-            fetch(`https://api.grab-tutorials.live/getAlias?sessionId=${encodeURIComponent(data.sessionId)}`)
+            // Optionally, call /getAlias to verify session and restore user data after 3 seconds
+            delay(3000)
+              .then(() => {
+                return fetch(`https://api.grab-tutorials.live/getAlias?sessionId=${encodeURIComponent(data.sessionId)}`);
+              })
               .then(response => response.json())
               .then(verifyData => {
                 console.log('Session verified:', verifyData);
@@ -71,15 +85,4 @@ window.addEventListener('DOMContentLoaded', () => {
               .catch(error => {
                 console.error('Error verifying session:', error);
               });
-          } else {
-            console.error('Missing sessionId or alias.');
           }
-        })
-        .catch(error => {
-          console.error('Error during login:', error);
-        });
-    } else {
-      console.log('No fragment found in URL.');
-    }
-  }
-});
