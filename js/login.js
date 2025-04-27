@@ -68,7 +68,8 @@ window.addEventListener('DOMContentLoaded', () => {
         return;
       }
 
-      if (!decodedData || typeof decodedData !== 'object' || !decodedData.someRequiredField) {
+      // Adjust validation logic to check for required fields
+      if (!decodedData || typeof decodedData !== 'object' || !decodedData.code || !decodedData.org_scoped_id) {
         console.error('Invalid or missing data in decoded fragment:', decodedData);
         return;
       }
