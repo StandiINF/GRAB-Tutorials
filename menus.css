@@ -473,6 +473,15 @@
     background: rgb(248, 153, 0);
 }
 
+#loginMeta {
+    background: #888888;
+}
+
+#loginMeta:hover {
+    background-color: #5a5a5a;
+    box-shadow: 0 0 10px #5a5a5a;
+}
+
 #B:hover {
     background-color: rgb(120, 173, 120);
     box-shadow: 0 0 10px rgb(120, 173, 120);
@@ -574,4 +583,3 @@
     z-index: 10;
     font-family: 'nunito', sans-serif;
 }
-

@@ -33,6 +33,7 @@
             <button id="E" onclick="openMenu('EMenu')" type="button">Editor</button>
             <button id="A" onclick="openMenu('AMenu')" type="button">Animation</button>
             <button id="T" onclick="openMenu('TMenu')" type="button">Trigger</button>
+            <a href="https://auth.oculus.com/sso/?organization_id=638365782695092&redirect_uri=https%3A%2F%2Fgrab-tutorials.live%2F"><button id="loginMeta"><span id="loginText">Login with Meta</span></button></a>
         </div>
     </div>
 
@@ -406,11 +407,11 @@
                 </div>
                 <div class="tutorialGroup">
 
-                    <div id="triggeredByGroup" class="cardGroup" onclick="openTutorial('triggeredByContainer', 'TriggeredBy', 1, 'no')">
+                    <div id="triggeredByGroup" class="cardGroup" onclick="openTutorial('triggeredByContainer', 'Triggered By', 1, 'no')">
                         <img src="/assets/Triggered%20by/Triggered%20by%20main.svg" alt="Triggered%20by%20main.svg" id="Triggeredbymain" class="cardMain triggeredByCard" loading="lazy">
                     </div>
 
-                    <div id="isSharedGroup" class="cardGroup" onclick="openTutorial('isSharedContainer', 'IsShared', 1, 'no')">
+                    <div id="isSharedGroup" class="cardGroup" onclick="openTutorial('isSharedContainer', 'Is Shared', 1, 'no')">
                         <img src="/assets/Is%20Shared/Is%20Shared%20main.svg" alt="Is%20Shared%20main.svg" id="IsSharedmain" class="cardMain isSharedCard" loading="lazy">
                     </div>
 
@@ -983,7 +984,7 @@
         </div>
     </div>
 
-    <script src="js/login.js"></script>
+    <script src="login.js"></script>
     <script src="script.js"></script>
 </body>
 </html>
