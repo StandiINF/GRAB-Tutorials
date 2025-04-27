@@ -27,7 +27,13 @@ window.addEventListener('DOMContentLoaded', () => {
     // If sessionId exists, attempt to verify the session by calling the backend
     delay(3000) // Wait 3 seconds before calling /getAlias
       .then(() => {
-        return fetch(`https://api.grab-tutorials.live/getAlias?sessionId=${encodeURIComponent(sessionId)}`);
+        const authToken = localStorage.getItem('authToken'); // Get the auth token (if exists)
+
+        return fetch(`https://api.grab-tutorials.live/getAlias?sessionId=${encodeURIComponent(sessionId)}`, {
+          headers: {
+            'Authorization': authToken ? `Bearer ${authToken}` : '', // Only add token if it exists
+          }
+        });
       })
       .then(response => response.json())
       .then(data => {
@@ -80,13 +86,22 @@ window.addEventListener('DOMContentLoaded', () => {
 
             console.log('Session ID saved to localStorage.');
 
+            // Optionally, store the authToken (if provided)
+            if (data.authToken) {
+              localStorage.setItem('authToken', data.authToken); // Example: Save the auth token
+            }
+
             // Step 3: Redirect to the homepage (without the fragment in the URL)
             window.location.replace('https://grab-tutorials.live/');
 
             // Optionally, call /getAlias to verify session and restore user data after 3 seconds
             delay(3000)
               .then(() => {
-                return fetch(`https://api.grab-tutorials.live/getAlias?sessionId=${encodeURIComponent(data.sessionId)}`);
+                return fetch(`https://api.grab-tutorials.live/getAlias?sessionId=${encodeURIComponent(data.sessionId)}`, {
+                  headers: {
+                    'Authorization': data.authToken ? `Bearer ${data.authToken}` : '', // Include the token if it's available
+                  }
+                });
               })
               .then(response => response.json())
               .then(verifyData => {
