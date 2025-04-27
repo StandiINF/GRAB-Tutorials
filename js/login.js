@@ -1,33 +1,18 @@
 window.addEventListener('DOMContentLoaded', () => {
-  // Check if sessionId is already in localStorage (indicating a logged-in session)
+  // Check if there's a sessionId in localStorage on page load
   const sessionId = localStorage.getItem('sessionId');
-  const loginMetaButton = document.getElementById('loginMeta'); // Reference to the login button
-
+  
   if (sessionId) {
     // If sessionId exists, attempt to verify the session by calling the backend
-    fetch(`https://api.grab-tutorials.live/getAlias?sessionId=${encodeURIComponent(sessionId)}`, {
-      method: 'GET',
-      headers: {
-        'Content-Type': 'application/json',
-        'Authorization': `Bearer ${sessionId}`,  // If token-based authentication is needed
-      },
-      credentials: 'include', // Ensure cookies/auth tokens are included
-    })
-      .then(response => {
-        if (response.status === 403) {
-          console.error('Session is not valid or has expired');
-          // Redirect to login page or handle session expiration
-          window.location.replace('https://grab-tutorials.live/login');
-        }
-        return response.json();
-      })
+    fetch(`https://api.grab-tutorials.live/getAlias?sessionId=${encodeURIComponent(sessionId)}`)
+      .then(response => response.json())
       .then(data => {
         if (data.alias) {
           console.log(`User is logged in as ${data.alias}`);
-          // Update the text of the login button with the user's alias
-          loginMetaButton.textContent = `Logged in as ${data.alias}`;
+          // Handle the UI updates for a logged-in user
         } else {
           console.log('Session expired or invalid');
+          // Handle the case where the session is not valid
         }
       })
       .catch(error => {
@@ -67,9 +52,6 @@ window.addEventListener('DOMContentLoaded', () => {
 
             console.log('Session ID saved to localStorage.');
 
-            // Update the login button text with the alias
-            loginMetaButton.textContent = `Logged in as ${data.alias}`;
-
             // Step 3: Redirect to the homepage (without the fragment in the URL)
             window.location.replace('https://grab-tutorials.live/');
 
@@ -80,6 +62,7 @@ window.addEventListener('DOMContentLoaded', () => {
                 console.log('Session verified:', verifyData);
                 if (verifyData.alias) {
                   console.log(`User is logged in as ${verifyData.alias}`);
+                  // Handle UI updates for the logged-in user
                 }
               })
               .catch(error => {
