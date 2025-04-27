@@ -12,7 +12,10 @@ window.addEventListener('DOMContentLoaded', () => {
 
     delay(3000)
       .then(() => {
-        return fetch(`https://api.grab-tutorials.live/getAlias?sessionId=${encodeURIComponent(sessionId)}`);
+        return fetch(`https://api.grab-tutorials.live/getAlias?sessionId=${encodeURIComponent(sessionId)}`, {
+          method: 'GET',
+          credentials: 'include', // Include credentials like cookies
+        });
       })
       .then(response => response.json())
       .then(data => {
