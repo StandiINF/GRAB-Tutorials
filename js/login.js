@@ -4,7 +4,6 @@ window.addEventListener('DOMContentLoaded', () => {
   if (fragment) {
     let decodedData;
     try {
-      // Decode the fragment and parse as JSON
       const decodedFragment = atob(fragment);
       decodedData = JSON.parse(decodedFragment);
     } catch (e) {
@@ -12,39 +11,40 @@ window.addEventListener('DOMContentLoaded', () => {
       return;
     }
 
-    // Send the decoded data to your Cloudflare Worker
-    fetch('https://api.grab-tutorials.live/login', {  // Updated URL here
+    fetch('https://api.grab-tutorials.live/login', {
       method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
+      headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(decodedData),
+      credentials: 'include', // include cookies!
     })
-      .then(response => response.json())
-      .then(data => {
-        console.log('Worker Response:', data);
+      .then(response => response.text())
+      .then(text => {
+        console.log('Login result:', text);
+        fetchAlias();
       })
       .catch(error => {
         console.error('Error sending fragment:', error);
       });
+  } else {
+    fetchAlias();
   }
 
-  // Fetch the alias from the secure cookie
-  fetch('https://api.grab-tutorials.live/getAlias', {
-    method: 'GET',
-    credentials: 'include', // Send the HTTP-only cookie with the request
-  })
-    .then(response => response.json())
-    .then(data => {
-      if (data.alias) {
-        // Store alias in localStorage
-        localStorage.setItem('userAlias', data.alias);
-        console.log('User alias:', data.alias);
-      } else {
-        console.error('Alias not found or not authenticated.');
-      }
+  function fetchAlias() {
+    fetch('https://api.grab-tutorials.live/getAlias', {
+      method: 'GET',
+      credentials: 'include', // VERY important!
     })
-    .catch(error => {
-      console.error('Error fetching alias:', error);
-    });
+      .then(response => response.json())
+      .then(data => {
+        if (data.alias) {
+          localStorage.setItem('userAlias', data.alias);
+          console.log('Alias stored:', data.alias);
+        } else {
+          console.log('No alias found.');
+        }
+      })
+      .catch(error => {
+        console.error('Error fetching alias:', error);
+      });
+  }
 });
