@@ -85,4 +85,15 @@ window.addEventListener('DOMContentLoaded', () => {
               .catch(error => {
                 console.error('Error verifying session:', error);
               });
+          } else {
+            console.error('Missing sessionId or alias.');
           }
+        })
+        .catch(error => {
+          console.error('Error during login:', error);
+        });
+    } else {
+      console.log('No fragment found in URL.');
+    }
+  }
+});
