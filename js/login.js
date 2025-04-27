@@ -10,7 +10,7 @@ window.addEventListener('DOMContentLoaded', () => {
   
   if (sessionId) {
 
-    delay(3000)
+    delay(1500)
       .then(() => {
         return fetch(`https://api.grab-tutorials.live/getAlias?sessionId=${encodeURIComponent(sessionId)}`, {
           method: 'GET',
@@ -54,7 +54,7 @@ window.addEventListener('DOMContentLoaded', () => {
         return;
       }
 
-      delay(3000)
+      delay(1500)
         .then(() => {
           return fetch('https://api.grab-tutorials.live/login', {
             method: 'POST',
