@@ -8,82 +8,82 @@ window.addEventListener('DOMContentLoaded', () => {
 
   let sessionId = localStorage.getItem('sessionId');
 
-  function proceedWithSession(sessionId) {
+  async function proceedWithSession(sessionId) {
       if (sessionId) {
-          delay(1500)
-              .then(() => {
-                  return fetch(`https://api.grab-tutorials.live/getAlias?sessionId=${encodeURIComponent(sessionId)}`, {
-                      method: 'GET',
-                      credentials: 'include',
-                      headers: {
-                          'Content-Type': 'application/json',
-                      },
-                  });
-              })
-              .then(response => {
-                  if (!response.ok) {
-                      if (response.status === 403) {
-                          console.error('Session is invalid or expired.');
-                          localStorage.removeItem('sessionId');
-                          setupLoginButton();
-                      }
-                      throw new Error(`HTTP error! status: ${response.status}`);
-                  }
-                  return response.json();
-              })
-              .then(data => {
-                  if (data.alias) {
-                      console.log(`User is logged in as ${data.alias}`);
-                      loginTextElement.textContent = `${data.alias}`;
-                      loginMetaElement.addEventListener('click', () => {
-                          localStorage.removeItem('sessionId');
-                          loginTextElement.textContent = 'Login with Meta';
-                          loginMetaElement.onclick = () => {
-                              window.location.href = 'https://auth.oculus.com/sso/?organization_id=638365782695092&redirect_uri=https%3A%2F%2Fgrab-tutorials.live%2F';
-                          };
-                          console.log('Logged out successfully.');
-                      });
-                      // Generate a new sessionId only if the user is logged in
-                      generateNewSessionId();
-                  } else {
-                      console.log('Session expired or invalid');
+          try {
+              await delay(1500);
+              const response = await fetch(`https://api.grab-tutorials.live/getAlias?sessionId=${encodeURIComponent(sessionId)}`, {
+                  method: 'GET',
+                  credentials: 'include',
+                  headers: {
+                      'Content-Type': 'application/json',
+                  },
+              });
+
+              if (!response.ok) {
+                  if (response.status === 403) {
+                      console.error('Session is invalid or expired. Generating a new session ID.');
                       localStorage.removeItem('sessionId');
-                      setupLoginButton();
+                      const newSessionId = await generateNewSessionId();
+                      if (newSessionId) {
+                          await proceedWithSession(newSessionId);
+                      }
+                      return;
                   }
-              })
-              .catch(error => {
-                  console.error('Error verifying session:', error);
+                  throw new Error(`HTTP error! status: ${response.status}`);
+              }
+
+              const data = await response.json();
+              if (data.alias) {
+                  console.log(`User is logged in as ${data.alias}`);
+                  loginTextElement.textContent = `${data.alias}`;
+                  loginMetaElement.addEventListener('click', () => {
+                      localStorage.removeItem('sessionId');
+                      loginTextElement.textContent = 'Login with Meta';
+                      loginMetaElement.onclick = () => {
+                          window.location.href = 'https://auth.oculus.com/sso/?organization_id=638365782695092&redirect_uri=https%3A%2F%2Fgrab-tutorials.live%2F';
+                      };
+                      console.log('Logged out successfully.');
+                  });
+              } else {
+                  console.log('Session expired or invalid');
                   localStorage.removeItem('sessionId');
                   setupLoginButton();
-              });
+              }
+          } catch (error) {
+              console.error('Error verifying session:', error);
+              localStorage.removeItem('sessionId');
+              setupLoginButton();
+          }
       } else {
           console.log('No session found in localStorage.');
           setupLoginButton();
       }
   }
 
-  function generateNewSessionId() {
-      return fetch('https://api.grab-tutorials.live/newSession', {
-          method: 'POST',
-          credentials: 'include',
-      })
-      .then(response => {
+  async function generateNewSessionId() {
+      try {
+          const response = await fetch('https://api.grab-tutorials.live/newSession', {
+              method: 'POST',
+              credentials: 'include',
+          });
+
           if (!response.ok) {
               throw new Error(`Failed to generate new session ID. HTTP status: ${response.status}`);
           }
-          return response.json();
-      })
-      .then(data => {
+
+          const data = await response.json();
           if (data.sessionId) {
               localStorage.setItem('sessionId', data.sessionId);
               console.log('New session ID generated:', data.sessionId);
+              return data.sessionId;
           } else {
               throw new Error('No session ID returned from server.');
           }
-      })
-      .catch(error => {
+      } catch (error) {
           console.error('Error generating new session ID:', error);
-      });
+          setupLoginButton();
+      }
   }
 
   function setupLoginButton() {
