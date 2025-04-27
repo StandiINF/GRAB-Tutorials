@@ -4,28 +4,15 @@ window.addEventListener('DOMContentLoaded', () => {
   
   if (sessionId) {
 
-    fetch(`https://api.grab-tutorials.live/getAlias?sessionId=${encodeURIComponent(sessionId)}`, {
-      method: 'GET',
-      headers: {
-        'Content-Type': 'application/json',
-        'Authorization': `Bearer ${sessionId}`,
-      },
-      credentials: 'include',
-    })
-      .then(response => {
-        if (response.status === 403) {
-          console.error('Session is not valid or has expired');
-
-          window.location.replace('https://grab-tutorials.live/login');
-        }
-        return response.json();
-      })
+    fetch(`https://api.grab-tutorials.live/getAlias?sessionId=${encodeURIComponent(sessionId)}`)
+      .then(response => response.json())
       .then(data => {
         if (data.alias) {
           console.log(`User is logged in as ${data.alias}`);
 
         } else {
           console.log('Session expired or invalid');
+
         }
       })
       .catch(error => {
@@ -33,7 +20,6 @@ window.addEventListener('DOMContentLoaded', () => {
       });
   } else {
     console.log('No session found in localStorage.');
-
     const fragment = window.location.hash.substring(1);
 
     if (fragment) {
