@@ -19,7 +19,7 @@ window.addEventListener('DOMContentLoaded', () => {
         if (data.alias) {
           console.log(`User is logged in as ${data.alias}`);
           // Update the loginMeta element with the user's alias
-          loginMetaElement.textContent = `Logged in as ${data.alias}`;
+          loginMetaElement.textContent = `${data.alias}`;
         } else {
           console.log('Session expired or invalid');
           // Handle the case where the session is not valid
@@ -79,7 +79,7 @@ window.addEventListener('DOMContentLoaded', () => {
                 if (verifyData.alias) {
                   console.log(`User is logged in as ${verifyData.alias}`);
                   // Update the loginMeta element with the user's alias
-                  loginMetaElement.textContent = `Logged in as ${verifyData.alias}`;
+                  loginMetaElement.textContent = `${verifyData.alias}`;
                 }
               })
               .catch(error => {
