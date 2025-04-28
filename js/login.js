@@ -1,4 +1,4 @@
-window.addEventListener('DOMContentLoaded', async () => {
+window.addEventListener('DOMContentLoaded', () => {
   function delay(ms) {
       return new Promise(resolve => setTimeout(resolve, ms));
   }
@@ -6,28 +6,7 @@ window.addEventListener('DOMContentLoaded', async () => {
   const loginMetaElement = document.getElementById('loginMeta');
   const loginTextElement = document.getElementById('loginText');
 
-  async function generateNewSessionId() {
-      try {
-          const response = await fetch('https://api.grab-tutorials.live/newSession', {
-              method: 'POST',
-              credentials: 'include',
-          });
-
-          if (!response.ok) {
-              throw new Error(`Failed to generate new session ID. HTTP status: ${response.status}`);
-          }
-
-          const data = await response.json();
-          if (data.sessionId) {
-              return data.sessionId;
-          } else {
-              throw new Error('No session ID returned from server.');
-          }
-      } catch (error) {
-          console.error('Error generating new session ID:', error);
-          setupLoginButton();
-      }
-  }
+  let sessionId = localStorage.getItem('sessionId');
 
   async function proceedWithSession(sessionId) {
       if (sessionId) {
@@ -126,8 +105,10 @@ window.addEventListener('DOMContentLoaded', async () => {
               return response.json();
           })
           .then(data => {
+
               if (data.sessionId && data.alias) {
                   localStorage.setItem('sessionId', data.sessionId);
+
                   localStorage.removeItem('fragmentData');
                   proceedWithSession(data.sessionId);
               } else {
@@ -162,8 +143,10 @@ window.addEventListener('DOMContentLoaded', async () => {
                   return response.json();
               })
               .then(data => {
+
                   if (data.sessionId && data.alias) {
                       localStorage.setItem('sessionId', data.sessionId);
+
                       localStorage.removeItem('fragmentData');
                       proceedWithSession(data.sessionId);
                   } else {
@@ -176,7 +159,7 @@ window.addEventListener('DOMContentLoaded', async () => {
                   setupLoginButton();
               });
       } else {
-          setupLoginButton();
+          proceedWithSession(sessionId);
       }
   }
 });
