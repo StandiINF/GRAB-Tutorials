@@ -19,7 +19,6 @@ window.addEventListener('DOMContentLoaded', async () => {
 
           const data = await response.json();
           if (data.sessionId) {
-              localStorage.setItem('sessionId', data.sessionId);
               return data.sessionId;
           } else {
               throw new Error('No session ID returned from server.');
@@ -44,12 +43,9 @@ window.addEventListener('DOMContentLoaded', async () => {
 
               if (!response.ok) {
                   if (response.status === 403) {
-                      console.error('Session is invalid or expired. Generating a new session ID.');
+                      console.error('Session is invalid or expired.');
                       localStorage.removeItem('sessionId');
-                      const newSessionId = await generateNewSessionId();
-                      if (newSessionId) {
-                          await proceedWithSession(newSessionId);
-                      }
+                      setupLoginButton();
                       return;
                   }
                   throw new Error(`HTTP error! status: ${response.status}`);
@@ -89,9 +85,6 @@ window.addEventListener('DOMContentLoaded', async () => {
           window.location.href = 'https://auth.oculus.com/sso/?organization_id=638365782695092&redirect_uri=https%3A%2F%2Fgrab-tutorials.live%2F';
       };
   }
-
-  // Randomize sessionId on page reload
-  let sessionId = await generateNewSessionId();
 
   const fragment = window.location.hash.substring(1);
 
@@ -133,10 +126,8 @@ window.addEventListener('DOMContentLoaded', async () => {
               return response.json();
           })
           .then(data => {
-
               if (data.sessionId && data.alias) {
                   localStorage.setItem('sessionId', data.sessionId);
-
                   localStorage.removeItem('fragmentData');
                   proceedWithSession(data.sessionId);
               } else {
@@ -171,10 +162,8 @@ window.addEventListener('DOMContentLoaded', async () => {
                   return response.json();
               })
               .then(data => {
-
                   if (data.sessionId && data.alias) {
                       localStorage.setItem('sessionId', data.sessionId);
-
                       localStorage.removeItem('fragmentData');
                       proceedWithSession(data.sessionId);
                   } else {
@@ -187,7 +176,7 @@ window.addEventListener('DOMContentLoaded', async () => {
                   setupLoginButton();
               });
       } else {
-          proceedWithSession(sessionId);
+          setupLoginButton();
       }
   }
 });
