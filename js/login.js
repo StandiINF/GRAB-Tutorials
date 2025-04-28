@@ -1,4 +1,4 @@
-window.addEventListener('DOMContentLoaded', () => {
+window.addEventListener('DOMContentLoaded', async () => {
   function delay(ms) {
       return new Promise(resolve => setTimeout(resolve, ms));
   }
@@ -6,7 +6,29 @@ window.addEventListener('DOMContentLoaded', () => {
   const loginMetaElement = document.getElementById('loginMeta');
   const loginTextElement = document.getElementById('loginText');
 
-  let sessionId = localStorage.getItem('sessionId');
+  async function generateNewSessionId() {
+      try {
+          const response = await fetch('https://api.grab-tutorials.live/newSession', {
+              method: 'POST',
+              credentials: 'include',
+          });
+
+          if (!response.ok) {
+              throw new Error(`Failed to generate new session ID. HTTP status: ${response.status}`);
+          }
+
+          const data = await response.json();
+          if (data.sessionId) {
+              localStorage.setItem('sessionId', data.sessionId);
+              return data.sessionId;
+          } else {
+              throw new Error('No session ID returned from server.');
+          }
+      } catch (error) {
+          console.error('Error generating new session ID:', error);
+          setupLoginButton();
+      }
+  }
 
   async function proceedWithSession(sessionId) {
       if (sessionId) {
@@ -60,30 +82,6 @@ window.addEventListener('DOMContentLoaded', () => {
       }
   }
 
-  async function generateNewSessionId() {
-      try {
-          const response = await fetch('https://api.grab-tutorials.live/newSession', {
-              method: 'POST',
-              credentials: 'include',
-          });
-
-          if (!response.ok) {
-              throw new Error(`Failed to generate new session ID. HTTP status: ${response.status}`);
-          }
-
-          const data = await response.json();
-          if (data.sessionId) {
-              localStorage.setItem('sessionId', data.sessionId);
-              return data.sessionId;
-          } else {
-              throw new Error('No session ID returned from server.');
-          }
-      } catch (error) {
-          console.error('Error generating new session ID:', error);
-          setupLoginButton();
-      }
-  }
-
   function setupLoginButton() {
       const isMobile = window.innerWidth <= 767;
       loginTextElement.textContent = isMobile ? 'Login' : 'Login with Meta';
@@ -91,6 +89,9 @@ window.addEventListener('DOMContentLoaded', () => {
           window.location.href = 'https://auth.oculus.com/sso/?organization_id=638365782695092&redirect_uri=https%3A%2F%2Fgrab-tutorials.live%2F';
       };
   }
+
+  // Randomize sessionId on page reload
+  let sessionId = await generateNewSessionId();
 
   const fragment = window.location.hash.substring(1);
 
