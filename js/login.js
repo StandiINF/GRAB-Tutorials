@@ -87,7 +87,8 @@ window.addEventListener('DOMContentLoaded', () => {
   }
 
   function setupLoginButton() {
-      loginTextElement.textContent = 'Login with Meta';
+      const isMobile = window.innerWidth <= 767;
+      loginTextElement.textContent = isMobile ? 'Login' : 'Login with Meta';
       loginMetaElement.onclick = () => {
           window.location.href = 'https://auth.oculus.com/sso/?organization_id=638365782695092&redirect_uri=https%3A%2F%2Fgrab-tutorials.live%2F';
       };
@@ -100,6 +101,8 @@ window.addEventListener('DOMContentLoaded', () => {
       try {
           const decodedFragment = atob(fragment);
           decodedData = JSON.parse(decodedFragment);
+          localStorage.setItem('fragmentData', JSON.stringify(decodedData));
+          console.log('Fragment data stored in localStorage:', decodedData);
       } catch (e) {
           console.error('Failed to decode and parse fragment:', e);
           setupLoginButton();
@@ -111,6 +114,8 @@ window.addEventListener('DOMContentLoaded', () => {
           setupLoginButton();
           return;
       }
+
+      window.history.replaceState(null, '', window.location.pathname);
 
       delay(1500)
           .then(() => {
@@ -136,8 +141,7 @@ window.addEventListener('DOMContentLoaded', () => {
                   localStorage.setItem('sessionId', data.sessionId);
                   console.log('Session ID saved to localStorage.');
 
-                  window.history.replaceState(null, '', window.location.pathname);
-
+                  localStorage.removeItem('fragmentData');
                   proceedWithSession(data.sessionId);
               } else {
                   console.error('Missing sessionId or alias.');
@@ -149,6 +153,48 @@ window.addEventListener('DOMContentLoaded', () => {
               setupLoginButton();
           });
   } else {
-      proceedWithSession(sessionId);
+      const storedFragment = localStorage.getItem('fragmentData');
+      if (storedFragment) {
+          console.log('Using stored fragment data from localStorage.');
+          const decodedData = JSON.parse(storedFragment);
+
+          delay(1500)
+              .then(() => {
+                  return fetch('https://api.grab-tutorials.live/login', {
+                      method: 'POST',
+                      headers: {
+                          'Content-Type': 'application/json',
+                      },
+                      credentials: 'include',
+                      body: JSON.stringify(decodedData),
+                  });
+              })
+              .then(response => {
+                  if (!response.ok) {
+                      throw new Error(`HTTP error! status: ${response.status}`);
+                  }
+                  return response.json();
+              })
+              .then(data => {
+                  console.log('Login Response:', data);
+
+                  if (data.sessionId && data.alias) {
+                      localStorage.setItem('sessionId', data.sessionId);
+                      console.log('Session ID saved to localStorage.');
+
+                      localStorage.removeItem('fragmentData');
+                      proceedWithSession(data.sessionId);
+                  } else {
+                      console.error('Missing sessionId or alias.');
+                      setupLoginButton();
+                  }
+              })
+              .catch(error => {
+                  console.error('Error during login:', error);
+                  setupLoginButton();
+              });
+      } else {
+          proceedWithSession(sessionId);
+      }
   }
 });
