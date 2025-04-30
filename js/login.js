@@ -38,7 +38,6 @@ window.addEventListener('DOMContentLoaded', () => {
                   loginTextElement.textContent = `${data.alias}`;
                   loginMetaElement.id = "U";
                   loginMetaElement.setAttribute("onclick", "openMenu('UMenu')");
-                  logoutMetaElement.setAttribute("onclick", "openMenu('UMenu')");
               } else {
                   console.log('Session expired or invalid');
                   localStorage.removeItem('sessionId');
