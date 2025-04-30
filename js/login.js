@@ -5,6 +5,8 @@ window.addEventListener('DOMContentLoaded', () => {
 
   const loginMetaElement = document.getElementById('loginMeta');
   const loginTextElement = document.getElementById('loginText');
+  const logoutMetaElement = document.getElementById('logoutMeta');
+  const uMenuElement = document.getElementById('UMenu');
 
   let sessionId = localStorage.getItem('sessionId');
 
@@ -34,12 +36,18 @@ window.addEventListener('DOMContentLoaded', () => {
               if (data.alias) {
                   console.log(`User is logged in as ${data.alias}`);
                   loginTextElement.textContent = `${data.alias}`;
-                  loginMetaElement.addEventListener('click', () => {
+                  loginMetaElement.id = "U";
+                  logoutMetaElement.addEventListener('click', () => {
                       localStorage.removeItem('sessionId');
-                      loginTextElement.textContent = 'Login with Meta';
+                      loginMetaElement.id.removeItem("U");
                       loginMetaElement.onclick = () => {
                           window.location.href = 'https://auth.oculus.com/sso/?organization_id=638365782695092&redirect_uri=https%3A%2F%2Fgrab-tutorials.live%2F';
                       };
+                      loginMetaElement.id = "loginMeta";
+                      if (uMenuElement) {
+                          uMenuElement.style.display = 'none';
+                      }
+                      setupLoginButton();
                       console.log('Logged out successfully.');
                   });
               } else {

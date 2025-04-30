@@ -429,8 +429,8 @@
 
 @media (max-width: 767px) {
     #menuButtons {
-        gap: 0.5rem;
-        padding-top: 25px;
+        gap: 0.2rem;
+        padding-top: 3px;
         top: 5px;
     }
 
@@ -582,4 +582,8 @@
     border-radius: 90px;
     z-index: 10;
     font-family: 'nunito', sans-serif;
+}
+
+#logoutButton {
+    background: red;
 }
