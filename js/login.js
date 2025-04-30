@@ -5,8 +5,6 @@ window.addEventListener('DOMContentLoaded', () => {
 
   const loginMetaElement = document.getElementById('loginMeta');
   const loginTextElement = document.getElementById('loginText');
-  const logoutMetaElement = document.getElementById('logoutMeta');
-  const uMenuElement = document.getElementById('UMenu');
 
   let sessionId = localStorage.getItem('sessionId');
 
@@ -37,7 +35,7 @@ window.addEventListener('DOMContentLoaded', () => {
                   console.log(`User is logged in as ${data.alias}`);
                   loginTextElement.textContent = `${data.alias}`;
                   loginMetaElement.id = "U";
-                  loginMetaElement.setAttribute("onclick", "openMenu('UMenu')");
+                  loginMetaElement.setAttribute("onclick", "openMenu('AMenu')");
               } else {
                   console.log('Session expired or invalid');
                   localStorage.removeItem('sessionId');
