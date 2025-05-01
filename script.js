@@ -51,14 +51,13 @@ document.addEventListener("keydown", (event) => {
 // menu opening / closing
 
 function openMenu(menuId) {
-    const menus = ["TMenu", "BMenu", "AMenu", "EMenu", "UMenu"];
-    const buttons = ["T", "B", "A", "E", "U"];
+    const menus = ["TMenu", "BMenu", "AMenu", "EMenu"];
+    const buttons = ["T", "B", "A", "E"];
     const colors = {
         TMenu: { background: "rgb(248, 153, 0)", gradient: "linear-gradient(to top, rgba(177, 65, 65, 0) 0%, rgb(248, 153, 0) 100%)", buttonGradient: "linear-gradient(to top, rgb(248, 153, 0), transparent)" },
         BMenu: { background: "rgb(144, 207, 144)", gradient: "linear-gradient(to top, rgba(177, 65, 65, 0) 0%, rgb(144, 207, 144) 100%)", buttonGradient: "linear-gradient(to top, rgb(144, 207, 144), transparent)" },
         AMenu: { background: "#638DDD", gradient: "linear-gradient(to top, rgba(177, 65, 65, 0) 0%, #638DDD 100%)", buttonGradient: "linear-gradient(to top, #638DDD, transparent)" },
         EMenu: { background: "rgb(124, 72, 72)", gradient: "linear-gradient(to top, rgba(177, 65, 65, 0) 0%, rgb(124, 72, 72) 100%)", buttonGradient: "linear-gradient(to top, rgb(124, 72, 72), transparent)" },
-        UMenu: { background: "rgb(70, 130, 180)", gradient: "linear-gradient(to top, rgba(177, 65, 65, 0) 0%, rgb(70, 130, 180) 100%)", buttonGradient: "linear-gradient(to top, rgb(70, 130, 180), transparent)" }
     };
     const menu = document.getElementById(menuId);
     const menuButtons = document.getElementById("menuButtons");
@@ -80,7 +79,7 @@ function openMenu(menuId) {
 
     menus.forEach((id, index) => {
         const currentMenu = document.getElementById(id);
-        const containers = Array.from(currentMenu.querySelectorAll(".menuContainer")).filter(container => !container.closest("#UMenu"));
+        const containers = currentMenu.querySelectorAll(".menuContainer");
         const button = document.getElementById(buttons[index]);
 
         if (id === menuId) {
@@ -111,7 +110,7 @@ function openMenu(menuId) {
 }
 
 function closeMenu() {
-    const menus = ["TMenu", "BMenu", "AMenu", "EMenu", "UMenu"];
+    const menus = ["TMenu", "BMenu", "AMenu", "EMenu"];
     menus.forEach(menuId => {
         const menu = document.getElementById(menuId);
         menu.style.pointerEvents = 'none';
@@ -482,17 +481,3 @@ const cardGroups = document.querySelectorAll('.cardGroup:not(.FeedbackLink)');
 console.log(`Total cards: ${cardElements.length}`);
 console.log(`Total decks: ${cardGroups.length}`);
 console.log(`To open Patch Notes, press Numpad +`);
-
-function logoutUser() {
-    localStorage.removeItem('sessionId');
-    location.reload();
-}
-
-document.getElementById("loginMeta").addEventListener("click", () => {
-    const sessionId = localStorage.getItem("sessionId");
-    if (sessionId) {
-        openMenu("UMenu");
-    } else {
-        alert("You are not logged in. Please log in to access the User Menu.");
-    }
-});

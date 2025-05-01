@@ -592,24 +592,3 @@
 #logoutButton {
     background: red;
 }
-
-#UMenu {
-    background: rgb(70, 130, 180);
-}
-
-#UMenu .groupText {
-    color: white;
-}
-
-#UMenu .cardGroup {
-    background-color: rgba(255, 255, 255, 0.1);
-    color: white;
-    text-align: center;
-    padding: 1rem;
-    border-radius: 10px;
-    cursor: pointer;
-}
-
-#UMenu .cardGroup:hover {
-    background-color: rgba(255, 255, 255, 0.2);
-}
