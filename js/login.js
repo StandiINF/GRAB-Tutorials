@@ -34,8 +34,14 @@ window.addEventListener('DOMContentLoaded', () => {
               if (data.alias) {
                   console.log(`User is logged in as ${data.alias}`);
                   loginTextElement.textContent = `${data.alias}`;
-                  loginMetaElement.id = "U";
-                  loginMetaElement.setAttribute("onclick", "openMenu('UMenu')");
+                  loginMetaElement.addEventListener('click', () => {
+                      localStorage.removeItem('sessionId');
+                      loginTextElement.textContent = 'Login with Meta';
+                      loginMetaElement.onclick = () => {
+                          window.location.href = 'https://auth.oculus.com/sso/?organization_id=638365782695092&redirect_uri=https%3A%2F%2Fgrab-tutorials.live%2F';
+                      };
+                      console.log('Logged out successfully.');
+                  });
               } else {
                   console.log('Session expired or invalid');
                   localStorage.removeItem('sessionId');
