@@ -51,7 +51,7 @@ document.addEventListener("keydown", (event) => {
 // menu opening / closing
 
 function openMenu(menuId) {
-    const menus = ["TMenu", "BMenu", "AMenu", "EMenu", "CMenu", "UMenu"];
+    const menus = ["TMenu", "BMenu", "AMenu", "EMenu", "UMenu"];
     const buttons = ["T", "B", "A", "E", "C", "U"];
     const colors = {
         TMenu: { background: "rgb(248, 153, 0)", gradient: "linear-gradient(to top, rgba(177, 65, 65, 0) 0%, rgb(248, 153, 0) 100%)", buttonGradient: "linear-gradient(to top, rgb(248, 153, 0), transparent)" },
@@ -80,7 +80,7 @@ function openMenu(menuId) {
 
     menus.forEach((id, index) => {
         const currentMenu = document.getElementById(id);
-        const containers = currentMenu.querySelectorAll(".menuContainer");
+        const containers = Array.from(currentMenu.querySelectorAll(".menuContainer")).filter(container => !container.closest("#UMenu"));
         const button = document.getElementById(buttons[index]);
 
         if (id === menuId) {
@@ -111,7 +111,7 @@ function openMenu(menuId) {
 }
 
 function closeMenu() {
-    const menus = ["TMenu", "BMenu", "AMenu", "EMenu", "CMenu", "UMenu"];
+    const menus = ["TMenu", "BMenu", "AMenu", "EMenu", "UMenu"];
     menus.forEach(menuId => {
         const menu = document.getElementById(menuId);
         menu.style.pointerEvents = 'none';
