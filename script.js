@@ -492,5 +492,7 @@ document.getElementById("loginMeta").addEventListener("click", () => {
     const sessionId = localStorage.getItem("sessionId");
     if (sessionId) {
         openMenu("UMenu");
+    } else {
+        alert("You are not logged in. Please log in to access the User Menu.");
     }
 });
