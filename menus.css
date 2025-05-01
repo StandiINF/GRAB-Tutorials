@@ -473,6 +473,11 @@
     background: rgb(248, 153, 0);
 }
 
+#C:hover {
+    background-color: rgb(70, 130, 180);
+    box-shadow: 0 0 10px rgb(70, 130, 180);
+}
+
 #loginMeta {
     background: #888888;
 }
@@ -586,4 +591,25 @@
 
 #logoutButton {
     background: red;
+}
+
+#UMenu {
+    background: rgb(70, 130, 180);
+}
+
+#UMenu .groupText {
+    color: white;
+}
+
+#UMenu .cardGroup {
+    background-color: rgba(255, 255, 255, 0.1);
+    color: white;
+    text-align: center;
+    padding: 1rem;
+    border-radius: 10px;
+    cursor: pointer;
+}
+
+#UMenu .cardGroup:hover {
+    background-color: rgba(255, 255, 255, 0.2);
 }

@@ -33,8 +33,7 @@
             <button id="E" onclick="openMenu('EMenu')" type="button">Editor</button>
             <button id="A" onclick="openMenu('AMenu')" type="button">Animation</button>
             <button id="T" onclick="openMenu('TMenu')" type="button">Trigger</button>
-            <button id="C" onclick="openMenu('CMenu')" type="button">Community</button>
-            <button id="U loginMeta"><span id="loginText">Login with Meta</span></button>
+            <button id="loginMeta"><span id="loginText">Login with Meta</span></button>
         </div>
     </div>
 
@@ -520,14 +519,23 @@
     </div>
 
     <div id="UMenu" class="menu">
-        <div id="communityContainer" class="menuContainer">
-            <a href=""><h1 id="username">Username</h1></a>
-
-            <div id="userInfoContainer">
-                <p>user info wow</p>
+        <div id="userContainer" class="menuContainer">
+            <div class="groupOneContainer groupContainer">
+                <div class="groupTextBox">
+                    <h2 class="groupText">User Menu</h2>
+                </div>
+                <div class="tutorialGroup">
+                    <div id="profileGroup" class="cardGroup">
+                        <h3>Profile</h3>
+                    </div>
+                    <div id="settingsGroup" class="cardGroup">
+                        <h3>Settings</h3>
+                    </div>
+                    <div id="logoutGroup" class="cardGroup" onclick="logoutUser()">
+                        <h3>Logout</h3>
+                    </div>
+                </div>
             </div>
-
-            <button id="logoutMeta" type="button">Logout</button>
         </div>
     </div>
 

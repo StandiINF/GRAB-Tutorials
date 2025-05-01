@@ -52,13 +52,12 @@ document.addEventListener("keydown", (event) => {
 
 function openMenu(menuId) {
     const menus = ["TMenu", "BMenu", "AMenu", "EMenu", "UMenu"];
-    const buttons = ["T", "B", "A", "E", "C", "U"];
+    const buttons = ["T", "B", "A", "E", "U"];
     const colors = {
         TMenu: { background: "rgb(248, 153, 0)", gradient: "linear-gradient(to top, rgba(177, 65, 65, 0) 0%, rgb(248, 153, 0) 100%)", buttonGradient: "linear-gradient(to top, rgb(248, 153, 0), transparent)" },
         BMenu: { background: "rgb(144, 207, 144)", gradient: "linear-gradient(to top, rgba(177, 65, 65, 0) 0%, rgb(144, 207, 144) 100%)", buttonGradient: "linear-gradient(to top, rgb(144, 207, 144), transparent)" },
         AMenu: { background: "#638DDD", gradient: "linear-gradient(to top, rgba(177, 65, 65, 0) 0%, #638DDD 100%)", buttonGradient: "linear-gradient(to top, #638DDD, transparent)" },
         EMenu: { background: "rgb(124, 72, 72)", gradient: "linear-gradient(to top, rgba(177, 65, 65, 0) 0%, rgb(124, 72, 72) 100%)", buttonGradient: "linear-gradient(to top, rgb(124, 72, 72), transparent)" },
-        CMenu: { background: "rgb(100, 149, 237)", gradient: "linear-gradient(to top, rgba(177, 65, 65, 0) 0%, rgb(100, 149, 237) 100%)", buttonGradient: "linear-gradient(to top, rgb(100, 149, 237), transparent)" },
     };
     const menu = document.getElementById(menuId);
     const menuButtons = document.getElementById("menuButtons");
@@ -482,3 +481,15 @@ const cardGroups = document.querySelectorAll('.cardGroup:not(.FeedbackLink)');
 console.log(`Total cards: ${cardElements.length}`);
 console.log(`Total decks: ${cardGroups.length}`);
 console.log(`To open Patch Notes, press Numpad +`);
+
+function logoutUser() {
+    localStorage.removeItem('sessionId');
+    location.reload();
+}
+
+document.getElementById("loginMeta").addEventListener("click", () => {
+    const sessionId = localStorage.getItem("sessionId");
+    if (sessionId) {
+        openMenu("UMenu");
+    }
+});
