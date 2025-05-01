@@ -35,7 +35,7 @@ window.addEventListener('DOMContentLoaded', () => {
                   console.log(`User is logged in as ${data.alias}`);
                   loginTextElement.textContent = `${data.alias}`;
                   loginMetaElement.id = "U";
-                  loginMetaElement.setAttribute("onclick", "openMenu('AMenu')");
+                  loginMetaElement.setAttribute("onclick", "openMenu('UMenu')");
               } else {
                   console.log('Session expired or invalid');
                   localStorage.removeItem('sessionId');
