@@ -94,6 +94,10 @@
                         <img src="/assets/Lobby/Lobby%20main.svg" alt="Lobby%20main.svg" id="Lobbymain" class="cardMain lobbyCard" loading="lazy">
                     </div>
 
+                    <div id="shopGroup" class="cardGroup" onclick="openTutorial('shopContainer', 'Shop', 1, 'no')">
+                        <img src="assets/Shop/shop-main.svg" alt="shop-main.svg" id="Shopmain" class="cardMain shopCard" loading="lazy">
+                    </div>
+
                     <div class="cardGroup FeedbackLink" onclick="window.open('https://discord.gg/J3yDuye6Uz', '_blank')">
                         <img src="/assets/Placeholder%20Discord%20main.svg" alt="Placeholder.svg" class="cardMain" loading="lazy">
                     </div>
@@ -217,6 +221,10 @@
 
                     <div id="buildGroup" class="cardGroup" onclick="openTutorial('buildContainer', 'Build', 1, 'no')">
                         <img src="/assets/Wrist%20menu/Build/Build%20main.svg" alt="Build%20main.svg" id="Buildmain" class="cardMain buildCard" loading="lazy">
+                    </div>
+
+                    <div id="specialGroup" class="cardGroup" onclick="openTutorial('specialContainer', 'Special', 1, 'no')">
+                        <img src="/assets/Wrist%20menu/Special/special-main.svg" alt="special-main.svg" id="Specialmain" class="cardMain specialCard" loading="lazy">
                     </div>
 
                     <div id="selectionGroup" class="cardGroup" onclick="openTutorial('selectionContainer', 'Selection', 1, 'no')">
@@ -572,6 +580,14 @@
     <div name="cardDecks">
 
         <!-- this could probably be dulled down into javascript but i cant be bothered 🤑 -->
+
+        <div id="specialContainer" class="cardContainer">
+            <img src="/assets/Wrist%20menu/Special/special-1.svg" alt="special-1.svg" class="cardOne indexOne helpOne" loading="lazy">
+        </div>
+
+        <div id="shopContainer" class="cardContainer">
+            <img src="/assets/Shop/shop-1.svg" alt="shop-1.svg" class="cardOne indexOne helpOne" loading="lazy">
+        </div>
 
         <div id="grapplingContainer" class="cardContainer">
             <img src="/assets/Basics/Movement/Grappling/Grappling%201.svg" alt="Grappling%201.svg" class="cardOne indexOne helpOne" loading="lazy">
