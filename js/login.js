@@ -87,18 +87,8 @@ window.addEventListener('DOMContentLoaded', () => {
   
     function applyUserColour(colour) {
         const lMenu = document.getElementById('LMenu');
-        const lButton = document.getElementById('L');
-        const menuButtons = document.getElementById('menuButtons');
-        const mMenu = document.getElementById('MMenu');
 
         lMenu.style.background = colour;
-        lMenu.style.setProperty('--menu-gradient', `linear-gradient(to top, rgba(177, 65, 65, 0) 0%, ${colour} 100%)`);
-        lButton.style.background = colour;
-        menuButtons.style.setProperty('--button-gradient', `linear-gradient(to top, ${colour}, transparent)`);
-        
-        setTimeout(() => {
-            mMenu.style.setProperty('--menu-gradient', `linear-gradient(to top, rgba(177, 65, 65, 0) 0%, ${colour} 100%)`);
-        }, 300);
     }
 
     const fragment = window.location.hash.substring(1);
