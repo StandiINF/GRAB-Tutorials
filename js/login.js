@@ -36,39 +36,26 @@ window.addEventListener('DOMContentLoaded', () => {
                 if (data.alias) {
                     console.log(`User is logged in as ${data.alias}`);
                     const userColour = data.hexColor; // Store hexColor in userColour
+                    localStorage.setItem('userColour', userColour); // Save userColour to localStorage
                     console.log(`User's color: ${userColour}`);
                     loginTextElement.textContent = `${data.alias}`;
                     loginMetaElement.textContent = 'Logout';
                     loggedinElement.style.display = 'none';
                     loginwithbuttonElement.style.display = 'none';
 
-                    // Update LMenu and button colors
-                    const lMenu = document.getElementById('LMenu');
-                    const lButton = document.getElementById('L');
-                    const menuButtons = document.getElementById('menuButtons');
-
-                    lMenu.style.background = userColour;
-                    lMenu.style.setProperty('--menu-gradient', `linear-gradient(to top, rgba(177, 65, 65, 0) 0%, ${userColour} 100%)`);
-                    lButton.style.background = userColour;
-                    menuButtons.style.setProperty('--button-gradient', `linear-gradient(to top, ${userColour}, transparent)`);
-
-                    // Ensure old colors are removed
-                    lMenu.style.transition = "background 0.3s ease";
-                    lButton.style.transition = "background 0.3s ease";
-                    menuButtons.style.transition = "background 0.3s ease";
+                    // Apply userColour to LMenu and related elements
+                    applyUserColour(userColour);
 
                     loginMetaElement.addEventListener('click', () => {
                         localStorage.removeItem('sessionId');
+                        localStorage.removeItem('userColour'); // Clear userColour on logout
                         loginTextElement.textContent = 'Login with Meta';
                         loginMetaElement.textContent = 'Login';
                         loggedinElement.style.display = 'block';
                         loginwithbuttonElement.style.display = 'block';
 
                         // Reset colors on logout
-                        lMenu.style.background = '#888888';
-                        lMenu.style.setProperty('--menu-gradient', `linear-gradient(to top, rgba(177, 65, 65, 0) 0%, #888888 100%)`);
-                        lButton.style.background = '#888888';
-                        menuButtons.style.setProperty('--button-gradient', `linear-gradient(to top, #2a3439, transparent)`);
+                        applyUserColour('#888888');
 
                         loginMetaElement.onclick = () => {
                             window.location.href = 'https://auth.oculus.com/sso/?organization_id=638365782695092&redirect_uri=https%3A%2F%2Fgrab-tutorials.live%2F';
@@ -98,6 +85,17 @@ window.addEventListener('DOMContentLoaded', () => {
         };
     }
   
+    function applyUserColour(colour) {
+        const lMenu = document.getElementById('LMenu');
+        const lButton = document.getElementById('L');
+        const menuButtons = document.getElementById('menuButtons');
+
+        lMenu.style.background = colour;
+        lMenu.style.setProperty('--menu-gradient', `linear-gradient(to top, rgba(177, 65, 65, 0) 0%, ${colour} 100%)`);
+        lButton.style.background = colour;
+        menuButtons.style.setProperty('--button-gradient', `linear-gradient(to top, ${colour}, transparent)`);
+    }
+
     const fragment = window.location.hash.substring(1);
   
     if (fragment) {
@@ -194,5 +192,11 @@ window.addEventListener('DOMContentLoaded', () => {
         } else {
             proceedWithSession(sessionId);
         }
+    }
+
+    // Apply stored userColour on page load if available
+    const storedUserColour = localStorage.getItem('userColour');
+    if (storedUserColour) {
+        applyUserColour(storedUserColour);
     }
   });
