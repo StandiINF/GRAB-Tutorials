@@ -51,13 +51,14 @@ document.addEventListener("keydown", (event) => {
 // menu opening / closing
 
 function openMenu(menuId) {
-    const menus = ["TMenu", "BMenu", "AMenu", "EMenu"];
-    const buttons = ["T", "B", "A", "E"];
+    const menus = ["TMenu", "BMenu", "AMenu", "EMenu", "LMenu"];
+    const buttons = ["T", "B", "A", "E", "L"];
     const colors = {
         TMenu: { background: "rgb(248, 153, 0)", gradient: "linear-gradient(to top, rgba(177, 65, 65, 0) 0%, rgb(248, 153, 0) 100%)", buttonGradient: "linear-gradient(to top, rgb(248, 153, 0), transparent)" },
         BMenu: { background: "rgb(144, 207, 144)", gradient: "linear-gradient(to top, rgba(177, 65, 65, 0) 0%, rgb(144, 207, 144) 100%)", buttonGradient: "linear-gradient(to top, rgb(144, 207, 144), transparent)" },
         AMenu: { background: "#638DDD", gradient: "linear-gradient(to top, rgba(177, 65, 65, 0) 0%, #638DDD 100%)", buttonGradient: "linear-gradient(to top, #638DDD, transparent)" },
         EMenu: { background: "rgb(124, 72, 72)", gradient: "linear-gradient(to top, rgba(177, 65, 65, 0) 0%, rgb(124, 72, 72) 100%)", buttonGradient: "linear-gradient(to top, rgb(124, 72, 72), transparent)" },
+        LMenu: { background: "#888888", gradient: "linear-gradient(to top, rgba(177, 65, 65, 0) 0%, #888888 100%)", buttonGradient: "linear-gradient(to top, #888888, transparent)" },
     };
     const menu = document.getElementById(menuId);
     const menuButtons = document.getElementById("menuButtons");
@@ -110,7 +111,7 @@ function openMenu(menuId) {
 }
 
 function closeMenu() {
-    const menus = ["TMenu", "BMenu", "AMenu", "EMenu"];
+    const menus = ["TMenu", "BMenu", "AMenu", "EMenu", "LMenu"];
     menus.forEach(menuId => {
         const menu = document.getElementById(menuId);
         menu.style.pointerEvents = 'none';

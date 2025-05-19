@@ -145,6 +145,10 @@
     background: linear-gradient(to top, rgba(177, 65, 65, 0) 0%, rgb(248, 153, 0) 100%);
 }
 
+#LMenu::before {
+    background: linear-gradient(to top, rgba(177, 65, 65, 0) 0%, #888888 100%);
+}
+
 .cardMain {
     width: 100%;
     height: auto;
@@ -473,16 +477,20 @@
     background: rgb(248, 153, 0);
 }
 
+#LMenu {
+    background: #888888;
+}
+
 #C:hover {
     background-color: rgb(70, 130, 180);
     box-shadow: 0 0 10px rgb(70, 130, 180);
 }
 
-#loginMeta {
+#L {
     background: #888888;
 }
 
-#loginMeta:hover {
+#L:hover {
     background-color: #5a5a5a;
     box-shadow: 0 0 10px #5a5a5a;
 }
@@ -555,8 +563,24 @@
 }
 
 .new
-.newFeature {
+.newFeature
+.updated {
     position: relative;
+}
+
+.updated::after {
+    content: "UPDATED";
+    position: absolute;
+    top: 5px;
+    right: 5px;
+    background-color: #724f0d;
+    color: white;
+    font-size: 0.8rem;
+    font-weight: bold;
+    padding: 2px 5px;
+    border-radius: 90px;
+    z-index: 10;
+    font-family: 'nunito', sans-serif;
 }
 
 .new::after {
@@ -591,4 +615,24 @@
 
 #logoutButton {
     background: red;
+}
+
+#loginMeta {
+    background: #2a3439;
+    color: white;
+    position: relative;
+    top: -25rem; /* Adjust this value to move it further up */
+    padding: 1rem 2rem;
+    border: none;
+    border-radius: 0.5rem;
+    font-size: 1rem;
+    cursor: pointer;
+    text-align: center;
+}
+
+#loginContainer {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
 }
