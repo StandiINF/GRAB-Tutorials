@@ -41,6 +41,17 @@ window.addEventListener('DOMContentLoaded', () => {
                     loginMetaElement.textContent = 'Logout';
                     loggedinElement.style.display = 'none';
                     loginwithbuttonElement.style.display = 'none';
+
+                    // Update LMenu and button colors
+                    const lMenu = document.getElementById('LMenu');
+                    const lButton = document.getElementById('L');
+                    const menuButtons = document.getElementById('menuButtons');
+
+                    lMenu.style.background = userColour;
+                    lMenu.style.setProperty('--menu-gradient', `linear-gradient(to top, rgba(177, 65, 65, 0) 0%, ${userColour} 100%)`);
+                    lButton.style.background = userColour;
+                    menuButtons.style.setProperty('--button-gradient', `linear-gradient(to top, ${userColour}, transparent)`);
+
                     loginMetaElement.addEventListener('click', () => {
                         localStorage.removeItem('sessionId');
                         loginTextElement.textContent = 'Login with Meta';
