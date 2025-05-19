@@ -613,15 +613,11 @@
     font-family: 'nunito', sans-serif;
 }
 
-#logoutButton {
-    background: red;
-}
-
 #loginMeta {
+    position: fixed;
+    top: 55rem;
     background: #2a3439;
     color: white;
-    position: fixed;
-    top: 20rem;
     padding: 1rem 2rem;
     border: none;
     border-radius: 0.5rem;
