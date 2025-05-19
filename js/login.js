@@ -26,6 +26,7 @@ window.addEventListener('DOMContentLoaded', () => {
                     if (response.status === 403) {
                         console.error('Session is invalid or expired.');
                         localStorage.removeItem('sessionId');
+                        localStorage.removeItem('userColour');
                         setupLoginButton();
                         return;
                     }
@@ -35,26 +36,24 @@ window.addEventListener('DOMContentLoaded', () => {
                 const data = await response.json();
                 if (data.alias) {
                     console.log(`User is logged in as ${data.alias}`);
-                    const userColour = data.hexColor; // Store hexColor in userColour
-                    localStorage.setItem('userColour', userColour); // Save userColour to localStorage
+                    const userColour = data.hexColor;
+                    localStorage.setItem('userColour', userColour);
                     console.log(`User's color: ${userColour}`);
                     loginTextElement.textContent = `${data.alias}`;
                     loginMetaElement.textContent = 'Logout';
                     loggedinElement.style.display = 'none';
                     loginwithbuttonElement.style.display = 'none';
 
-                    // Apply userColour to LMenu and related elements
                     applyUserColour(userColour);
 
                     loginMetaElement.addEventListener('click', () => {
                         localStorage.removeItem('sessionId');
-                        localStorage.removeItem('userColour'); // Clear userColour on logout
+                        localStorage.removeItem('userColour');
                         loginTextElement.textContent = 'Login with Meta';
                         loginMetaElement.textContent = 'Login';
                         loggedinElement.style.display = 'block';
                         loginwithbuttonElement.style.display = 'block';
 
-                        // Reset colors on logout
                         applyUserColour('#888888');
 
                         loginMetaElement.onclick = () => {
@@ -70,6 +69,7 @@ window.addEventListener('DOMContentLoaded', () => {
             } catch (error) {
                 console.error('Error verifying session:', error);
                 localStorage.removeItem('sessionId');
+                localStorage.removeItem('userColour');
                 setupLoginButton();
             }
         } else {
@@ -89,11 +89,16 @@ window.addEventListener('DOMContentLoaded', () => {
         const lMenu = document.getElementById('LMenu');
         const lButton = document.getElementById('L');
         const menuButtons = document.getElementById('menuButtons');
+        const mMenu = document.getElementById('MMenu');
 
         lMenu.style.background = colour;
         lMenu.style.setProperty('--menu-gradient', `linear-gradient(to top, rgba(177, 65, 65, 0) 0%, ${colour} 100%)`);
         lButton.style.background = colour;
         menuButtons.style.setProperty('--button-gradient', `linear-gradient(to top, ${colour}, transparent)`);
+        
+        setTimeout(() => {
+            mMenu.style.setProperty('--menu-gradient', `linear-gradient(to top, rgba(177, 65, 65, 0) 0%, ${colour} 100%)`);
+        }, 300);
     }
 
     const fragment = window.location.hash.substring(1);
@@ -194,7 +199,6 @@ window.addEventListener('DOMContentLoaded', () => {
         }
     }
 
-    // Apply stored userColour on page load if available
     const storedUserColour = localStorage.getItem('userColour');
     if (storedUserColour) {
         applyUserColour(storedUserColour);
