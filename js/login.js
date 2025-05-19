@@ -35,6 +35,8 @@ window.addEventListener('DOMContentLoaded', () => {
                 const data = await response.json();
                 if (data.alias) {
                     console.log(`User is logged in as ${data.alias}`);
+                    const userColour = data.hexColor; // Store hexColor in userColour
+                    console.log(`User's color: ${userColour}`);
                     loginTextElement.textContent = `${data.alias}`;
                     loginMetaElement.textContent = 'Logout';
                     loggedinElement.style.display = 'none';
