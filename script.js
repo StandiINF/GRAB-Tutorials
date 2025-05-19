@@ -58,7 +58,11 @@ function openMenu(menuId) {
         BMenu: { background: "rgb(144, 207, 144)", gradient: "linear-gradient(to top, rgba(177, 65, 65, 0) 0%, rgb(144, 207, 144) 100%)", buttonGradient: "linear-gradient(to top, rgb(144, 207, 144), transparent)" },
         AMenu: { background: "#638DDD", gradient: "linear-gradient(to top, rgba(177, 65, 65, 0) 0%, #638DDD 100%)", buttonGradient: "linear-gradient(to top, #638DDD, transparent)" },
         EMenu: { background: "rgb(124, 72, 72)", gradient: "linear-gradient(to top, rgba(177, 65, 65, 0) 0%, rgb(124, 72, 72) 100%)", buttonGradient: "linear-gradient(to top, rgb(124, 72, 72), transparent)" },
-        LMenu: { background: "#888888", gradient: "linear-gradient(to top, rgba(177, 65, 65, 0) 0%, #888888 100%)", buttonGradient: "linear-gradient(to top, #888888, transparent)" },
+        LMenu: { 
+            background: localStorage.getItem('userColour') || "#888888", 
+            gradient: `linear-gradient(to top, rgba(177, 65, 65, 0) 0%, ${localStorage.getItem('userColour') || "#888888"} 100%)`, 
+            buttonGradient: `linear-gradient(to top, ${localStorage.getItem('userColour') || "#888888"}, transparent)` 
+        },
     };
     const menu = document.getElementById(menuId);
     const menuButtons = document.getElementById("menuButtons");

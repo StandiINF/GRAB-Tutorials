@@ -52,12 +52,24 @@ window.addEventListener('DOMContentLoaded', () => {
                     lButton.style.background = userColour;
                     menuButtons.style.setProperty('--button-gradient', `linear-gradient(to top, ${userColour}, transparent)`);
 
+                    // Ensure old colors are removed
+                    lMenu.style.transition = "background 0.3s ease";
+                    lButton.style.transition = "background 0.3s ease";
+                    menuButtons.style.transition = "background 0.3s ease";
+
                     loginMetaElement.addEventListener('click', () => {
                         localStorage.removeItem('sessionId');
                         loginTextElement.textContent = 'Login with Meta';
                         loginMetaElement.textContent = 'Login';
                         loggedinElement.style.display = 'block';
                         loginwithbuttonElement.style.display = 'block';
+
+                        // Reset colors on logout
+                        lMenu.style.background = '#888888';
+                        lMenu.style.setProperty('--menu-gradient', `linear-gradient(to top, rgba(177, 65, 65, 0) 0%, #888888 100%)`);
+                        lButton.style.background = '#888888';
+                        menuButtons.style.setProperty('--button-gradient', `linear-gradient(to top, #2a3439, transparent)`);
+
                         loginMetaElement.onclick = () => {
                             window.location.href = 'https://auth.oculus.com/sso/?organization_id=638365782695092&redirect_uri=https%3A%2F%2Fgrab-tutorials.live%2F';
                         };
