@@ -620,7 +620,7 @@
 #loginMeta {
     background: #2a3439;
     color: white;
-    position: relative;
+    position: fixed;
     top: 20rem;
     padding: 1rem 2rem;
     border: none;
