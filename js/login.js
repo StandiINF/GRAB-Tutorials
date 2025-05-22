@@ -55,6 +55,7 @@ window.addEventListener('DOMContentLoaded', () => {
                         loginwithbuttonElement.style.display = 'block';
 
                         applyUserColour('#888888');
+                        applySecondaryColour('#888888');
 
                         const mMenu = document.getElementById('MMenu');
                         const menuButtons = document.getElementById('menuButtons');
