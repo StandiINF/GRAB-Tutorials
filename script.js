@@ -54,10 +54,11 @@ function openMenu(menuId) {
     const menus = ["TMenu", "BMenu", "AMenu", "EMenu", "LMenu"];
     const buttons = ["T", "B", "A", "E", "L"];
     let userColour = "#888888";
+    let userColourSecondary = "#888888";
     const menu = document.getElementById(menuId);
     const menuButtons = document.getElementById("menuButtons");
 
-    function applyMenuColours(colour) {
+    function applyMenuColours(colour, secondaryColour) {
         const colors = {
             TMenu: { background: "rgb(248, 153, 0)", gradient: "linear-gradient(to top, rgba(177, 65, 65, 0) 0%, rgb(248, 153, 0) 100%)", buttonGradient: "linear-gradient(to top, rgb(248, 153, 0), transparent)" },
             BMenu: { background: "rgb(144, 207, 144)", gradient: "linear-gradient(to top, rgba(177, 65, 65, 0) 0%, rgb(144, 207, 144) 100%)", buttonGradient: "linear-gradient(to top, rgb(144, 207, 144), transparent)" },
@@ -95,6 +96,10 @@ function openMenu(menuId) {
                 button.classList.remove("active");
             }
         });
+        const lButton = document.getElementById('L');
+        if (lButton) {
+            lButton.style.background = secondaryColour;
+        }
     }
 
     menuButtons.style.pointerEvents = "none";
@@ -127,16 +132,19 @@ function openMenu(menuId) {
                 if (data && data.hexColor) {
                     userColour = data.hexColor;
                 }
-                applyMenuColours(userColour);
+                if (data && data.hexColorSecondary) {
+                    userColourSecondary = data.hexColorSecondary;
+                }
+                applyMenuColours(userColour, userColourSecondary);
             })
             .catch(() => {
-                applyMenuColours(userColour);
+                applyMenuColours(userColour, userColourSecondary);
             });
             return;
         }
     }
 
-    applyMenuColours(userColour);
+    applyMenuColours(userColour, userColourSecondary);
 }
 
 function closeMenu() {
