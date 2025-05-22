@@ -46,22 +46,22 @@ window.addEventListener('DOMContentLoaded', () => {
 
                     applyUserColour(userColour, userColourSecondary);
 
-                    loginMetaElement.replaceWith(loginMetaElement.cloneNode(true));
-                    const newLoginMetaElement = document.getElementById('loginMeta');
-                    newLoginMetaElement.addEventListener('click', () => {
+                    function handleLogout() {
                         localStorage.removeItem('sessionId');
                         loginTextElement.textContent = 'Login with Meta';
-                        newLoginMetaElement.textContent = 'Login';
+                        loginMetaElement.textContent = 'Login';
                         loggedinElement.style.display = 'block';
                         loginwithbuttonElement.style.display = 'block';
-
                         applyUserColour('#888888', '#888888');
-
-                        newLoginMetaElement.onclick = () => {
+                        loginMetaElement.onclick = () => {
                             window.location.href = 'https://auth.oculus.com/sso/?organization_id=638365782695092&redirect_uri=https%3A%2F%2Fgrab-tutorials.live%2F';
                         };
                         console.log('Logged out successfully.');
-                    });
+                        loginMetaElement.removeEventListener('click', handleLogout);
+                    }
+
+                    loginMetaElement.removeEventListener('click', handleLogout);
+                    loginMetaElement.addEventListener('click', handleLogout);
                 } else {
                     console.log('Session expired or invalid');
                     localStorage.removeItem('sessionId');
