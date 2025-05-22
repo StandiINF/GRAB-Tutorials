@@ -44,7 +44,7 @@ window.addEventListener('DOMContentLoaded', () => {
                     loggedinElement.style.display = 'none';
                     loginwithbuttonElement.style.display = 'none';
 
-                    applyUserColour(userColour);
+                    applyUserColour(userColour, userColourSecondary);
 
                     loginMetaElement.addEventListener('click', () => {
                         localStorage.removeItem('sessionId');
@@ -53,7 +53,7 @@ window.addEventListener('DOMContentLoaded', () => {
                         loggedinElement.style.display = 'block';
                         loginwithbuttonElement.style.display = 'block';
 
-                        applyUserColour('#888888');
+                        applyUserColour('#888888', '#888888');
 
                         loginMetaElement.onclick = () => {
                             window.location.href = 'https://auth.oculus.com/sso/?organization_id=638365782695092&redirect_uri=https%3A%2F%2Fgrab-tutorials.live%2F';
@@ -85,13 +85,13 @@ window.addEventListener('DOMContentLoaded', () => {
         };
     }
   
-    function applyUserColour(colour) {
+    function applyUserColour(primaryColour, secondaryColour) {
         const lMenu = document.getElementById('LMenu');
         const lButton = document.getElementById('L');
-        lMenu.style.background = colour;
-        if (lButton) {
-            lButton.style.background = colour;
-        }
+        // Set LMenu and others to primary, L to secondary
+        if (lMenu) lMenu.style.background = primaryColour;
+        // Add more elements here if needed to use primaryColour
+        if (lButton) lButton.style.background = secondaryColour;
     }
 
     const fragment = window.location.hash.substring(1);
