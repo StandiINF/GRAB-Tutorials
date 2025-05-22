@@ -37,13 +37,14 @@ window.addEventListener('DOMContentLoaded', () => {
                 if (data.alias) {
                     console.log(`User is logged in as ${data.alias}`);
                     const userColour = data.hexColor;
+                    const userColourSecondary = data.hexColorSecondary;
                     console.log(`User's color: ${userColour}`);
                     loginTextElement.textContent = `${data.alias}`;
                     loginMetaElement.textContent = 'Logout';
                     loggedinElement.style.display = 'none';
                     loginwithbuttonElement.style.display = 'none';
 
-                    applyUserColour(userColour);
+                    applyUserColour(userColourSecondary);
 
                     loginMetaElement.addEventListener('click', () => {
                         localStorage.removeItem('sessionId');
