@@ -103,8 +103,15 @@ function openMenu(menuId) {
             }
         });
         const lButton = document.getElementById('L');
-        if (lButton && menuId === "LMenu") {
-            lButton.style.background = secondaryColour;
+        if (lButton) {
+            if (menuId === "LMenu") {
+                lButton.style.background = secondaryColour;
+            } else {
+                const sessionId = localStorage.getItem('sessionId');
+                if (sessionId && secondaryColour && secondaryColour !== "#888888") {
+                    lButton.style.background = secondaryColour;
+                }
+            }
         }
     }
 
@@ -124,6 +131,31 @@ function openMenu(menuId) {
     }
 
     if (menuId === "LMenu") {
+        const sessionId = localStorage.getItem('sessionId');
+        if (sessionId) {
+            fetch(`https://api.grab-tutorials.live/getAlias?sessionId=${encodeURIComponent(sessionId)}`, {
+                method: 'GET',
+                credentials: 'include',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+            })
+            .then(response => response.ok ? response.json() : null)
+            .then(data => {
+                if (data && data.hexColor) {
+                    userColour = data.hexColor;
+                }
+                if (data && data.hexColorSecondary) {
+                    userColourSecondary = data.hexColorSecondary;
+                }
+                applyMenuColours(userColour, userColourSecondary);
+            })
+            .catch(() => {
+                applyMenuColours(userColour, userColourSecondary);
+            });
+            return;
+        }
+    } else {
         const sessionId = localStorage.getItem('sessionId');
         if (sessionId) {
             fetch(`https://api.grab-tutorials.live/getAlias?sessionId=${encodeURIComponent(sessionId)}`, {
