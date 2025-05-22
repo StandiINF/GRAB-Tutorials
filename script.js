@@ -53,8 +53,8 @@ document.addEventListener("keydown", (event) => {
 function openMenu(menuId) {
     const menus = ["TMenu", "BMenu", "AMenu", "EMenu", "LMenu"];
     const buttons = ["T", "B", "A", "E", "L"];
-    let userColour = "#888888";
-    let userColourSecondary = "#888888";
+    let userColour = localStorage.getItem('hexColor') || "#888888";
+    let userColourSecondary = localStorage.getItem('hexColorSecondary') || "#888888";
     const menu = document.getElementById(menuId);
     const menuButtons = document.getElementById("menuButtons");
 
@@ -130,7 +130,10 @@ function openMenu(menuId) {
         return;
     }
 
-    if (menuId === "LMenu") {
+    if (
+        (menuId === "LMenu" || localStorage.getItem('sessionId')) &&
+        (!localStorage.getItem('hexColor') || !localStorage.getItem('hexColorSecondary'))
+    ) {
         const sessionId = localStorage.getItem('sessionId');
         if (sessionId) {
             fetch(`https://api.grab-tutorials.live/getAlias?sessionId=${encodeURIComponent(sessionId)}`, {
@@ -144,34 +147,11 @@ function openMenu(menuId) {
             .then(data => {
                 if (data && data.hexColor) {
                     userColour = data.hexColor;
+                    localStorage.setItem('hexColor', userColour);
                 }
                 if (data && data.hexColorSecondary) {
                     userColourSecondary = data.hexColorSecondary;
-                }
-                applyMenuColours(userColour, userColourSecondary);
-            })
-            .catch(() => {
-                applyMenuColours(userColour, userColourSecondary);
-            });
-            return;
-        }
-    } else {
-        const sessionId = localStorage.getItem('sessionId');
-        if (sessionId) {
-            fetch(`https://api.grab-tutorials.live/getAlias?sessionId=${encodeURIComponent(sessionId)}`, {
-                method: 'GET',
-                credentials: 'include',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-            })
-            .then(response => response.ok ? response.json() : null)
-            .then(data => {
-                if (data && data.hexColor) {
-                    userColour = data.hexColor;
-                }
-                if (data && data.hexColorSecondary) {
-                    userColourSecondary = data.hexColorSecondary;
+                    localStorage.setItem('hexColorSecondary', userColourSecondary);
                 }
                 applyMenuColours(userColour, userColourSecondary);
             })

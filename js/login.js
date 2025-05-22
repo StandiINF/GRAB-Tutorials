@@ -27,6 +27,8 @@ window.addEventListener('DOMContentLoaded', () => {
                         console.error('Session is invalid or expired.');
                         localStorage.removeItem('sessionId');
                         localStorage.removeItem('fragmentData');
+                        localStorage.removeItem('hexColor');
+                        localStorage.removeItem('hexColorSecondary');
                         setupLoginButton();
                         return;
                     }
@@ -38,6 +40,10 @@ window.addEventListener('DOMContentLoaded', () => {
                     console.log(`User is logged in as ${data.alias}`);
                     const userColour = data.hexColor;
                     const userColourSecondary = data.hexColorSecondary;
+
+                    localStorage.setItem('hexColor', userColour);
+                    localStorage.setItem('hexColorSecondary', userColourSecondary);
+
                     loginTextElement.textContent = `${data.alias}`;
                     loginMetaElement.textContent = 'Logout';
                     loggedinElement.style.display = 'none';
@@ -52,6 +58,9 @@ window.addEventListener('DOMContentLoaded', () => {
                         loginMetaElement.textContent = 'Login';
                         loggedinElement.style.display = 'block';
                         loginwithbuttonElement.style.display = 'block';
+
+                        localStorage.removeItem('hexColor');
+                        localStorage.removeItem('hexColorSecondary');
 
                         applyUserColour('#888888');
                         applySecondaryColour('#888888');
@@ -75,12 +84,16 @@ window.addEventListener('DOMContentLoaded', () => {
                     console.log('Session expired or invalid');
                     localStorage.removeItem('sessionId');
                     localStorage.removeItem('fragmentData');
+                    localStorage.removeItem('hexColor');
+                    localStorage.removeItem('hexColorSecondary');
                     setupLoginButton();
                 }
             } catch (error) {
                 console.error('Error verifying session:', error);
                 localStorage.removeItem('sessionId');
                 localStorage.removeItem('fragmentData');
+                localStorage.removeItem('hexColor');
+                localStorage.removeItem('hexColorSecondary');
                 setupLoginButton();
             }
         } else {
@@ -94,6 +107,8 @@ window.addEventListener('DOMContentLoaded', () => {
         loginMetaElement.onclick = () => {
             window.location.href = 'https://auth.oculus.com/sso/?organization_id=638365782695092&redirect_uri=https%3A%2F%2Fgrab-tutorials.live%2F';
         };
+        localStorage.removeItem('hexColor');
+        localStorage.removeItem('hexColorSecondary');
     }
   
     function applyUserColour(colour) {
@@ -164,12 +179,16 @@ window.addEventListener('DOMContentLoaded', () => {
                 } else {
                     console.error('Missing sessionId or alias.');
                     localStorage.removeItem('fragmentData');
+                    localStorage.removeItem('hexColor');
+                    localStorage.removeItem('hexColorSecondary');
                     setupLoginButton();
                 }
             })
             .catch(error => {
                 console.error('Error during login:', error);
                 localStorage.removeItem('fragmentData');
+                localStorage.removeItem('hexColor');
+                localStorage.removeItem('hexColorSecondary');
                 setupLoginButton();
             });
     } else {
@@ -204,12 +223,16 @@ window.addEventListener('DOMContentLoaded', () => {
                     } else {
                         console.error('Missing sessionId or alias.');
                         localStorage.removeItem('fragmentData');
+                        localStorage.removeItem('hexColor');
+                        localStorage.removeItem('hexColorSecondary');
                         setupLoginButton();
                     }
                 })
                 .catch(error => {
                     console.error('Error during login:', error);
                     localStorage.removeItem('fragmentData');
+                    localStorage.removeItem('hexColor');
+                    localStorage.removeItem('hexColorSecondary');
                     setupLoginButton();
                 });
         } else {
