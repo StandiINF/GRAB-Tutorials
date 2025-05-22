@@ -112,9 +112,8 @@ window.addEventListener('DOMContentLoaded', () => {
     }
   
     function applyUserColour(colour) {
-        // Only apply if LMenu is open
         const lMenu = document.getElementById('LMenu');
-        if (lMenu && lMenu.style.display === 'block') {
+        if (lMenu && window.getComputedStyle(lMenu).display === 'block') {
             const mMenu = document.getElementById('MMenu');
             const menuButtons = document.getElementById('menuButtons');
             if (mMenu) {
