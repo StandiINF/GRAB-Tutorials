@@ -76,6 +76,12 @@ function openMenu(menuId) {
                 currentMenu.style.zIndex = 1000;
                 button.classList.add("active");
 
+                if (id === "TMenu") button.style.background = "rgb(248, 153, 0)";
+                else if (id === "BMenu") button.style.background = "rgb(144, 207, 144)";
+                else if (id === "AMenu") button.style.background = "#638DDD";
+                else if (id === "EMenu") button.style.background = "rgb(124, 72, 72)";
+                else if (id === "LMenu") button.style.background = secondaryColour;
+
                 const mMenu = document.getElementById("MMenu");
                 mMenu.style.transition = "background 0.3s ease, var(--menu-gradient) 0.3s ease";
                 mMenu.style.background = colors[id].background;
@@ -97,7 +103,7 @@ function openMenu(menuId) {
             }
         });
         const lButton = document.getElementById('L');
-        if (lButton) {
+        if (lButton && menuId === "LMenu") {
             lButton.style.background = secondaryColour;
         }
     }
