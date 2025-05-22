@@ -37,6 +37,7 @@ window.addEventListener('DOMContentLoaded', () => {
                 if (data.alias) {
                     console.log(`User is logged in as ${data.alias}`);
                     const userColour = data.hexColor;
+                    const userColourSecondary = data.hexColorSecondary;
                     console.log(`User's color: ${userColour}`);
                     loginTextElement.textContent = `${data.alias}`;
                     loginMetaElement.textContent = 'Logout';
@@ -44,6 +45,7 @@ window.addEventListener('DOMContentLoaded', () => {
                     loginwithbuttonElement.style.display = 'none';
 
                     applyUserColour(userColour);
+                    applySecondaryColour(userColourSecondary);
 
                     loginMetaElement.addEventListener('click', () => {
                         localStorage.removeItem('sessionId');
@@ -54,15 +56,14 @@ window.addEventListener('DOMContentLoaded', () => {
 
                         applyUserColour('#888888');
 
-                        const lMenu = document.getElementById('LMenu');
                         const mMenu = document.getElementById('MMenu');
                         const menuButtons = document.getElementById('menuButtons');
-                        if (lMenu && mMenu && lMenu.style.display === 'block') {
+                        if (mMenu) {
                             mMenu.style.background = '#888888';
                             mMenu.style.setProperty('--menu-gradient', 'linear-gradient(to top, rgba(177, 65, 65, 0) 0%, #888888 100%)');
-                            if (menuButtons) {
-                                menuButtons.style.setProperty('--button-gradient', 'linear-gradient(to top, #888888, transparent)');
-                            }
+                        }
+                        if (menuButtons) {
+                            menuButtons.style.setProperty('--button-gradient', 'linear-gradient(to top, #888888, transparent)');
                         }
 
                         loginMetaElement.onclick = () => {
@@ -96,22 +97,20 @@ window.addEventListener('DOMContentLoaded', () => {
     }
   
     function applyUserColour(colour) {
-        const lMenu = document.getElementById('LMenu');
-        const lButton = document.getElementById('L');
         const mMenu = document.getElementById('MMenu');
         const menuButtons = document.getElementById('menuButtons');
-        lMenu.style.background = colour;
-        if (lButton) {
-            lButton.style.background = colour;
-        }
-
-        if (lMenu && mMenu && lMenu.style.display === 'block') {
+        if (mMenu) {
             mMenu.style.background = colour;
             mMenu.style.setProperty('--menu-gradient', `linear-gradient(to top, rgba(177, 65, 65, 0) 0%, ${colour} 100%)`);
-            if (menuButtons) {
-                menuButtons.style.setProperty('--button-gradient', `linear-gradient(to top, ${colour}, transparent)`);
-            }
         }
+        if (menuButtons) {
+            menuButtons.style.setProperty('--button-gradient', `linear-gradient(to top, ${colour}, transparent)`);
+        }
+    }
+
+    function applySecondaryColour(colour) {
+        const lButton = document.getElementById('L');
+        lButton.style.background = colour;
     }
 
     const fragment = window.location.hash.substring(1);
