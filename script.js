@@ -14,6 +14,10 @@ const helpEight = document.getElementById("helpEight");
 
 let lastPressedCard = null;
 
+// Store user colours globally
+let globalUserColour = "#888888";
+let globalUserColourSecondary = "#888888";
+
 const patchNotesContainer = document.getElementById("patchNotesContainer");
 const patchNotesToggle = document.getElementById("patchNotesToggle");
 
@@ -53,8 +57,8 @@ document.addEventListener("keydown", (event) => {
 function openMenu(menuId) {
     const menus = ["TMenu", "BMenu", "AMenu", "EMenu", "LMenu"];
     const buttons = ["T", "B", "A", "E", "L"];
-    let userColour = "#888888";
-    let userColourSecondary = "#888888";
+    let userColour = globalUserColour;
+    let userColourSecondary = globalUserColourSecondary;
     const menu = document.getElementById(menuId);
     const menuButtons = document.getElementById("menuButtons");
 
@@ -64,7 +68,7 @@ function openMenu(menuId) {
             BMenu: { background: "rgb(144, 207, 144)", gradient: "linear-gradient(to top, rgba(177, 65, 65, 0) 0%, rgb(144, 207, 144) 100%)", buttonGradient: "linear-gradient(to top, rgb(144, 207, 144), transparent)" },
             AMenu: { background: "#638DDD", gradient: "linear-gradient(to top, rgba(177, 65, 65, 0) 0%, #638DDD 100%)", buttonGradient: "linear-gradient(to top, #638DDD, transparent)" },
             EMenu: { background: "rgb(124, 72, 72)", gradient: "linear-gradient(to top, rgba(177, 65, 65, 0) 0%, rgb(124, 72, 72) 100%)", buttonGradient: "linear-gradient(to top, rgb(124, 72, 72), transparent)" },
-            LMenu: { background: colour, gradient: `linear-gradient(to top, rgba(177, 65, 65, 0) 0%, ${colour} 100%)`, buttonGradient: `linear-gradient(to top, ${colour}, transparent)` },
+            LMenu: { background: globalUserColour, gradient: `linear-gradient(to top, rgba(177, 65, 65, 0) 0%, ${globalUserColour} 100%)`, buttonGradient: `linear-gradient(to top, ${globalUserColour}, transparent)` },
         };
         menus.forEach((id, index) => {
             const currentMenu = document.getElementById(id);
@@ -98,7 +102,7 @@ function openMenu(menuId) {
         });
         const lButton = document.getElementById('L');
         if (lButton) {
-            lButton.style.background = secondaryColour;
+            lButton.style.background = globalUserColourSecondary;
         }
     }
 
@@ -130,15 +134,15 @@ function openMenu(menuId) {
             .then(response => response.ok ? response.json() : null)
             .then(data => {
                 if (data && data.hexColor) {
-                    userColour = data.hexColor;
+                    globalUserColour = data.hexColor;
                 }
                 if (data && data.hexColorSecondary) {
-                    userColourSecondary = data.hexColorSecondary;
+                    globalUserColourSecondary = data.hexColorSecondary;
                 }
-                applyMenuColours(userColour, userColourSecondary);
+                applyMenuColours(globalUserColour, globalUserColourSecondary);
             })
             .catch(() => {
-                applyMenuColours(userColour, userColourSecondary);
+                applyMenuColours(globalUserColour, globalUserColourSecondary);
             });
             return;
         }
