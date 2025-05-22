@@ -37,31 +37,39 @@ window.addEventListener('DOMContentLoaded', () => {
                 if (data.alias) {
                     console.log(`User is logged in as ${data.alias}`);
                     const userColour = data.hexColor;
-                    const userColourSecondary = data.hexColorSecondary;
                     console.log(`User's color: ${userColour}`);
                     loginTextElement.textContent = `${data.alias}`;
                     loginMetaElement.textContent = 'Logout';
                     loggedinElement.style.display = 'none';
                     loginwithbuttonElement.style.display = 'none';
 
-                    applyUserColour(userColour, userColourSecondary);
+                    applyUserColour(userColour);
 
-                    function handleLogout() {
+                    loginMetaElement.addEventListener('click', () => {
                         localStorage.removeItem('sessionId');
                         loginTextElement.textContent = 'Login with Meta';
                         loginMetaElement.textContent = 'Login';
                         loggedinElement.style.display = 'block';
                         loginwithbuttonElement.style.display = 'block';
-                        applyUserColour('#888888', '#888888');
+
+                        applyUserColour('#888888');
+
+                        const lMenu = document.getElementById('LMenu');
+                        const mMenu = document.getElementById('MMenu');
+                        const menuButtons = document.getElementById('menuButtons');
+                        if (lMenu && mMenu && lMenu.style.display === 'block') {
+                            mMenu.style.background = '#888888';
+                            mMenu.style.setProperty('--menu-gradient', 'linear-gradient(to top, rgba(177, 65, 65, 0) 0%, #888888 100%)');
+                            if (menuButtons) {
+                                menuButtons.style.setProperty('--button-gradient', 'linear-gradient(to top, #888888, transparent)');
+                            }
+                        }
+
                         loginMetaElement.onclick = () => {
                             window.location.href = 'https://auth.oculus.com/sso/?organization_id=638365782695092&redirect_uri=https%3A%2F%2Fgrab-tutorials.live%2F';
                         };
                         console.log('Logged out successfully.');
-                        loginMetaElement.removeEventListener('click', handleLogout);
-                    }
-
-                    loginMetaElement.removeEventListener('click', handleLogout);
-                    loginMetaElement.addEventListener('click', handleLogout);
+                    });
                 } else {
                     console.log('Session expired or invalid');
                     localStorage.removeItem('sessionId');
@@ -87,11 +95,23 @@ window.addEventListener('DOMContentLoaded', () => {
         };
     }
   
-    function applyUserColour(primaryColour, secondaryColour) {
+    function applyUserColour(colour) {
         const lMenu = document.getElementById('LMenu');
         const lButton = document.getElementById('L');
-        if (lMenu) lMenu.style.background = primaryColour;
-        if (lButton) lButton.style.background = secondaryColour;
+        const mMenu = document.getElementById('MMenu');
+        const menuButtons = document.getElementById('menuButtons');
+        lMenu.style.background = colour;
+        if (lButton) {
+            lButton.style.background = colour;
+        }
+
+        if (lMenu && mMenu && lMenu.style.display === 'block') {
+            mMenu.style.background = colour;
+            mMenu.style.setProperty('--menu-gradient', `linear-gradient(to top, rgba(177, 65, 65, 0) 0%, ${colour} 100%)`);
+            if (menuButtons) {
+                menuButtons.style.setProperty('--button-gradient', `linear-gradient(to top, ${colour}, transparent)`);
+            }
+        }
     }
 
     const fragment = window.location.hash.substring(1);
