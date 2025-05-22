@@ -44,7 +44,7 @@ window.addEventListener('DOMContentLoaded', () => {
                     loggedinElement.style.display = 'none';
                     loginwithbuttonElement.style.display = 'none';
 
-                    applyUserColour(userColourSecondary);
+                    applyUserColour(userColour);
 
                     loginMetaElement.addEventListener('click', () => {
                         localStorage.removeItem('sessionId');
