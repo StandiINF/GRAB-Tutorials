@@ -26,7 +26,7 @@ window.addEventListener('DOMContentLoaded', () => {
                     if (response.status === 403) {
                         console.error('Session is invalid or expired.');
                         localStorage.removeItem('sessionId');
-                        localStorage.removeItem('userColour');
+                        localStorage.removeItem('fragmentData');
                         setupLoginButton();
                         return;
                     }
@@ -37,7 +37,6 @@ window.addEventListener('DOMContentLoaded', () => {
                 if (data.alias) {
                     console.log(`User is logged in as ${data.alias}`);
                     const userColour = data.hexColor;
-                    localStorage.setItem('userColour', userColour);
                     console.log(`User's color: ${userColour}`);
                     loginTextElement.textContent = `${data.alias}`;
                     loginMetaElement.textContent = 'Logout';
@@ -48,7 +47,6 @@ window.addEventListener('DOMContentLoaded', () => {
 
                     loginMetaElement.addEventListener('click', () => {
                         localStorage.removeItem('sessionId');
-                        localStorage.removeItem('userColour');
                         loginTextElement.textContent = 'Login with Meta';
                         loginMetaElement.textContent = 'Login';
                         loggedinElement.style.display = 'block';
@@ -75,12 +73,13 @@ window.addEventListener('DOMContentLoaded', () => {
                 } else {
                     console.log('Session expired or invalid');
                     localStorage.removeItem('sessionId');
+                    localStorage.removeItem('fragmentData');
                     setupLoginButton();
                 }
             } catch (error) {
                 console.error('Error verifying session:', error);
                 localStorage.removeItem('sessionId');
-                localStorage.removeItem('userColour');
+                localStorage.removeItem('fragmentData');
                 setupLoginButton();
             }
         } else {
@@ -125,12 +124,14 @@ window.addEventListener('DOMContentLoaded', () => {
             localStorage.setItem('fragmentData', JSON.stringify(decodedData));
         } catch (e) {
             console.error('Failed to decode and parse fragment:', e);
+            localStorage.removeItem('fragmentData');
             setupLoginButton();
             return;
         }
   
         if (!decodedData || typeof decodedData !== 'object' || !decodedData.code || !decodedData.org_scoped_id) {
             console.error('Invalid or missing data in decoded fragment:', decodedData);
+            localStorage.removeItem('fragmentData');
             setupLoginButton();
             return;
         }
@@ -163,11 +164,13 @@ window.addEventListener('DOMContentLoaded', () => {
                     proceedWithSession(data.sessionId);
                 } else {
                     console.error('Missing sessionId or alias.');
+                    localStorage.removeItem('fragmentData');
                     setupLoginButton();
                 }
             })
             .catch(error => {
                 console.error('Error during login:', error);
+                localStorage.removeItem('fragmentData');
                 setupLoginButton();
             });
     } else {
@@ -201,20 +204,17 @@ window.addEventListener('DOMContentLoaded', () => {
                         proceedWithSession(data.sessionId);
                     } else {
                         console.error('Missing sessionId or alias.');
+                        localStorage.removeItem('fragmentData');
                         setupLoginButton();
                     }
                 })
                 .catch(error => {
                     console.error('Error during login:', error);
+                    localStorage.removeItem('fragmentData');
                     setupLoginButton();
                 });
         } else {
             proceedWithSession(sessionId);
         }
-    }
-
-    const storedUserColour = localStorage.getItem('userColour');
-    if (storedUserColour) {
-        applyUserColour(storedUserColour);
     }
   });
