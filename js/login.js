@@ -55,17 +55,6 @@ window.addEventListener('DOMContentLoaded', () => {
 
                         applyUserColour('#888888');
 
-                        const lMenu = document.getElementById('LMenu');
-                        const mMenu = document.getElementById('MMenu');
-                        const menuButtons = document.getElementById('menuButtons');
-                        if (lMenu && mMenu && lMenu.style.display === 'block') {
-                            mMenu.style.background = '#888888';
-                            mMenu.style.setProperty('--menu-gradient', 'linear-gradient(to top, rgba(177, 65, 65, 0) 0%, #888888 100%)');
-                            if (menuButtons) {
-                                menuButtons.style.setProperty('--button-gradient', 'linear-gradient(to top, #888888, transparent)');
-                            }
-                        }
-
                         loginMetaElement.onclick = () => {
                             window.location.href = 'https://auth.oculus.com/sso/?organization_id=638365782695092&redirect_uri=https%3A%2F%2Fgrab-tutorials.live%2F';
                         };
@@ -99,19 +88,9 @@ window.addEventListener('DOMContentLoaded', () => {
     function applyUserColour(colour) {
         const lMenu = document.getElementById('LMenu');
         const lButton = document.getElementById('L');
-        const mMenu = document.getElementById('MMenu');
-        const menuButtons = document.getElementById('menuButtons');
         lMenu.style.background = colour;
         if (lButton) {
             lButton.style.background = colour;
-        }
-
-        if (lMenu && mMenu && lMenu.style.display === 'block') {
-            mMenu.style.background = colour;
-            mMenu.style.setProperty('--menu-gradient', `linear-gradient(to top, rgba(177, 65, 65, 0) 0%, ${colour} 100%)`);
-            if (menuButtons) {
-                menuButtons.style.setProperty('--button-gradient', `linear-gradient(to top, ${colour}, transparent)`);
-            }
         }
     }
 
