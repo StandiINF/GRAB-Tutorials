@@ -64,15 +64,18 @@ window.addEventListener('DOMContentLoaded', () => {
 
                         applyUserColour('#888888');
                         applySecondaryColour('#888888');
-
-                        const mMenu = document.getElementById('MMenu');
-                        const menuButtons = document.getElementById('menuButtons');
-                        if (mMenu) {
-                            mMenu.style.background = '#888888';
-                            mMenu.style.setProperty('--menu-gradient', 'linear-gradient(to top, rgba(177, 65, 65, 0) 0%, #888888 100%)');
-                        }
-                        if (menuButtons) {
-                            menuButtons.style.setProperty('--button-gradient', 'linear-gradient(to top, #888888, transparent)');
+                        
+                        const lMenu = document.getElementById('LMenu');
+                        if (lMenu && window.getComputedStyle(lMenu).display === 'block') {
+                            const mMenu = document.getElementById('MMenu');
+                            const menuButtons = document.getElementById('menuButtons');
+                            if (mMenu) {
+                                mMenu.style.background = '#888888';
+                                mMenu.style.setProperty('--menu-gradient', 'linear-gradient(to top, rgba(177, 65, 65, 0) 0%, #888888 100%)');
+                            }
+                            if (menuButtons) {
+                                menuButtons.style.setProperty('--button-gradient', 'linear-gradient(to top, #888888, transparent)');
+                            }
                         }
 
                         loginMetaElement.onclick = () => {
