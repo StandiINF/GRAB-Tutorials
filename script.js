@@ -14,9 +14,9 @@ const helpEight = document.getElementById("helpEight");
 
 let lastPressedCard = null;
 
-// Store user colours globally
 let globalUserColour = "#888888";
 let globalUserColourSecondary = "#888888";
+window.globalUserColourSecondary = globalUserColourSecondary;
 
 const patchNotesContainer = document.getElementById("patchNotesContainer");
 const patchNotesToggle = document.getElementById("patchNotesToggle");
@@ -58,7 +58,7 @@ function openMenu(menuId) {
     const menus = ["TMenu", "BMenu", "AMenu", "EMenu", "LMenu"];
     const buttons = ["T", "B", "A", "E", "L"];
     let userColour = globalUserColour;
-    let userColourSecondary = globalUserColourSecondary;
+    let userColourSecondary = window.globalUserColourSecondary || globalUserColourSecondary;
     const menu = document.getElementById(menuId);
     const menuButtons = document.getElementById("menuButtons");
 
@@ -102,7 +102,7 @@ function openMenu(menuId) {
         });
         const lButton = document.getElementById('L');
         if (lButton) {
-            lButton.style.background = globalUserColourSecondary;
+            lButton.style.background = window.globalUserColourSecondary || globalUserColourSecondary;
         }
     }
 
@@ -138,6 +138,7 @@ function openMenu(menuId) {
                 }
                 if (data && data.hexColorSecondary) {
                     globalUserColourSecondary = data.hexColorSecondary;
+                    window.globalUserColourSecondary = data.hexColorSecondary;
                 }
                 applyMenuColours(globalUserColour, globalUserColourSecondary);
             })
