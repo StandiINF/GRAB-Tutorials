@@ -112,14 +112,18 @@ window.addEventListener('DOMContentLoaded', () => {
     }
   
     function applyUserColour(colour) {
-        const mMenu = document.getElementById('MMenu');
-        const menuButtons = document.getElementById('menuButtons');
-        if (mMenu) {
-            mMenu.style.background = colour;
-            mMenu.style.setProperty('--menu-gradient', `linear-gradient(to top, rgba(177, 65, 65, 0) 0%, ${colour} 100%)`);
-        }
-        if (menuButtons) {
-            menuButtons.style.setProperty('--button-gradient', `linear-gradient(to top, ${colour}, transparent)`);
+        // Only apply if LMenu is open
+        const lMenu = document.getElementById('LMenu');
+        if (lMenu && lMenu.style.display === 'block') {
+            const mMenu = document.getElementById('MMenu');
+            const menuButtons = document.getElementById('menuButtons');
+            if (mMenu) {
+                mMenu.style.background = colour;
+                mMenu.style.setProperty('--menu-gradient', `linear-gradient(to top, rgba(177, 65, 65, 0) 0%, ${colour} 100%)`);
+            }
+            if (menuButtons) {
+                menuButtons.style.setProperty('--button-gradient', `linear-gradient(to top, ${colour}, transparent)`);
+            }
         }
     }
 
