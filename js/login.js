@@ -87,8 +87,11 @@ window.addEventListener('DOMContentLoaded', () => {
   
     function applyUserColour(colour) {
         const lMenu = document.getElementById('LMenu');
-
+        const lButton = document.getElementById('L');
         lMenu.style.background = colour;
+        if (lButton) {
+            lButton.style.background = colour;
+        }
     }
 
     const fragment = window.location.hash.substring(1);
