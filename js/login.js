@@ -59,7 +59,8 @@ window.addEventListener('DOMContentLoaded', () => {
                         if (window.globalUserColourSecondary !== undefined) {
                             window.globalUserColourSecondary = '#888888';
                         }
-
+                        window.isUserLoggedIn = false;
+                        
                         const mMenu = document.getElementById('MMenu');
                         const menuButtons = document.getElementById('menuButtons');
                         if (mMenu) {
