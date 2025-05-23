@@ -13,7 +13,7 @@ window.addEventListener('DOMContentLoaded', () => {
     async function proceedWithSession(sessionId) {
         if (sessionId) {
             try {
-                await delay(500);
+                await delay(250);
                 const response = await fetch(`https://api.grab-tutorials.live/getAlias?sessionId=${encodeURIComponent(sessionId)}`, {
                     method: 'GET',
                     credentials: 'include',
