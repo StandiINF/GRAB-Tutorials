@@ -158,7 +158,7 @@ window.addEventListener('DOMContentLoaded', () => {
   
         window.history.replaceState(null, '', window.location.pathname);
   
-        delay(1500)
+        delay(1000)
             .then(() => {
                 return fetch('https://api.grab-tutorials.live/login', {
                     method: 'POST',
