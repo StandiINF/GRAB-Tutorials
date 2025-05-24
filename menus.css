@@ -50,18 +50,15 @@
     transition: opacity 0.3s;
 }
 
-#sliderGroup {
-
-    #sliderDial {
-    position: absolute;
-    left: 42px;
-    top: 168px;
-    z-index: 1;
-    height: 50px;
-    width: 50px;
-    transition: left 0.3s;
-    cursor: pointer;
-    }
+#sliderDial {
+position: absolute;
+left: 42px;
+top: 168px;
+z-index: 1;
+height: 50px;
+width: 50px;
+transition: left 0.3s;
+cursor: pointer;
 }
 
 #sliderGroup:hover #sliderDial {
@@ -70,12 +67,10 @@
 }
 
 @media (max-width: 767px) {
-    #sliderGroup {
-        #sliderDial {
-            height: 27px;
-            left: 9px;
-            top: 82.5px;
-        }
+    #sliderDial {
+        height: 27px;
+        left: 9px;
+        top: 82.5px;
     }
 
     #sliderGroup:hover #sliderDial {
@@ -240,6 +235,21 @@
     transition: transform 0.3s ease;
     will-change: transform;
     backface-visibility: hidden;
+}
+
+.cardGroup img.gif {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 2;
+    pointer-events: none;
+    display: none; /* Hide by default */
+}
+
+.cardGroup:hover img.gif {
+    display: block; /* Show on hover */
 }
 
 .cardGroup:hover {

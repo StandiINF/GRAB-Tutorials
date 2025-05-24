@@ -13,7 +13,7 @@ window.addEventListener('DOMContentLoaded', () => {
     async function proceedWithSession(sessionId) {
         if (sessionId) {
             try {
-                await delay(100);
+                await delay(250);
                 const response = await fetch(`https://api.grab-tutorials.live/getAlias?sessionId=${encodeURIComponent(sessionId)}`, {
                     method: 'GET',
                     credentials: 'include',
@@ -64,7 +64,7 @@ window.addEventListener('DOMContentLoaded', () => {
 
                         applyUserColour('#888888');
                         applySecondaryColour('#888888');
-                        
+
                         const lMenu = document.getElementById('LMenu');
                         if (lMenu && window.getComputedStyle(lMenu).display === 'block') {
                             const mMenu = document.getElementById('MMenu');
@@ -158,7 +158,7 @@ window.addEventListener('DOMContentLoaded', () => {
   
         window.history.replaceState(null, '', window.location.pathname);
   
-        delay(900)
+        delay(1000)
             .then(() => {
                 return fetch('https://api.grab-tutorials.live/login', {
                     method: 'POST',

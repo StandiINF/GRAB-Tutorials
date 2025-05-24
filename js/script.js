@@ -178,12 +178,16 @@ function closeMenu() {
 
 function moveSafetyNets(container) {
     const safetyNets = document.getElementById("safetyNets");
-    container.appendChild(safetyNets);
+    if (safetyNets && safetyNets.nodeType === 1 && safetyNets.parentNode !== container) {
+        container.appendChild(safetyNets);
+    }
 }
 
 function oneCardSafetyNet(container) {
-    const safetyNet = document.getElementById("oneCard") // if the deck only has one card
-    container.appendChild(safetyNet);
+    const safetyNet = document.getElementById("oneCard"); // if the deck only has one card
+    if (safetyNet && safetyNet.nodeType === 1 && safetyNet.parentNode !== container) {
+        container.appendChild(safetyNet);
+    }
 }
 
 // open the decks! (also open help and text containers)
@@ -196,7 +200,6 @@ function openTutorial(element, tutorialName, totalSteps, safetyNet) {
 
     if (safetyNet === "no") {
         oneCardSafetyNet(container);
-        
     } else {
         moveSafetyNets(container);
     }
@@ -204,16 +207,21 @@ function openTutorial(element, tutorialName, totalSteps, safetyNet) {
     if (Array.from(document.getElementsByClassName("cardOne")).some(el => el.classList.contains("active")) && safetyNet === "no") {
         setTimeout(() => {
             const secretMessage = document.getElementById("secretMessage");
-            container.appendChild(secretMessage);
-            secretMessage.style.display = "block";
-            secretMessage.style.opacity = 1;
-            secretMessage.style.zIndex = "-1";
-            secretMessage.style.position = "absolute";
+            if (secretMessage && container) {
+                container.appendChild(secretMessage);
+                secretMessage.style.display = "block";
+                secretMessage.style.opacity = 1;
+                secretMessage.style.zIndex = "-1";
+                secretMessage.style.position = "absolute";
+            }
         }, 300);
     }
 
-    document.getElementById("safetyNetMiddle").style.display = "block";
-    document.getElementById("safetyNetRight").style.display = "block";
+    const safetyNetMiddle = document.getElementById("safetyNetMiddle");
+    const safetyNetRight = document.getElementById("safetyNetRight");
+    if (safetyNetMiddle) safetyNetMiddle.style.display = "block";
+    if (safetyNetRight) safetyNetRight.style.display = "block";
+
     num.innerText = `1/${totalSteps}`;
     tutID.innerText = tutorialName;
     setTimeout(() => {
@@ -237,8 +245,11 @@ function closeTutorial() {
             help.classList.remove("active");
             text.style.opacity = 0;
 
-            document.getElementById("secretMessage").style.display = "none";
-        document.getElementById("secretMessage").style.opacity = 0;
+            const secretMessage = document.getElementById("secretMessage");
+            if (secretMessage) {
+                secretMessage.style.display = "none";
+                secretMessage.style.opacity = 0;
+            }
 
             const elements = container.querySelectorAll(".card");
             elements.forEach(element => {
@@ -264,7 +275,7 @@ function closeTutorial() {
                 help.style.display = 'none';
                 text.style.display = 'none';
                 Array.from(document.getElementsByClassName("safetyNet")).forEach(net => {
-                    net.style.display = "none";
+                    if (net && net.style) net.style.display = "none";
                 });
             }, 300);
         }
@@ -272,10 +283,10 @@ function closeTutorial() {
 
     const helpElements = [helpTwo, helpThree, helpFour, helpFive, helpSix, helpSeven, helpEight];
     helpElements.forEach(helpElement => {
-        helpElement.style.opacity = "0";
+        if (helpElement && helpElement.style) helpElement.style.opacity = "0";
     });
 
-    helpOne.style.opacity = "1";
+    if (helpOne && helpOne.style) helpOne.style.opacity = "1";
 
     document.querySelectorAll(".cardOne").forEach(cardOne => {
         cardOne.classList.remove("active");
@@ -292,78 +303,120 @@ function closeTutorial() {
 
 // card flicking
 
-document.querySelectorAll(".card").forEach((card, index) => {
-    card.addEventListener("click", function() {
-        const active = document.querySelector(".card.active");
-        lastPressedCard = this;
-        this.style.pointerEvents = 'none';
+document.body.addEventListener("click", function(event) {
+    const cardContainer = event.target.closest(".cardContainer");
+    if (!cardContainer || cardContainer.style.display === "none") return;
 
-        if (this.classList.contains("cardFour")) {
-            setTimeout(() => {
-                document.getElementById("safetyNetRight").style.display = "none";
-            }, 700);
-        }
+    if (event.target === cardContainer) {
+        closeTutorial();
+        return;
+    }
 
-        if (this.classList.contains("cardThree")) {
-            document.getElementById("safetyNetRight").style.display = "block";
-        }
+    const card = event.target.closest(".card, .cardOne");
+    if (!card) return;
 
-        if (this.classList.contains("cardTwo")) {
-            document.querySelectorAll(".cardOne").forEach(cardOne => {
-                cardOne.classList.add("active");
-                document.getElementById("safetyNetLeft").style.display = "block";
-            });
-        }
+    const cards = Array.from(cardContainer.querySelectorAll(".card"));
+    const cardOne = cardContainer.querySelector(".cardOne");
+    const idx = cards.indexOf(card);
 
-        document.querySelectorAll(".cardOne").forEach(cardOne => {
-            cardOne.addEventListener("click", function() {
-                if (this.classList.contains("cardOne")) {
-                    this.classList.remove("active");
-                    setTimeout(() => {
-                        document.getElementById("safetyNetLeft").style.display = "none";
-                    }, 700);
+    const helpClass = Array.from(card.classList).find(cls => /^help(One|Two|Three|Four|Five|Six|Seven|Eight)$/.test(cls));
+    if (helpClass) {
+        showHelp(helpClass);
+    } else {
+        showHelp("helpOne");
+    }
 
-                    if (active) {
-                        active.classList.remove("active");
-                    }
+    if (card.classList.contains("cardOne") && card.classList.contains("active")) {
+        card.classList.remove("active");
+        const cardTwo = cardContainer.querySelector(".cardTwo");
+        if (cardTwo) cardTwo.classList.remove("active");
 
-                    const middleCard = document.querySelector(".card.active");
-                    if (middleCard) {
-                        middleCard.classList.remove("active");
-                        middleCard.style.pointerEvents = 'auto';
-                    }
+        setTimeout(() => {
+            const safetyNetLeft = document.getElementById("safetyNetLeft");
+            if (safetyNetLeft) safetyNetLeft.style.display = "none";
+        }, 700);
 
-                    let currentNum = parseInt(num.innerText.split('/')[0]);
-                    if (currentNum > 1) {
-                        num.innerText = `${currentNum - 1}/${num.innerText.split('/')[1]}`;
-                    }
-                }
-            });
-        });
-
-        if (!this.classList.contains("active") && !this.classList.contains("activeTwo")) {
-            this.classList.add("active");
-            if (active) {
-                active.classList.add("activeTwo");
-                active.classList.remove("active");
-                active.style.pointerEvents = "auto";
+        const prevCard = cards.find(c => c.classList.contains("activeTwo"));
+        if (prevCard) {
+            prevCard.classList.remove("activeTwo");
+            prevCard.classList.add("active");
+            prevCard.style.pointerEvents = "none";
+            const prevIdx = cards.indexOf(prevCard);
+            if (prevIdx > 0) {
+                cards[prevIdx - 1].style.pointerEvents = "auto";
             }
-            let currentNum = parseInt(num.innerText.split('/')[0]);
-            num.innerText = `${currentNum + 1}/${num.innerText.split('/')[1]}`;
-        } else if (this.classList.contains("active") && !this.classList.contains("activeTwo")) {
-            this.classList.add("activeTwo");
-            this.classList.remove("active");
-        } else if (!this.classList.contains("active") && this.classList.contains("activeTwo")) {
-            this.classList.remove("activeTwo");
-            this.classList.add("active");
-            if (active) {
-                active.classList.remove("active");
-                active.style.pointerEvents = 'auto';
-            }
-            let currentNum = parseInt(num.innerText.split('/')[0]);
+        }
+
+        if (cards.length > 0) {
+            cards[0].style.pointerEvents = "auto";
+        }
+
+        let currentNum = parseInt(num.innerText.split('/')[0]);
+        if (currentNum > 1) {
             num.innerText = `${currentNum - 1}/${num.innerText.split('/')[1]}`;
         }
-    });
+        return;
+    }
+
+    const active = cardContainer.querySelector(".card.active");
+    lastPressedCard = card;
+    card.style.pointerEvents = 'none';
+
+    if (card.classList.contains("cardFour")) {
+        setTimeout(() => {
+            const safetyNetRight = document.getElementById("safetyNetRight");
+            if (safetyNetRight) safetyNetRight.style.display = "none";
+        }, 700);
+    }
+
+    if (card.classList.contains("cardThree")) {
+        const safetyNetRight = document.getElementById("safetyNetRight");
+        if (safetyNetRight) safetyNetRight.style.display = "block";
+    }
+
+    if (idx !== -1 && idx < cards.length - 1) {
+        cards.forEach(cardEl => {
+            cardEl.style.pointerEvents = "none";
+        });
+        cardContainer.querySelectorAll(".cardOne").forEach(cardOneEl => {
+            cardOneEl.style.pointerEvents = "auto";
+        });
+        cards[idx + 1].style.pointerEvents = "auto";
+        document.querySelectorAll(".cardOne").forEach(cardOne => {
+            cardOne.classList.add("active");
+            const safetyNetLeft = document.getElementById("safetyNetLeft");
+            if (safetyNetLeft) safetyNetLeft.style.display = "block";
+        });
+    }
+
+    if (card.classList.contains("activeTwo")) {
+        card.classList.remove("activeTwo");
+        card.classList.add("active");
+        if (active) {
+            active.classList.remove("active");
+            active.style.pointerEvents = "auto";
+        }
+        if (idx > 0) {
+            cards[idx - 1].style.pointerEvents = "auto";
+        }
+        let currentNum = parseInt(num.innerText.split('/')[0]);
+        num.innerText = `${currentNum - 1}/${num.innerText.split('/')[1]}`;
+        return;
+    }
+
+    if (!card.classList.contains("active") && !card.classList.contains("activeTwo")) {
+        card.classList.add("active");
+        if (active) {
+            active.classList.add("activeTwo");
+            active.classList.remove("active");
+            active.style.pointerEvents = "auto";
+        }
+        let currentNum = parseInt(num.innerText.split('/')[0]);
+        num.innerText = `${currentNum + 1}/${num.innerText.split('/')[1]}`;
+    } else if (card.classList.contains("active") && !card.classList.contains("activeTwo")) {
+        card.classList.add("activeTwo");
+        card.classList.remove("active");
+    }
 });
 
 // horizontal scrolling
@@ -441,69 +494,6 @@ function showHelp(helpId) {
 ["helpOne", "helpTwo", "helpThree", "helpFour", "helpFive", "helpSix", "helpSeven", "helpEight"].forEach(helpId => {
     document.querySelectorAll(`.${helpId}`).forEach(element => {
         element.addEventListener("click", () => showHelp(helpId));
-    });
-});
-
-// randomiser hover changey thingy
-
-document.getElementById("TRandomiserGroup").addEventListener("mouseenter", () => {
-    const colors = ["TRandomiserPurple", "TRandomiserRed", "TRandomiserGreen", "TRandomiserYellow"];
-    const randomColor = colors[Math.floor(Math.random() * colors.length)];
-    colors.forEach(color => {
-        const element = document.getElementById(color);
-        if (color === randomColor) {
-            element.style.display = "block";
-            element.style.opacity = 1;
-        } else {
-            element.style.opacity = 0;
-            element.style.display = "none";
-        }
-    });
-});
-
-document.getElementById("TRandomiserGroup").addEventListener("mouseleave", () => {
-    const colors = ["TRandomiserPurple", "TRandomiserRed", "TRandomiserGreen", "TRandomiserYellow"];
-    colors.forEach(color => {
-        const element = document.getElementById(color);
-        element.style.opacity = 0;
-        element.style.display = "none";
-    });
-});
-
-document.getElementById("ARandomiserGroup").addEventListener("mouseenter", () => {
-    const alts = ["ARalt1", "ARalt2", "ARalt3", "ARalt4", "ARalt5"];
-    const randomAlt = alts[Math.floor(Math.random() * alts.length)];
-    alts.forEach(alt => {
-        const element = document.getElementById(alt);
-        if (alt === randomAlt) {
-            element.style.display = "block";
-            element.style.opacity = 1;
-        } else {
-            element.style.opacity = 0;
-            element.style.display = "none";
-        }
-    });
-});
-
-document.getElementById("ARandomiserGroup").addEventListener("mouseleave", () => {
-    const alts = ["ARalt1", "ARalt2", "ARalt3", "ARalt4", "ARalt5"];
-    alts.forEach(alt => {
-        const element = document.getElementById(alt);
-        element.style.opacity = 0;
-        element.style.display = "none";
-    });
-});
-
-// hover restarting gifs
-
-document.querySelectorAll(".cardGroup").forEach(group => {
-    group.addEventListener("mouseenter", () => {
-        const gifs = group.querySelectorAll("img.gif");
-        gifs.forEach(gif => {
-            const src = gif.src;
-            gif.src = "";
-            gif.src = src;
-        });
     });
 });
 
