@@ -638,7 +638,7 @@ cursor: pointer;
 
 @media (max-width: 767px) {
     #loginMeta {
-        top: 45rem;
+        top: 35rem;
         font-size: 0.8rem;
         padding: 0.5rem 1rem;
     }
