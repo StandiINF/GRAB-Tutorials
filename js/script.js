@@ -326,6 +326,13 @@ document.body.addEventListener("click", function(event) {
         showHelp("helpOne");
     }
 
+    if (card.classList.contains("cardTwo") && cardOne && !cardOne.classList.contains("active")) {
+        cardOne.classList.add("active");
+        cardOne.style.pointerEvents = "auto";
+        const safetyNetLeft = document.getElementById("safetyNetLeft");
+        if (safetyNetLeft) safetyNetLeft.style.display = "block";
+    }
+
     if (card.classList.contains("cardOne") && card.classList.contains("active")) {
         card.classList.remove("active");
         const cardTwo = cardContainer.querySelector(".cardTwo");
