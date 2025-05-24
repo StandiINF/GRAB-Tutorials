@@ -13,7 +13,7 @@ window.addEventListener('DOMContentLoaded', () => {
     async function proceedWithSession(sessionId) {
         if (sessionId) {
             try {
-                await delay(250);
+                await delay(500);
                 const response = await fetch(`https://api.grab-tutorials.live/getAlias?sessionId=${encodeURIComponent(sessionId)}`, {
                     method: 'GET',
                     credentials: 'include',
@@ -158,7 +158,7 @@ window.addEventListener('DOMContentLoaded', () => {
   
         window.history.replaceState(null, '', window.location.pathname);
   
-        delay(1000)
+        delay(1500)
             .then(() => {
                 return fetch('https://api.grab-tutorials.live/login', {
                     method: 'POST',
