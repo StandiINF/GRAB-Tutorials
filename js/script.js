@@ -177,16 +177,27 @@ function closeMenu() {
 // safety nets to prevent accidental closing
 
 function moveSafetyNets(container) {
-    const safetyNets = document.getElementById("safetyNets");
-    if (safetyNets && safetyNets.nodeType === 1 && safetyNets.parentNode !== container) {
-        container.appendChild(safetyNets);
+    // Only move the .safetyNet elements, not the #safetyNets wrapper
+    const safetyNetMiddle = document.getElementById("safetyNetMiddle");
+    const safetyNetRight = document.getElementById("safetyNetRight");
+    if (safetyNetMiddle && safetyNetMiddle.parentNode !== container) {
+        container.appendChild(safetyNetMiddle);
+    }
+    if (safetyNetRight && safetyNetRight.parentNode !== container) {
+        container.appendChild(safetyNetRight);
     }
 }
 
 function oneCardSafetyNet(container) {
-    const safetyNet = document.getElementById("oneCard"); // if the deck only has one card
-    if (safetyNet && safetyNet.nodeType === 1 && safetyNet.parentNode !== container) {
-        container.appendChild(safetyNet);
+    // Only move the #oneCard div, not the #safetyNets wrapper
+    const oneCard = document.getElementById("oneCard");
+    if (oneCard && oneCard.parentNode !== container) {
+        container.appendChild(oneCard);
+    }
+    // Also ensure the middle safety net is inside #oneCard
+    const safetyNetMiddle = document.getElementById("safetyNetMiddle");
+    if (safetyNetMiddle && safetyNetMiddle.parentNode !== oneCard) {
+        oneCard.appendChild(safetyNetMiddle);
     }
 }
 
@@ -217,10 +228,42 @@ function openTutorial(element, tutorialName, totalSteps, safetyNet) {
         }, 300);
     }
 
+    // --- Always append safety nets to the current container before showing ---
+    const safetyNetsRoot = document.getElementById("safetyNets");
     const safetyNetMiddle = document.getElementById("safetyNetMiddle");
     const safetyNetRight = document.getElementById("safetyNetRight");
-    if (safetyNetMiddle) safetyNetMiddle.style.display = "block";
-    if (safetyNetRight) safetyNetRight.style.display = "block";
+    const safetyNetLeft = document.getElementById("safetyNetLeft");
+
+    if (safetyNet === "no") {
+        // Only middle safety net for one card
+        if (safetyNetMiddle && safetyNetMiddle.parentNode !== container) {
+            container.appendChild(safetyNetMiddle);
+        }
+        if (safetyNetRight && safetyNetRight.parentNode !== safetyNetsRoot) {
+            safetyNetsRoot.appendChild(safetyNetRight);
+        }
+        if (safetyNetLeft && safetyNetLeft.parentNode !== safetyNetsRoot) {
+            safetyNetsRoot.appendChild(safetyNetLeft);
+        }
+        if (safetyNetMiddle) safetyNetMiddle.style.display = "block";
+        if (safetyNetRight) safetyNetRight.style.display = "none";
+        if (safetyNetLeft) safetyNetLeft.style.display = "none";
+    } else {
+        // Middle and right safety nets for multi-card decks
+        if (safetyNetMiddle && safetyNetMiddle.parentNode !== container) {
+            container.appendChild(safetyNetMiddle);
+        }
+        if (safetyNetRight && safetyNetRight.parentNode !== container) {
+            container.appendChild(safetyNetRight);
+        }
+        if (safetyNetLeft && safetyNetLeft.parentNode !== safetyNetsRoot) {
+            safetyNetsRoot.appendChild(safetyNetLeft);
+        }
+        if (safetyNetMiddle) safetyNetMiddle.style.display = "block";
+        if (safetyNetRight) safetyNetRight.style.display = "block";
+        if (safetyNetLeft) safetyNetLeft.style.display = "none";
+    }
+    // --- End append logic ---
 
     num.innerText = `1/${totalSteps}`;
     tutID.innerText = tutorialName;
@@ -274,9 +317,32 @@ function closeTutorial() {
                 container.style.display = 'none';
                 help.style.display = 'none';
                 text.style.display = 'none';
-                Array.from(document.getElementsByClassName("safetyNet")).forEach(net => {
+                // --- Move all .safetyNet elements and #oneCard back to their original containers ---
+                const safetyNetsRoot = document.getElementById("safetyNets");
+                const oneCard = document.getElementById("oneCard");
+                const safetyNetMiddle = document.getElementById("safetyNetMiddle");
+                const safetyNetLeft = document.getElementById("safetyNetLeft");
+                const safetyNetRight = document.getElementById("safetyNetRight");
+                // Always move left/right back to #safetyNets
+                if (safetyNetLeft && safetyNetLeft.parentNode !== safetyNetsRoot) {
+                    safetyNetsRoot.appendChild(safetyNetLeft);
+                }
+                if (safetyNetRight && safetyNetRight.parentNode !== safetyNetsRoot) {
+                    safetyNetsRoot.appendChild(safetyNetRight);
+                }
+                // Always move #oneCard back to #safetyNets
+                if (oneCard && oneCard.parentNode !== safetyNetsRoot) {
+                    safetyNetsRoot.appendChild(oneCard);
+                }
+                // Always move middle back to #oneCard
+                if (safetyNetMiddle && safetyNetMiddle.parentNode !== oneCard) {
+                    oneCard.appendChild(safetyNetMiddle);
+                }
+                // Hide all safety nets
+                [safetyNetLeft, safetyNetRight, safetyNetMiddle].forEach(net => {
                     if (net && net.style) net.style.display = "none";
                 });
+                // --- End move ---
             }, 300);
         }
     });
@@ -329,7 +395,11 @@ document.body.addEventListener("click", function(event) {
     if (card.classList.contains("cardTwo") && cardOne && !cardOne.classList.contains("active")) {
         cardOne.classList.add("active");
         cardOne.style.pointerEvents = "auto";
+        // --- Move left safety net into the current container and show it ---
         const safetyNetLeft = document.getElementById("safetyNetLeft");
+        if (safetyNetLeft && safetyNetLeft.parentNode !== cardContainer) {
+            cardContainer.appendChild(safetyNetLeft);
+        }
         if (safetyNetLeft) safetyNetLeft.style.display = "block";
     }
 
