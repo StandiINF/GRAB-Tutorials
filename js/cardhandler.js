@@ -14,6 +14,8 @@ const cache = {
   help: null
 };
 
+const deckDomCache = new Map();
+
 async function fetchBasics() {
   if (cache.basics) return cache.basics;
   const res = await fetch("https://assets.grab-tutorials.live/basics.json");
@@ -63,38 +65,10 @@ async function renderBasicsCategory(container, category) {
   try {
     const basicsData = await fetchBasics();
     const items = basicsData.filter(item => item.category === category && item.cover);
-    container.innerHTML = "";
+
     items.forEach(item => {
 
-      if (item.title && item.title.toLowerCase().includes("randomiser") && item.category === "trigger") {
-        const div = document.createElement("div");
-        div.classList.add("cardGroup");
-        div.id = "TRandomiserGroup";
-        div.style.position = "relative";
-
-        const mainImg = document.createElement("img");
-        mainImg.src = "https://assets.grab-tutorials.live/" + item.cover.replace(/^\/+/, "");
-        mainImg.alt = item.title + " main.svg";
-        mainImg.className = "cardMain TRandomiserCard";
-        mainImg.loading = "lazy";
-        div.appendChild(mainImg);
-
-        const alts = [
-          { id: "TRandomiserPurple", file: "Trigger randomiser/Trigger randomiser purple.svg" },
-          { id: "TRandomiserRed", file: "Trigger randomiser/Trigger randomiser red.svg" },
-          { id: "TRandomiserGreen", file: "Trigger randomiser/Trigger randomiser green.svg" },
-          { id: "TRandomiserYellow", file: "Trigger randomiser/Trigger randomiser yellow.svg" }
-        ];
-        alts.forEach(alt => {
-          const img = document.createElement("img");
-          img.src = "https://assets.grab-tutorials.live/" + alt.file.replace(/^\/+/, "");
-          img.alt = alt.file.split('/').pop();
-          img.id = alt.id;
-          img.className = "cardMain TRandomiserCard";
-          img.loading = "lazy";
-          div.appendChild(img);
-        });
-        container.appendChild(div);
+      if (container.querySelector(`img[src$="${item.cover.replace(/^\/+/, "")}"]`)) {
         return;
       }
       const div = document.createElement("div");
@@ -105,7 +79,6 @@ async function renderBasicsCategory(container, category) {
         div.id = "sliderGroup";
       }
 
-      // Main image
       const img = document.createElement("img");
       img.src = "https://assets.grab-tutorials.live/" + item.cover.replace(/^\/+/, "");
       img.alt = item.title || "Tutorial";
@@ -170,149 +143,11 @@ async function renderCategories(fetchFn, groups) {
     const data = await fetchFn();
     for (const [category, container] of Object.entries(groups)) {
       if (!container) continue;
-      if (container.children.length > 0) continue;
+
       const items = data.filter(item => item.category === category && item.cover);
-      container.innerHTML = "";
       items.forEach(item => {
-        if (item.alt) {
-          const div = document.createElement("div");
-          div.classList.add("cardGroup");
-          if (item.title && item.title.toLowerCase().includes("randomiser") && (item.cover.toLowerCase().includes("trigger") || category === "trigger")) {
-            div.id = "TRandomiserGroup";
-          } else if (item.title && item.title.toLowerCase().includes("randomiser") && (item.cover.toLowerCase().includes("animation") || category === "animation")) {
-            div.id = "ARandomiserGroup";
-          } else if (item.title && item.title.toLowerCase().includes("tracker")) {
-            div.id = "trackerGroup";
-          }
-          div.style.position = "relative";
-          const mainImg = document.createElement("img");
-          mainImg.src = "https://assets.grab-tutorials.live/" + item.cover.replace(/^\/+/, "");
-          mainImg.alt = (item.title ? item.title + " main.svg" : "main.svg");
-          mainImg.className = "cardMain" + (div.id ? " " + div.id.replace("Group", "Card") : "");
-          mainImg.loading = "lazy";
-          div.appendChild(mainImg);
 
-          const altImgs = [];
-          if (typeof item.alt === "object") {
-            Object.entries(item.alt).forEach(([key, file], idx) => {
-              const img = document.createElement("img");
-              img.src = "https://assets.grab-tutorials.live/" + file.replace(/^\/+/, "");
-              img.alt = file.split('/').pop();
-              img.id = (div.id ? div.id.replace("Group", "Alt") : "alt") + (idx + 1);
-              img.className = "cardMain" + (div.id ? " " + div.id.replace("Group", "Card") : "");
-              img.loading = "lazy";
-              img.style.display = "none";
-              img.style.opacity = "0";
-              img.style.position = "absolute";
-              img.style.top = "0";
-              img.style.left = "0";
-              img.style.width = "100%";
-              img.style.height = "100%";
-              img.style.zIndex = "10";
-              div.appendChild(img);
-              altImgs.push(img);
-            });
-          } else if (typeof item.alt === "string") {
-            const img = document.createElement("img");
-            img.src = "https://assets.grab-tutorials.live/" + item.alt.replace(/^\/+/, "");
-            img.alt = item.alt.split('/').pop();
-            img.id = (div.id ? div.id.replace("Group", "Alt") : "alt") + "1";
-            img.className = "cardMain" + (div.id ? " " + div.id.replace("Group", "Card") : "");
-            img.loading = "lazy";
-            img.style.display = "none";
-            img.style.opacity = "0";
-            img.style.position = "absolute";
-            img.style.top = "0";
-            img.style.left = "0";
-            img.style.width = "100%";
-            img.style.height = "100%";
-            img.style.zIndex = "10";
-            div.appendChild(img);
-            altImgs.push(img);
-          }
-
-          div.addEventListener("mouseenter", () => {
-            altImgs.forEach(img => {
-              img.style.display = "none";
-              img.style.opacity = "0";
-            });
-            if (altImgs.length > 0) {
-              if (altImgs.length === 1) {
-                altImgs[0].style.display = "block";
-                altImgs[0].style.opacity = "1";
-              } else {
-                const randomIdx = Math.floor(Math.random() * altImgs.length);
-                altImgs[randomIdx].style.display = "block";
-                altImgs[randomIdx].style.opacity = "1";
-              }
-            }
-          });
-          div.addEventListener("mouseleave", () => {
-            altImgs.forEach(img => {
-              img.style.display = "none";
-              img.style.opacity = "0";
-            });
-          });
-          container.appendChild(div);
-          return;
-        }
-
-        if (
-          item.title &&
-          item.title.toLowerCase().includes("randomiser") &&
-          (item.cover.toLowerCase().includes("animation") || category === "animation")
-        ) {
-          const div = document.createElement("div");
-          div.classList.add("cardGroup");
-          div.id = "ARandomiserGroup";
-          div.style.position = "relative";
-
-          const mainImg = document.createElement("img");
-          mainImg.src = "https://assets.grab-tutorials.live/" + item.cover.replace(/^\/+/, "");
-          mainImg.alt = item.title + " main.svg";
-          mainImg.className = "cardMain ARandomiserCard";
-          mainImg.loading = "lazy";
-          div.appendChild(mainImg);
-
-          const altImgs = [];
-          if (item.alt && typeof item.alt === "object") {
-            Object.entries(item.alt).forEach(([key, file], idx) => {
-              const img = document.createElement("img");
-              img.src = "https://assets.grab-tutorials.live/" + file.replace(/^\/+/, "");
-              img.alt = file.split('/').pop();
-              img.id = `ARalt${idx+1}`;
-              img.className = "cardMain ARandomiserCard";
-              img.loading = "lazy";
-              img.style.display = "none";
-              img.style.opacity = "0";
-              img.style.position = "absolute";
-              img.style.top = "0";
-              img.style.left = "0";
-              img.style.width = "100%";
-              img.style.height = "100%";
-              img.style.zIndex = "10";
-              div.appendChild(img);
-              altImgs.push(img);
-            });
-          }
-          div.addEventListener("mouseenter", () => {
-            altImgs.forEach(img => {
-              img.style.display = "none";
-              img.style.opacity = "0";
-            });
-            if (altImgs.length > 0) {
-              const randomIdx = Math.floor(Math.random() * altImgs.length);
-              altImgs[randomIdx].style.display = "block";
-              altImgs[randomIdx].style.opacity = "1";
-            }
-          });
-          div.addEventListener("mouseleave", () => {
-            altImgs.forEach(img => {
-              img.style.display = "none";
-              img.style.opacity = "0";
-            });
-          });
-          container.appendChild(div);
+        if (container.querySelector(`img[src$="${item.cover.replace(/^\/+/, "")}"]`)) {
           return;
         }
         const div = document.createElement("div");
@@ -370,28 +205,26 @@ async function renderCategories(fetchFn, groups) {
         container.appendChild(div);
       });
 
-      const isAnimation = fetchFn === fetchAnimation;
-      const isTrigger = fetchFn === fetchTrigger;
-      const isBasics = fetchFn === fetchBasics;
       if (
-        (isAnimation && ["beginner", "intermediate", "advanced"].includes(category)) ||
-        (isTrigger && ["beginner", "intermediate", "advanced"].includes(category)) ||
-        (isBasics && category === "playing")
+        (fetchFn === fetchAnimation && ["beginner", "intermediate", "advanced"].includes(category)) ||
+        (fetchFn === fetchTrigger && ["beginner", "intermediate", "advanced"].includes(category)) ||
+        (fetchFn === fetchBasics && category === "playing")
       ) {
-        const feedbackDiv = document.createElement("div");
-        feedbackDiv.className = "cardGroup FeedbackLink";
-        feedbackDiv.onclick = function() {
-          window.open('https://discord.gg/J3yDuye6Uz', '_blank');
-        };
-        const feedbackImg = document.createElement("img");
-        feedbackImg.src = "https://assets.grab-tutorials.live/!assets/placeholder-discord-main.svg";
-        feedbackImg.alt = "Placeholder.svg";
-        feedbackImg.className = "cardMain";
-        feedbackImg.loading = "lazy";
-        feedbackDiv.appendChild(feedbackImg);
-        container.appendChild(feedbackDiv);
+        if (!container.querySelector('.FeedbackLink')) {
+          const feedbackDiv = document.createElement("div");
+          feedbackDiv.className = "cardGroup FeedbackLink";
+          feedbackDiv.onclick = function() {
+            window.open('https://discord.gg/J3yDuye6Uz', '_blank');
+          };
+          const feedbackImg = document.createElement("img");
+          feedbackImg.src = "https://assets.grab-tutorials.live/!assets/placeholder-discord-main.svg";
+          feedbackImg.alt = "Placeholder.svg";
+          feedbackImg.className = "cardMain";
+          feedbackImg.loading = "lazy";
+          feedbackDiv.appendChild(feedbackImg);
+          container.appendChild(feedbackDiv);
+        }
       }
-
     }
   } catch (e) {
     console.error("Failed to fetch or render categories:", e);
@@ -552,6 +385,29 @@ function renderCardDeck(cardObj, jsonKey) {
   cardDecks.innerHTML = "";
 
   const containerId = (cardObj.title || "deck").replace(/\s+/g, '') + "Container";
+  const deckStorage = document.getElementById("deckStorage");
+
+  let storedDeck = deckStorage && deckStorage.querySelector(`#${containerId}`);
+  if (storedDeck) {
+    cardDecks.appendChild(storedDeck);
+    storedDeck.style.display = "block";
+    window.openTutorial(containerId, cardObj.title, Object.keys(cardObj.cards).length, Object.keys(cardObj.cards).length === 1 ? "no" : "yes");
+    return;
+  }
+  let existingDeck = document.getElementById(containerId);
+  if (existingDeck && existingDeck.parentNode === cardDecks) {
+    existingDeck.style.display = "block";
+    window.openTutorial(containerId, cardObj.title, Object.keys(cardObj.cards).length, Object.keys(cardObj.cards).length === 1 ? "no" : "yes");
+    return;
+  }
+  if (deckDomCache.has(containerId)) {
+    const cached = deckDomCache.get(containerId);
+    cardDecks.appendChild(cached);
+    cached.style.display = "block";
+    window.openTutorial(containerId, cardObj.title, Object.keys(cardObj.cards).length, Object.keys(cardObj.cards).length === 1 ? "no" : "yes");
+    return;
+  }
+
   const container = document.createElement("div");
   container.id = containerId;
   container.className = "cardContainer";
@@ -598,8 +454,28 @@ function renderCardDeck(cardObj, jsonKey) {
   container.style.display = "block";
   cardDecks.appendChild(container);
 
+  deckDomCache.set(containerId, container);
+
   window.openTutorial(container.id, cardObj.title, cardKeys.length, cardKeys.length === 1 ? "no" : "yes");
 }
+
+window._originalCloseTutorial = window.closeTutorial;
+window.closeTutorial = function() {
+  const cardDecks = document.querySelector('[name="cardDecks"]');
+  const deckStorage = document.getElementById("deckStorage");
+
+  setTimeout(() => {
+    document.querySelectorAll(".cardContainer").forEach(container => {
+      if (container.style.opacity == 1 || container.style.display === "block") {
+        container.style.display = "none";
+        if (deckStorage && container.parentNode !== deckStorage) {
+          deckStorage.appendChild(container);
+        }
+      }
+    });
+  }, 350);
+  window._originalCloseTutorial();
+};
 
 function numberToWord(n) {
   const words = [

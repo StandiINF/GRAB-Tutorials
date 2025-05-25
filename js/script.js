@@ -368,6 +368,10 @@ document.body.addEventListener("click", function(event) {
     const card = event.target.closest(".card, .cardOne");
     if (!card) return;
 
+    if (card.classList.contains("cardOne") && !card.classList.contains("active")) {
+        return;
+    }
+
     const cards = Array.from(cardContainer.querySelectorAll(".card"));
     const cardOne = cardContainer.querySelector(".cardOne");
     const idx = cards.indexOf(card);
