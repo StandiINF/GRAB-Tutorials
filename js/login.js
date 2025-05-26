@@ -10,10 +10,46 @@ window.addEventListener('DOMContentLoaded', () => {
   
     let sessionId = localStorage.getItem('sessionId');
   
+    async function showDiscordLinkSection(sessionId) {
+        const discordLinkSection = document.getElementById('discordLinkSection');
+        if (!discordLinkSection) return;
+        discordLinkSection.style.display = 'block';
+        discordLinkSection.innerHTML = `
+            <button id="generateDiscordCodeBtn">Generate Discord Link Code</button>
+            <div id="discordCodeDisplay" style="margin-top:10px;"></div>
+            <div id="discordCodeInfo" style="font-size:0.9em;color:#aaa;margin-top:5px;"></div>
+        `;
+        document.getElementById('generateDiscordCodeBtn').onclick = async () => {
+            discordLinkSection.querySelector('#discordCodeDisplay').textContent = 'Generating...';
+            try {
+                const res = await fetch('https://api.grab-tutorials.live/generateLinkCode', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    credentials: 'include',
+                    body: JSON.stringify({ sessionId })
+                });
+                if (!res.ok) throw new Error('Failed to generate code');
+                const data = await res.json();
+                discordLinkSection.querySelector('#discordCodeDisplay').textContent = `Your code: ${data.code}`;
+                discordLinkSection.querySelector('#discordCodeInfo').textContent = 'Use /link code:' + data.code + ' in Discord within 10 minutes.';
+            } catch (e) {
+                discordLinkSection.querySelector('#discordCodeDisplay').textContent = 'Error generating code.';
+            }
+        };
+    }
+
+    async function hideDiscordLinkSection() {
+        const discordLinkSection = document.getElementById('discordLinkSection');
+        if (discordLinkSection) {
+            discordLinkSection.style.display = 'none';
+            discordLinkSection.innerHTML = '';
+        }
+    }
+
     async function proceedWithSession(sessionId) {
         if (sessionId) {
             try {
-                await delay(500);
+                await delay(250);
                 const response = await fetch(`https://api.grab-tutorials.live/getAlias?sessionId=${encodeURIComponent(sessionId)}`, {
                     method: 'GET',
                     credentials: 'include',
@@ -51,6 +87,8 @@ window.addEventListener('DOMContentLoaded', () => {
 
                     applyUserColour(userColour);
                     applySecondaryColour(userColourSecondary);
+
+                    showDiscordLinkSection(sessionId);
 
                     loginMetaElement.addEventListener('click', () => {
                         localStorage.removeItem('sessionId');
@@ -90,6 +128,7 @@ window.addEventListener('DOMContentLoaded', () => {
                     localStorage.removeItem('hexColor');
                     localStorage.removeItem('hexColorSecondary');
                     setupLoginButton();
+                    hideDiscordLinkSection();
                 }
             } catch (error) {
                 console.error('Error verifying session:', error);
@@ -98,9 +137,11 @@ window.addEventListener('DOMContentLoaded', () => {
                 localStorage.removeItem('hexColor');
                 localStorage.removeItem('hexColorSecondary');
                 setupLoginButton();
+                hideDiscordLinkSection();
             }
         } else {
             setupLoginButton();
+            hideDiscordLinkSection();
         }
     }
   
@@ -112,6 +153,7 @@ window.addEventListener('DOMContentLoaded', () => {
         };
         localStorage.removeItem('hexColor');
         localStorage.removeItem('hexColorSecondary');
+        hideDiscordLinkSection();
     }
   
     function applyUserColour(colour) {
@@ -158,7 +200,7 @@ window.addEventListener('DOMContentLoaded', () => {
   
         window.history.replaceState(null, '', window.location.pathname);
   
-        delay(1500)
+        delay(1000)
             .then(() => {
                 return fetch('https://api.grab-tutorials.live/login', {
                     method: 'POST',
