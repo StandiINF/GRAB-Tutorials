@@ -13,29 +13,54 @@ window.addEventListener('DOMContentLoaded', () => {
     async function showDiscordLinkSection(sessionId) {
         const discordLinkSection = document.getElementById('discordLinkSection');
         if (!discordLinkSection) return;
+        discordLinkSection.innerHTML = 'Checking Discord link status...';
         discordLinkSection.style.display = 'block';
-        discordLinkSection.innerHTML = `
-            <button id="generateDiscordCodeBtn">Generate Discord Link Code</button>
-            <div id="discordCodeDisplay" style="margin-top:10px;"></div>
-            <div id="discordCodeInfo" style="font-size:0.9em;color:#aaa;margin-top:5px;"></div>
-        `;
-        document.getElementById('generateDiscordCodeBtn').onclick = async () => {
-            discordLinkSection.querySelector('#discordCodeDisplay').textContent = 'Generating...';
-            try {
-                const res = await fetch('https://api.grab-tutorials.live/generateLinkCode', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    credentials: 'include',
-                    body: JSON.stringify({ sessionId })
-                });
-                if (!res.ok) throw new Error('Failed to generate code');
-                const data = await res.json();
-                discordLinkSection.querySelector('#discordCodeDisplay').textContent = `Your code: ${data.code}`;
-                discordLinkSection.querySelector('#discordCodeInfo').textContent = 'Use /link code:' + data.code + ' in Discord within 10 minutes.';
-            } catch (e) {
-                discordLinkSection.querySelector('#discordCodeDisplay').textContent = 'Error generating code.';
+        try {
+            const res = await fetch('https://api.grab-tutorials.live/generateLinkCode', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                credentials: 'include',
+                body: JSON.stringify({ sessionId })
+            });
+            if (!res.ok) throw new Error('Failed to check link status');
+            const data = await res.json();
+            if (data.alreadyLinked) {
+                discordLinkSection.style.display = 'none';
+                discordLinkSection.innerHTML = '';
+                return;
             }
-        };
+            discordLinkSection.innerHTML = `
+                <button id="generateDiscordCodeBtn">Generate Discord Link Code</button>
+                <div id="discordCodeDisplay" style="margin-top:10px;"></div>
+                <div id="discordCodeInfo" style="font-size:0.9em;color:#aaa;margin-top:5px;"></div>
+            `;
+            document.getElementById('generateDiscordCodeBtn').onclick = async () => {
+                discordLinkSection.querySelector('#discordCodeDisplay').textContent = 'Generating...';
+                try {
+
+                    const res2 = await fetch('https://api.grab-tutorials.live/generateLinkCode', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        credentials: 'include',
+                        body: JSON.stringify({ sessionId })
+                    });
+                    if (!res2.ok) throw new Error('Failed to generate code');
+                    const data2 = await res2.json();
+                    if (data2.alreadyLinked) {
+                        discordLinkSection.style.display = 'none';
+                        discordLinkSection.innerHTML = '';
+                        return;
+                    }
+                    discordLinkSection.querySelector('#discordCodeDisplay').textContent = `Your code: ${data2.code}`;
+                    discordLinkSection.querySelector('#discordCodeInfo').textContent = 'Use /link code:' + data2.code + ' in Discord within 10 minutes.';
+                } catch (e) {
+                    discordLinkSection.querySelector('#discordCodeDisplay').textContent = 'Error generating code.';
+                }
+            };
+        } catch (e) {
+            discordLinkSection.style.display = 'none';
+            discordLinkSection.innerHTML = '';
+        }
     }
 
     async function hideDiscordLinkSection() {
