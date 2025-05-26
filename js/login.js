@@ -16,18 +16,27 @@ window.addEventListener('DOMContentLoaded', () => {
         discordLinkSection.innerHTML = 'Checking Discord link status...';
         discordLinkSection.style.display = 'block';
         try {
-            const res = await fetch('https://api.grab-tutorials.live/generateLinkCode', {
+            const aliasRes = await fetch(`https://api.grab-tutorials.live/getAlias?sessionId=${encodeURIComponent(sessionId)}`, {
+                method: 'GET',
+                credentials: 'include',
+                headers: { 'Content-Type': 'application/json' }
+            });
+            if (!aliasRes.ok) throw new Error('Failed to get alias');
+            const aliasData = await aliasRes.json();
+            if (!aliasData.alias) throw new Error('No alias found');
+
+            const sqlRes = await fetch('https://api.grab-tutorials.live/get-alias', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                credentials: 'include',
-                body: JSON.stringify({ sessionId })
+                body: JSON.stringify({ alias: aliasData.alias })
             });
-            if (!res.ok) throw new Error('Failed to check link status');
-            const data = await res.json();
-            if (data.alreadyLinked) {
-                discordLinkSection.style.display = 'none';
-                discordLinkSection.innerHTML = '';
-                return;
+            if (sqlRes.ok) {
+                const sqlData = await sqlRes.json();
+                if (sqlData.linked) {
+                    discordLinkSection.style.display = 'none';
+                    discordLinkSection.innerHTML = '';
+                    return;
+                }
             }
             discordLinkSection.innerHTML = `
                 <button id="generateDiscordCodeBtn">Generate Discord Link Code</button>
@@ -37,7 +46,6 @@ window.addEventListener('DOMContentLoaded', () => {
             document.getElementById('generateDiscordCodeBtn').onclick = async () => {
                 discordLinkSection.querySelector('#discordCodeDisplay').textContent = 'Generating...';
                 try {
-
                     const res2 = await fetch('https://api.grab-tutorials.live/generateLinkCode', {
                         method: 'POST',
                         headers: { 'Content-Type': 'application/json' },
