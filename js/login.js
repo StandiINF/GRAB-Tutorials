@@ -25,14 +25,15 @@ window.addEventListener('DOMContentLoaded', () => {
             const aliasData = await aliasRes.json();
             if (!aliasData.alias) throw new Error('No alias found');
 
-            // Use GET instead of POST for SQL check
-            const sqlRes = await fetch(`https://api.grab-tutorials.live/get-alias?alias=${encodeURIComponent(aliasData.alias)}`, {
-                method: 'GET',
-                headers: { 'Content-Type': 'application/json' }
+            // Use POST to check SQL for existing link
+            const sqlRes = await fetch('https://api.grab-tutorials.live/get-alias', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ alias: aliasData.alias })
             });
             if (sqlRes.ok) {
                 const sqlData = await sqlRes.json();
-                if (sqlData.linked) {
+                if (sqlData.alias && sqlData.alias === aliasData.alias) {
                     discordLinkSection.style.display = 'none';
                     discordLinkSection.innerHTML = '';
                     return;
