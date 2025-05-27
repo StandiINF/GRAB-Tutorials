@@ -18,19 +18,19 @@ window.addEventListener('DOMContentLoaded', () => {
             discordLinkSection.style.position = 'fixed';
             discordLinkSection.style.left = '50%';
             discordLinkSection.style.transform = 'translateX(-50%)';
-            discordLinkSection.style.width = '90vw';
-            discordLinkSection.style.maxWidth = '220px';
+            discordLinkSection.style.width = '96vw';
+            discordLinkSection.style.maxWidth = '110px';
             discordLinkSection.style.zIndex = '9999';
             discordLinkSection.style.background = '#181a20';
-            discordLinkSection.style.borderRadius = '12px';
-            discordLinkSection.style.boxShadow = '0 2px 16px #000a';
-            discordLinkSection.style.padding = '10px 8px 8px 8px';
+            discordLinkSection.style.borderRadius = '8px';
+            discordLinkSection.style.boxShadow = '0 2px 10px #000a';
+            discordLinkSection.style.padding = '3px 2px 2px 2px';
             discordLinkSection.style.margin = '0';
             discordLinkSection.style.display = 'block';
             const loginBtn = document.getElementById('loginMeta');
             if (loginBtn) {
                 const rect = loginBtn.getBoundingClientRect();
-                discordLinkSection.style.top = (rect.top - 50 + window.scrollY) + 'px';
+                discordLinkSection.style.top = (rect.top - 30 + window.scrollY) + 'px';
                 discordLinkSection.style.bottom = '';
             } else {
                 discordLinkSection.style.top = '30%';
@@ -82,23 +82,23 @@ window.addEventListener('DOMContentLoaded', () => {
                     background: linear-gradient(90deg, #5865f2 0%, #4752c4 100%);
                     color: #fff;
                     border: none;
-                    border-radius: 5px;
-                    padding: 4px 10px;
-                    font-size: 0.93em;
+                    border-radius: 4px;
+                    padding: 2px 6px;
+                    font-size: 0.75em;
                     font-weight: 600;
-                    box-shadow: 0 1px 3px #0002;
+                    box-shadow: 0 1px 2px #0002;
                     cursor: pointer;
                     transition: background 0.2s, transform 0.1s;
                     outline: none;
-                    margin-bottom: 4px;
+                    margin-bottom: 2px;
                     letter-spacing: 0.01em;
                     min-width: 0;
                     min-height: 0;
-                " onmouseover="this.style.background='linear-gradient(90deg,#4752c4 0%,#5865f2 100%)';this.style.transform='scale(1.02)';"
+                " onmouseover="this.style.background='linear-gradient(90deg,#4752c4 0%,#5865f2 100%)';this.style.transform='scale(1.01)';"
                   onmouseout="this.style.background='linear-gradient(90deg,#5865f2 0%,#4752c4 100%)';this.style.transform='';"
                 >Generate Discord Link Code</button>
-                <div id="discordCodeDisplay" style="margin-top:5px;"></div>
-                <div id="discordCodeInfo" style="font-size:0.8em;color:#aaa;margin-top:3px;"></div>
+                <div id="discordCodeDisplay" style="margin-top:2px;"></div>
+                <div id="discordCodeInfo" style="font-size:0.7em;color:#aaa;margin-top:1px;"></div>
             `;
             document.getElementById('generateDiscordCodeBtn').onclick = async () => {
                 discordLinkSection.querySelector('#discordCodeDisplay').textContent = 'Generating...';
@@ -122,7 +122,7 @@ window.addEventListener('DOMContentLoaded', () => {
                             <img src="https://assets.grab-tutorials.live/!assets/copy-icon.png" alt="Copy" style="width:20px;height:20px;vertical-align:middle;">
                         </button>
                     `;
-                    discordLinkSection.querySelector('#discordCodeInfo').textContent = 'Use /link code:' + data2.code + ' in Discord within 10 minutes.';
+                    discordLinkSection.querySelector('#discordCodeInfo').textContent = 'Use /account link code:' + data2.code + ' in Discord within 10 minutes.';
 
                     const copyBtn = document.getElementById('copyDiscordCodeBtn');
                     const codeSpan = document.getElementById('discordGeneratedCode');
