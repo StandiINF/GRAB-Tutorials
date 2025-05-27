@@ -13,6 +13,46 @@ window.addEventListener('DOMContentLoaded', () => {
     async function showDiscordLinkSection(sessionId) {
         const discordLinkSection = document.getElementById('discordLinkSection');
         if (!discordLinkSection) return;
+        const isMobile = window.innerWidth <= 767;
+        if (isMobile) {
+            discordLinkSection.style.position = 'fixed';
+            discordLinkSection.style.left = '50%';
+            discordLinkSection.style.bottom = '';
+            discordLinkSection.style.top = '';
+            discordLinkSection.style.transform = 'translateX(-50%)';
+            discordLinkSection.style.width = '90vw';
+            discordLinkSection.style.maxWidth = '400px';
+            discordLinkSection.style.zIndex = '9999';
+            discordLinkSection.style.background = '#181a20';
+            discordLinkSection.style.borderRadius = '12px';
+            discordLinkSection.style.boxShadow = '0 2px 16px #000a';
+            discordLinkSection.style.padding = '18px 12px 12px 12px';
+            discordLinkSection.style.margin = '0';
+            discordLinkSection.style.display = 'block';
+            const loginBtn = document.getElementById('loginMeta');
+            if (loginBtn) {
+                const rect = loginBtn.getBoundingClientRect();
+                discordLinkSection.style.top = (rect.top - 90) + 'px';
+                discordLinkSection.style.bottom = '';
+            } else {
+                discordLinkSection.style.top = '30%';
+            }
+        } else {
+            discordLinkSection.style.position = 'fixed';
+            discordLinkSection.style.left = '20px';
+            discordLinkSection.style.bottom = '20px';
+            discordLinkSection.style.top = '';
+            discordLinkSection.style.transform = '';
+            discordLinkSection.style.width = '340px';
+            discordLinkSection.style.maxWidth = '90vw';
+            discordLinkSection.style.zIndex = '9999';
+            discordLinkSection.style.background = '#181a20';
+            discordLinkSection.style.borderRadius = '12px';
+            discordLinkSection.style.boxShadow = '0 2px 16px #000a';
+            discordLinkSection.style.padding = '18px 12px 12px 12px';
+            discordLinkSection.style.margin = '0';
+            discordLinkSection.style.display = 'block';
+        }
         discordLinkSection.innerHTML = 'Checking Discord link status...';
         discordLinkSection.style.display = 'block';
         try {
@@ -25,7 +65,6 @@ window.addEventListener('DOMContentLoaded', () => {
             const aliasData = await aliasRes.json();
             if (!aliasData.alias) throw new Error('No alias found');
 
-            // Use GET to check if alias is linked
             const sqlRes = await fetch(`https://api.grab-tutorials.live/get-alias?alias=${encodeURIComponent(aliasData.alias)}`, {
                 method: 'GET',
                 headers: { 'Content-Type': 'application/json' }
@@ -40,9 +79,27 @@ window.addEventListener('DOMContentLoaded', () => {
             }
 
             discordLinkSection.innerHTML = `
-                <button id="generateDiscordCodeBtn">Generate Discord Link Code</button>
-                <div id="discordCodeDisplay" style="margin-top:10px;"></div>
-                <div id="discordCodeInfo" style="font-size:0.9em;color:#aaa;margin-top:5px;"></div>
+                <button id="generateDiscordCodeBtn" style="
+                    background: linear-gradient(90deg, #5865f2 0%, #4752c4 100%);
+                    color: #fff;
+                    border: none;
+                    border-radius: 5px;
+                    padding: 4px 10px;
+                    font-size: 0.93em;
+                    font-weight: 600;
+                    box-shadow: 0 1px 3px #0002;
+                    cursor: pointer;
+                    transition: background 0.2s, transform 0.1s;
+                    outline: none;
+                    margin-bottom: 4px;
+                    letter-spacing: 0.01em;
+                    min-width: 0;
+                    min-height: 0;
+                " onmouseover="this.style.background='linear-gradient(90deg,#4752c4 0%,#5865f2 100%)';this.style.transform='scale(1.02)';"
+                  onmouseout="this.style.background='linear-gradient(90deg,#5865f2 0%,#4752c4 100%)';this.style.transform='';"
+                >Generate Discord Link Code</button>
+                <div id="discordCodeDisplay" style="margin-top:5px;"></div>
+                <div id="discordCodeInfo" style="font-size:0.8em;color:#aaa;margin-top:3px;"></div>
             `;
             document.getElementById('generateDiscordCodeBtn').onclick = async () => {
                 discordLinkSection.querySelector('#discordCodeDisplay').textContent = 'Generating...';
@@ -60,8 +117,33 @@ window.addEventListener('DOMContentLoaded', () => {
                         discordLinkSection.innerHTML = '';
                         return;
                     }
-                    discordLinkSection.querySelector('#discordCodeDisplay').textContent = `Your code: ${data2.code}`;
+                    discordLinkSection.querySelector('#discordCodeDisplay').innerHTML = `
+                        Your code: <span id="discordGeneratedCode" style="user-select:all; font-weight:bold; background:#222; color:#fff; padding:2px 6px; border-radius:4px; cursor:text;">${data2.code}</span>
+                        <button id="copyDiscordCodeBtn" style="margin-left:8px; font-size:0.9em; background:none; border:none; cursor:pointer; vertical-align:middle; padding:0;">
+                            <img src="https://assets.grab-tutorials.live/!assets/copy-icon.png" alt="Copy" style="width:20px;height:20px;vertical-align:middle;">
+                        </button>
+                    `;
                     discordLinkSection.querySelector('#discordCodeInfo').textContent = 'Use /link code:' + data2.code + ' in Discord within 10 minutes.';
+
+                    const copyBtn = document.getElementById('copyDiscordCodeBtn');
+                    const codeSpan = document.getElementById('discordGeneratedCode');
+                    if (copyBtn && codeSpan) {
+                        copyBtn.onclick = () => {
+                            if (navigator.clipboard) {
+                                navigator.clipboard.writeText(codeSpan.textContent);
+                            } else {
+                                const range = document.createRange();
+                                range.selectNodeContents(codeSpan);
+                                const sel = window.getSelection();
+                                sel.removeAllRanges();
+                                sel.addRange(range);
+                                try { document.execCommand('copy'); } catch (e) {}
+                                sel.removeAllRanges();
+                            }
+                            codeSpan.style.outline = "2px solid #4caf50";
+                            setTimeout(() => { codeSpan.style.outline = ""; }, 800);
+                        };
+                    }
                 } catch (e) {
                     discordLinkSection.querySelector('#discordCodeDisplay').textContent = 'Error generating code.';
                 }
@@ -136,6 +218,8 @@ window.addEventListener('DOMContentLoaded', () => {
 
                         applyUserColour('#888888');
                         applySecondaryColour('#888888');
+
+                        hideDiscordLinkSection();
 
                         const lMenu = document.getElementById('LMenu');
                         if (lMenu && window.getComputedStyle(lMenu).display === 'block') {
@@ -321,4 +405,4 @@ window.addEventListener('DOMContentLoaded', () => {
             proceedWithSession(sessionId);
         }
     }
-  });
+});
