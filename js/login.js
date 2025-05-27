@@ -93,7 +93,9 @@ window.addEventListener('DOMContentLoaded', () => {
                 >Generate Discord Link Code</button>
                 <div id="discordCodeDisplay" style="margin-top:2px;"></div>
                 <div id="discordCodeInfo" style="font-size:0.7em;color:#aaa;margin-top:1px;"></div>
-                <button id="refreshDiscordLinkBtn" style="margin-top:8px;font-size:0.8em;">Refresh</button>
+                <button id="refreshDiscordLinkBtn" style="margin-top:8px;font-size:0.8em; background:none; border:none; cursor:pointer;">
+                    <img src="https://assets.grab-tutorials.live/!assets/refresh-icon.png" alt="Refresh" style="width:22px;height:22px;vertical-align:middle;">
+                </button>
             `;
             document.getElementById('generateDiscordCodeBtn').onclick = async () => {
                 discordLinkSection.querySelector('#discordCodeDisplay').textContent = 'Generating...';
