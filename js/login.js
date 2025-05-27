@@ -27,11 +27,11 @@ window.addEventListener('DOMContentLoaded', () => {
             discordLinkSection.style.padding = '3px 2px 2px 2px';
             discordLinkSection.style.margin = '0';
             discordLinkSection.style.display = 'block';
-            discordLinkSection.style.fontSize = '0.68em';
+            discordLinkSection.style.fontSize = '0.75em';
             const loginBtn = document.getElementById('loginMeta');
             if (loginBtn) {
                 const rect = loginBtn.getBoundingClientRect();
-                discordLinkSection.style.top = (rect.bottom + 8 + window.scrollY) + 'px';
+                discordLinkSection.style.top = (rect.top - discordLinkSection.offsetHeight - 8 + window.scrollY) + 'px';
                 discordLinkSection.style.bottom = '';
             } else {
                 discordLinkSection.style.top = '30%';
@@ -120,7 +120,7 @@ window.addEventListener('DOMContentLoaded', () => {
                     discordLinkSection.querySelector('#discordCodeDisplay').innerHTML = `
                         Your code: <span id="discordGeneratedCode" style="user-select:all; font-weight:bold; background:#222; color:#fff; padding:2px 6px; border-radius:4px; cursor:text;">${data2.code}</span>
                         <button id="copyDiscordCodeBtn" style="margin-left:8px; font-size:0.9em; background:none; border:none; cursor:pointer; vertical-align:middle; padding:0;">
-                            <img src="https://assets.grab-tutorials.live/!assets/copy-icon.png" alt="Copy" style="width:20px;height:20px;vertical-align:middle;">
+                            <img src="https://assets.grab-tutorials.live/!assets/copy-icon.png" alt="Copy" style="width:14px;height:14px;vertical-align:middle;">
                         </button>
                     `;
                     discordLinkSection.querySelector('#discordCodeInfo').textContent = 'Use /account link code:' + data2.code + ' in Discord within 10 minutes.';
