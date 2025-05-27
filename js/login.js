@@ -17,25 +17,24 @@ window.addEventListener('DOMContentLoaded', () => {
         if (isMobile) {
             discordLinkSection.style.position = 'fixed';
             discordLinkSection.style.left = '50%';
-            discordLinkSection.style.bottom = '';
-            discordLinkSection.style.top = '';
             discordLinkSection.style.transform = 'translateX(-50%)';
-            discordLinkSection.style.width = '70vw';
-            discordLinkSection.style.maxWidth = '180px';
+            discordLinkSection.style.width = '60vw';
+            discordLinkSection.style.maxWidth = '120px';
             discordLinkSection.style.zIndex = '9999';
             discordLinkSection.style.background = '#181a20';
-            discordLinkSection.style.borderRadius = '8px';
-            discordLinkSection.style.boxShadow = '0 2px 16px #000a';
-            discordLinkSection.style.padding = '6px 4px 4px 4px';
+            discordLinkSection.style.borderRadius = '7px';
+            discordLinkSection.style.boxShadow = '0 2px 12px #000a';
+            discordLinkSection.style.padding = '4px 2px 2px 2px';
             discordLinkSection.style.margin = '0';
             discordLinkSection.style.display = 'block';
             const loginBtn = document.getElementById('loginMeta');
             if (loginBtn) {
                 const rect = loginBtn.getBoundingClientRect();
-                discordLinkSection.style.top = (rect.top - 40) + 'px';
+                discordLinkSection.style.top = (rect.bottom + 8 + window.scrollY) + 'px';
                 discordLinkSection.style.bottom = '';
             } else {
-                discordLinkSection.style.top = '30%';
+                discordLinkSection.style.top = '40%';
+                discordLinkSection.style.bottom = '';
             }
         } else {
             discordLinkSection.style.position = 'fixed';
