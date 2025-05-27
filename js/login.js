@@ -27,10 +27,11 @@ window.addEventListener('DOMContentLoaded', () => {
             discordLinkSection.style.padding = '3px 2px 2px 2px';
             discordLinkSection.style.margin = '0';
             discordLinkSection.style.display = 'block';
+            discordLinkSection.style.fontSize = '0.68em';
             const loginBtn = document.getElementById('loginMeta');
             if (loginBtn) {
                 const rect = loginBtn.getBoundingClientRect();
-                discordLinkSection.style.top = (rect.top - 30 + window.scrollY) + 'px';
+                discordLinkSection.style.top = (rect.bottom + 8 + window.scrollY) + 'px';
                 discordLinkSection.style.bottom = '';
             } else {
                 discordLinkSection.style.top = '30%';
