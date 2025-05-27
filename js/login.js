@@ -9,11 +9,27 @@ window.addEventListener('DOMContentLoaded', () => {
     const loginwithbuttonElement = document.getElementById('loginwithbutton');
   
     let sessionId = localStorage.getItem('sessionId');
-    let discordLinkPollInterval = null;
   
     async function showDiscordLinkSection(sessionId) {
         const discordLinkSection = document.getElementById('discordLinkSection');
         if (!discordLinkSection) return;
+        try {
+            const statusRes = await fetch('https://api.grab-tutorials.live/discord-link-status', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ sessionId })
+            });
+            if (statusRes.ok) {
+                const statusData = await statusRes.json();
+                if (statusData.loggedIn) {
+                    discordLinkSection.style.display = 'none';
+                    discordLinkSection.innerHTML = '';
+                    return;
+                }
+            }
+        } catch (e) {
+            // 
+        }
         const isMobile = window.innerWidth <= 767;
         if (isMobile) {
             discordLinkSection.style.position = 'fixed';
@@ -48,27 +64,6 @@ window.addEventListener('DOMContentLoaded', () => {
         }
         discordLinkSection.innerHTML = 'Checking Discord link status...';
         discordLinkSection.style.display = 'block';
-        clearInterval(discordLinkPollInterval);
-        async function pollDiscordLink() {
-            try {
-                const res = await fetch(`https://api.grab-tutorials.live/check-discord-link?sessionId=${encodeURIComponent(sessionId)}`, {
-                    method: 'GET',
-                    credentials: 'include',
-                    headers: { 'Content-Type': 'application/json' }
-                });
-                if (res.ok) {
-                    const data = await res.json();
-                    if (data.linked) {
-                        discordLinkSection.style.display = 'none';
-                        discordLinkSection.innerHTML = '';
-                        clearInterval(discordLinkPollInterval);
-                    }
-                }
-            } catch (e) {}
-        }
-        discordLinkPollInterval = setInterval(pollDiscordLink, 3000);
-        pollDiscordLink();
-  
         try {
             const aliasRes = await fetch(`https://api.grab-tutorials.live/getAlias?sessionId=${encodeURIComponent(sessionId)}`, {
                 method: 'GET',
@@ -165,7 +160,6 @@ window.addEventListener('DOMContentLoaded', () => {
         } catch (e) {
             discordLinkSection.style.display = 'none';
             discordLinkSection.innerHTML = '';
-            clearInterval(discordLinkPollInterval);
         }
     }
 
@@ -175,7 +169,6 @@ window.addEventListener('DOMContentLoaded', () => {
             discordLinkSection.style.display = 'none';
             discordLinkSection.innerHTML = '';
         }
-        clearInterval(discordLinkPollInterval);
     }
 
     async function proceedWithSession(sessionId) {
