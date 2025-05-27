@@ -83,7 +83,7 @@ window.addEventListener('DOMContentLoaded', () => {
             ws.onmessage = (event) => {
                 try {
                     const data = JSON.parse(event.data);
-                    if (data.loggedIn && data.sessionId === sessionId) {
+                    if (data.loggedIn && data.alias === aliasData.alias) {
                         discordLinkSection.style.display = 'none';
                         discordLinkSection.innerHTML = '';
                         ws.close();
