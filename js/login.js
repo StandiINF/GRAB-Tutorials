@@ -57,42 +57,59 @@ window.addEventListener('DOMContentLoaded', () => {
             const aliasData = await aliasRes.json();
             if (!aliasData.alias) throw new Error('No alias found');
 
-            const sqlRes = await fetch(`https://api.grab-tutorials.live/get-alias?alias=${encodeURIComponent(aliasData.alias)}`, {
-                method: 'GET',
-                headers: { 'Content-Type': 'application/json' }
-            });
-            if (sqlRes.ok) {
-                const sqlData = await sqlRes.json();
-                if (sqlData.alias && sqlData.alias === aliasData.alias) {
-                    discordLinkSection.style.display = 'none';
-                    discordLinkSection.innerHTML = '';
-                    return;
+            let sqlCheckInterval;
+            async function checkSqlStatus() {
+                const sqlRes = await fetch(`https://api.grab-tutorials.live/get-alias?alias=${encodeURIComponent(aliasData.alias)}`, {
+                    method: 'GET',
+                    headers: { 'Content-Type': 'application/json' }
+                });
+                if (sqlRes.ok) {
+                    const sqlData = await sqlRes.json();
+                    if (sqlData.alias && sqlData.alias === aliasData.alias && sqlData.discord_id) {
+                        discordLinkSection.style.display = 'none';
+                        discordLinkSection.innerHTML = '';
+                        if (sqlCheckInterval) clearInterval(sqlCheckInterval);
+                        return true;
+                    }
                 }
+                return false;
             }
+
+            const alreadyLinked = await checkSqlStatus();
+            if (alreadyLinked) return;
 
             discordLinkSection.innerHTML = `
                 <button id="generateDiscordCodeBtn" style="
                     background: linear-gradient(90deg, #5865f2 0%, #4752c4 100%);
                     color: #fff;
                     border: none;
-                    border-radius: 4px;
-                    padding: 2px 6px;
-                    font-size: 0.75em;
+                    border-radius: 3px;
+                    padding: 1px 4px;
+                    font-size: 0.62em;
                     font-weight: 600;
                     box-shadow: 0 1px 2px #0002;
                     cursor: pointer;
                     transition: background 0.2s, transform 0.1s;
                     outline: none;
-                    margin-bottom: 2px;
+                    margin-bottom: 1px;
                     letter-spacing: 0.01em;
                     min-width: 0;
                     min-height: 0;
                 " onmouseover="this.style.background='linear-gradient(90deg,#4752c4 0%,#5865f2 100%)';this.style.transform='scale(1.01)';"
                   onmouseout="this.style.background='linear-gradient(90deg,#5865f2 0%,#4752c4 100%)';this.style.transform='';"
                 >Generate Discord Link Code</button>
-                <div id="discordCodeDisplay" style="margin-top:2px;"></div>
-                <div id="discordCodeInfo" style="font-size:0.7em;color:#aaa;margin-top:1px;"></div>
+                <div id="discordCodeDisplay" style="margin-top:1px;"></div>
+                <div id="discordCodeInfo" style="font-size:0.6em;color:#aaa;margin-top:1px;"></div>
             `;
+            if (!isMobile) {
+                const btn = document.getElementById('generateDiscordCodeBtn');
+                if (btn) {
+                    btn.style.fontSize = '1em';
+                    btn.style.padding = '8px 16px';
+                    btn.style.marginBottom = '6px';
+                    btn.style.borderRadius = '6px';
+                }
+            }
             document.getElementById('generateDiscordCodeBtn').onclick = async () => {
                 discordLinkSection.querySelector('#discordCodeDisplay').textContent = 'Generating...';
                 try {
@@ -107,6 +124,7 @@ window.addEventListener('DOMContentLoaded', () => {
                     if (data2.alreadyLinked) {
                         discordLinkSection.style.display = 'none';
                         discordLinkSection.innerHTML = '';
+                        if (sqlCheckInterval) clearInterval(sqlCheckInterval);
                         return;
                     }
                     discordLinkSection.querySelector('#discordCodeDisplay').innerHTML = `
@@ -140,6 +158,9 @@ window.addEventListener('DOMContentLoaded', () => {
                     discordLinkSection.querySelector('#discordCodeDisplay').textContent = 'Error generating code.';
                 }
             };
+
+            sqlCheckInterval = setInterval(checkSqlStatus, 2000);
+
         } catch (e) {
             discordLinkSection.style.display = 'none';
             discordLinkSection.innerHTML = '';
