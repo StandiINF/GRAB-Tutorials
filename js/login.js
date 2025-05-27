@@ -9,27 +9,12 @@ window.addEventListener('DOMContentLoaded', () => {
     const loginwithbuttonElement = document.getElementById('loginwithbutton');
   
     let sessionId = localStorage.getItem('sessionId');
+    let discordLinkStatusInterval = null;
+    let ws = null;
   
     async function showDiscordLinkSection(sessionId) {
         const discordLinkSection = document.getElementById('discordLinkSection');
         if (!discordLinkSection) return;
-        try {
-            const statusRes = await fetch('https://api.grab-tutorials.live/discord-link-status', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ sessionId })
-            });
-            if (statusRes.ok) {
-                const statusData = await statusRes.json();
-                if (statusData.loggedIn) {
-                    discordLinkSection.style.display = 'none';
-                    discordLinkSection.innerHTML = '';
-                    return;
-                }
-            }
-        } catch (e) {
-            // 
-        }
         const isMobile = window.innerWidth <= 767;
         if (isMobile) {
             discordLinkSection.style.position = 'fixed';
@@ -86,6 +71,32 @@ window.addEventListener('DOMContentLoaded', () => {
                     return;
                 }
             }
+
+            if (ws) {
+                ws.close();
+                ws = null;
+            }
+            ws = new WebSocket('wss://api.grab-tutorials.live/ws');
+            ws.onopen = () => {
+                ws.send(JSON.stringify({ sessionId }));
+            };
+            ws.onmessage = (event) => {
+                try {
+                    const data = JSON.parse(event.data);
+                    if (data.loggedIn && data.sessionId === sessionId) {
+                        discordLinkSection.style.display = 'none';
+                        discordLinkSection.innerHTML = '';
+                        ws.close();
+                        ws = null;
+                    }
+                } catch (e) {}
+            };
+            ws.onerror = () => {
+                // 
+            };
+            ws.onclose = () => {
+                ws = null;
+            };
 
             discordLinkSection.innerHTML = `
                 <button id="generateDiscordCodeBtn" style="
