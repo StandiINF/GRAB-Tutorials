@@ -104,10 +104,10 @@ window.addEventListener('DOMContentLoaded', () => {
             if (!isMobile) {
                 const btn = document.getElementById('generateDiscordCodeBtn');
                 if (btn) {
-                    btn.style.fontSize = '1.1em';
-                    btn.style.padding = '12px 22px';
-                    btn.style.marginBottom = '8px';
-                    btn.style.borderRadius = '8px';
+                    btn.style.fontSize = '1em';
+                    btn.style.padding = '8px 16px';
+                    btn.style.marginBottom = '6px';
+                    btn.style.borderRadius = '6px';
                 }
             }
             document.getElementById('generateDiscordCodeBtn').onclick = async () => {
