@@ -10,7 +10,6 @@ window.addEventListener('DOMContentLoaded', () => {
   
     let sessionId = localStorage.getItem('sessionId');
     let discordLinkStatusInterval = null;
-    let ws = null;
   
     async function showDiscordLinkSection(sessionId) {
         const discordLinkSection = document.getElementById('discordLinkSection');
@@ -72,32 +71,6 @@ window.addEventListener('DOMContentLoaded', () => {
                 }
             }
 
-            if (ws) {
-                ws.close();
-                ws = null;
-            }
-            ws = new WebSocket('wss://api.grab-tutorials.live/ws');
-            ws.onopen = () => {
-                ws.send(JSON.stringify({ sessionId }));
-            };
-            ws.onmessage = (event) => {
-                try {
-                    const data = JSON.parse(event.data);
-                    if (data.loggedIn && data.alias === aliasData.alias) {
-                        discordLinkSection.style.display = 'none';
-                        discordLinkSection.innerHTML = '';
-                        ws.close();
-                        ws = null;
-                    }
-                } catch (e) {}
-            };
-            ws.onerror = () => {
-                // 
-            };
-            ws.onclose = () => {
-                ws = null;
-            };
-
             discordLinkSection.innerHTML = `
                 <button id="generateDiscordCodeBtn" style="
                     background: linear-gradient(90deg, #5865f2 0%, #4752c4 100%);
@@ -120,6 +93,7 @@ window.addEventListener('DOMContentLoaded', () => {
                 >Generate Discord Link Code</button>
                 <div id="discordCodeDisplay" style="margin-top:2px;"></div>
                 <div id="discordCodeInfo" style="font-size:0.7em;color:#aaa;margin-top:1px;"></div>
+                <button id="refreshDiscordLinkBtn" style="margin-top:8px;font-size:0.8em;">Refresh</button>
             `;
             document.getElementById('generateDiscordCodeBtn').onclick = async () => {
                 discordLinkSection.querySelector('#discordCodeDisplay').textContent = 'Generating...';
@@ -167,6 +141,9 @@ window.addEventListener('DOMContentLoaded', () => {
                 } catch (e) {
                     discordLinkSection.querySelector('#discordCodeDisplay').textContent = 'Error generating code.';
                 }
+            };
+            document.getElementById('refreshDiscordLinkBtn').onclick = () => {
+                window.location.reload();
             };
         } catch (e) {
             discordLinkSection.style.display = 'none';
