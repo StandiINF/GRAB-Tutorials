@@ -101,15 +101,6 @@ window.addEventListener('DOMContentLoaded', () => {
                 <div id="discordCodeDisplay" style="margin-top:2px;"></div>
                 <div id="discordCodeInfo" style="font-size:0.7em;color:#aaa;margin-top:1px;"></div>
             `;
-            if (!isMobile) {
-                const btn = document.getElementById('generateDiscordCodeBtn');
-                if (btn) {
-                    btn.style.fontSize = '1em';
-                    btn.style.padding = '8px 16px';
-                    btn.style.marginBottom = '6px';
-                    btn.style.borderRadius = '6px';
-                }
-            }
             document.getElementById('generateDiscordCodeBtn').onclick = async () => {
                 discordLinkSection.querySelector('#discordCodeDisplay').textContent = 'Generating...';
                 try {
