@@ -83,23 +83,23 @@ window.addEventListener('DOMContentLoaded', () => {
                     background: linear-gradient(90deg, #5865f2 0%, #4752c4 100%);
                     color: #fff;
                     border: none;
-                    border-radius: 3px;
-                    padding: 1px 4px;
-                    font-size: 0.62em;
+                    border-radius: 4px;
+                    padding: 2px 6px;
+                    font-size: 0.75em;
                     font-weight: 600;
                     box-shadow: 0 1px 2px #0002;
                     cursor: pointer;
                     transition: background 0.2s, transform 0.1s;
                     outline: none;
-                    margin-bottom: 1px;
+                    margin-bottom: 2px;
                     letter-spacing: 0.01em;
                     min-width: 0;
                     min-height: 0;
                 " onmouseover="this.style.background='linear-gradient(90deg,#4752c4 0%,#5865f2 100%)';this.style.transform='scale(1.01)';"
                   onmouseout="this.style.background='linear-gradient(90deg,#5865f2 0%,#4752c4 100%)';this.style.transform='';"
                 >Generate Discord Link Code</button>
-                <div id="discordCodeDisplay" style="margin-top:1px;"></div>
-                <div id="discordCodeInfo" style="font-size:0.6em;color:#aaa;margin-top:1px;"></div>
+                <div id="discordCodeDisplay" style="margin-top:2px;"></div>
+                <div id="discordCodeInfo" style="font-size:0.7em;color:#aaa;margin-top:1px;"></div>
             `;
             if (!isMobile) {
                 const btn = document.getElementById('generateDiscordCodeBtn');
