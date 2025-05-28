@@ -247,6 +247,7 @@ async function renderAllBasicsCategories(groups) {
  */
 async function renderAllEditorCategories(groups) {
   await renderCategories(fetchEditor, {
+    basics: groups.basicsGroup,
     ui: groups.uiGroup,
     wrist: groups.wristGroup,
     blocks: groups.blocksGroup
@@ -301,11 +302,12 @@ document.addEventListener("DOMContentLoaded", () => {
     });
 
     document.getElementById("E").addEventListener("click", () => {
-        const uiGroup = document.querySelector('#EMenu .groupOneContainer .tutorialGroup');
-        const wristGroup = document.querySelector('#EMenu .groupTwoContainer .tutorialGroup');
-        const blocksGroup = document.querySelector('#EMenu .groupThreeContainer .tutorialGroup');
+        const basicsGroup = document.querySelector('#EMenu .groupOneContainer .tutorialGroup');
+        const uiGroup = document.querySelector('#EMenu .groupTwoContainer .tutorialGroup');
+        const wristGroup = document.querySelector('#EMenu .groupThreeContainer .tutorialGroup');
+        const blocksGroup = document.querySelector('#EMenu .groupFourContainer .tutorialGroup');
         if (window.renderAllEditorCategories) {
-            window.renderAllEditorCategories({ uiGroup, wristGroup, blocksGroup });
+            window.renderAllEditorCategories({ basicsGroup, uiGroup, wristGroup, blocksGroup });
         }
     });
 
