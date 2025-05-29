@@ -21,69 +21,69 @@ async function renderAllDecksCategories(category, groups) {
   if (!groups) return;
   try {
     const decksData = await fetchDecks();
-    for (const [subcategory, container] of Object.entries(groups)) {
-      if (!container) continue;
-      const items = decksData.filter(
-        item => item.category === category && item.subcategory === subcategory && item.cover
-      );
-      items.forEach(item => {
-        if (container.querySelector(`img[src$="${item.cover.replace(/^\/+/, "")}"]`)) {
-          return;
-        }
-        const div = document.createElement("div");
-        div.classList.add("cardGroup");
-        div.style.position = "relative";
-
-        if (item.title && item.title.toLowerCase() === "slider") {
-          div.id = "sliderGroup";
-        }
-
-        const img = document.createElement("img");
-        img.src = "https://assets.grab-tutorials.live/" + item.cover.replace(/^\/+/, "");
-        img.alt = item.title || "Tutorial";
-        img.loading = "lazy";
-        img.classList.add("cardMain");
-        if (item.title && item.title.toLowerCase().includes("slider")) {
-          img.classList.add("sliderCard");
-        }
-        div.appendChild(img);
-
-        if (item.gif) {
-          const gifImg = document.createElement("img");
-          gifImg.dataset.src = "https://assets.grab-tutorials.live/" + item.gif.replace(/^\/+/, "");
-          gifImg.alt = (item.title || "Tutorial") + " gif";
-          gifImg.className = (item.title ? item.title.replace(/\s+/g, '') : "card") + "Card gif";
-          gifImg.classList.add("gif");
-          gifImg.loading = "lazy";
-          gifImg.style.position = "absolute";
-          gifImg.style.top = "0";
-          gifImg.style.left = "0";
-          gifImg.style.width = "100%";
-          gifImg.style.height = "100%";
-          gifImg.style.zIndex = "2";
-          gifImg.style.pointerEvents = "none";
-          div.appendChild(gifImg);
-
-          div.addEventListener("mouseenter", () => {
-            gifImg.src = gifImg.dataset.src;
-          });
-          div.addEventListener("mouseleave", () => {
-            gifImg.removeAttribute("src");
-          });
-        }
-
-        if (item.dial) {
-          const dialImg = document.createElement("img");
-          dialImg.src = "https://assets.grab-tutorials.live/" + item.dial.replace(/^\/+/, "");
-          dialImg.alt = (item.title || "Tutorial") + " dial";
-          dialImg.id = "sliderDial";
-          dialImg.loading = "lazy";
-          div.appendChild(dialImg);
-        }
-
-        container.appendChild(div);
-      });
+    for (const container of Object.values(groups)) {
+      if (container) container.innerHTML = "";
     }
+    decksData.forEach(item => {
+      if (item.category !== category || !item.cover || !item.subcategory) return;
+      const container = groups[item.subcategory];
+      if (!container) return;
+      if (container.querySelector(`img[src$="${item.cover.replace(/^\/+/, "")}"]`)) {
+        return;
+      }
+      const div = document.createElement("div");
+      div.classList.add("cardGroup");
+      div.style.position = "relative";
+
+      if (item.title && item.title.toLowerCase() === "slider") {
+        div.id = "sliderGroup";
+      }
+
+      const img = document.createElement("img");
+      img.src = "https://assets.grab-tutorials.live/" + item.cover.replace(/^\/+/, "");
+      img.alt = item.title || "Tutorial";
+      img.loading = "lazy";
+      img.classList.add("cardMain");
+      if (item.title && item.title.toLowerCase().includes("slider")) {
+        img.classList.add("sliderCard");
+      }
+      div.appendChild(img);
+
+      if (item.gif) {
+        const gifImg = document.createElement("img");
+        gifImg.dataset.src = "https://assets.grab-tutorials.live/" + item.gif.replace(/^\/+/, "");
+        gifImg.alt = (item.title || "Tutorial") + " gif";
+        gifImg.className = (item.title ? item.title.replace(/\s+/g, '') : "card") + "Card gif";
+        gifImg.classList.add("gif");
+        gifImg.loading = "lazy";
+        gifImg.style.position = "absolute";
+        gifImg.style.top = "0";
+        gifImg.style.left = "0";
+        gifImg.style.width = "100%";
+        gifImg.style.height = "100%";
+        gifImg.style.zIndex = "2";
+        gifImg.style.pointerEvents = "none";
+        div.appendChild(gifImg);
+
+        div.addEventListener("mouseenter", () => {
+          gifImg.src = gifImg.dataset.src;
+        });
+        div.addEventListener("mouseleave", () => {
+          gifImg.removeAttribute("src");
+        });
+      }
+
+      if (item.dial) {
+        const dialImg = document.createElement("img");
+        dialImg.src = "https://assets.grab-tutorials.live/" + item.dial.replace(/^\/+/, "");
+        dialImg.alt = (item.title || "Tutorial") + " dial";
+        dialImg.id = "sliderDial";
+        dialImg.loading = "lazy";
+        div.appendChild(dialImg);
+      }
+
+      container.appendChild(div);
+    });
   } catch (e) {
     console.error(`Failed to fetch or render decks for category ${category}:`, e);
   }
