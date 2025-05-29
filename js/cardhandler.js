@@ -14,95 +14,82 @@ async function fetchDecks() {
 }
 
 /**
- * @param {HTMLElement} container
  * @param {string} category
+ * @param {Object} groups
  */
-async function renderDecksCategory(container, category) {
-  if (!container) return;
+async function renderAllDecksCategories(category, groups) {
+  if (!groups) return;
   try {
     const decksData = await fetchDecks();
-    const items = decksData.filter(item => item.category === category && item.cover);
+    for (const [subcategory, container] of Object.entries(groups)) {
+      if (!container) continue;
+      const items = decksData.filter(
+        item => item.category === category && item.subcategory === subcategory && item.cover
+      );
+      items.forEach(item => {
+        if (container.querySelector(`img[src$="${item.cover.replace(/^\/+/, "")}"]`)) {
+          return;
+        }
+        const div = document.createElement("div");
+        div.classList.add("cardGroup");
+        div.style.position = "relative";
 
-    items.forEach(item => {
-      if (container.querySelector(`img[src$="${item.cover.replace(/^\/+/, "")}"]`)) {
-        return;
-      }
-      const div = document.createElement("div");
-      div.classList.add("cardGroup");
-      div.style.position = "relative";
+        if (item.title && item.title.toLowerCase() === "slider") {
+          div.id = "sliderGroup";
+        }
 
-      if (item.title && item.title.toLowerCase() === "slider") {
-        div.id = "sliderGroup";
-      }
+        const img = document.createElement("img");
+        img.src = "https://assets.grab-tutorials.live/" + item.cover.replace(/^\/+/, "");
+        img.alt = item.title || "Tutorial";
+        img.loading = "lazy";
+        img.classList.add("cardMain");
+        if (item.title && item.title.toLowerCase().includes("slider")) {
+          img.classList.add("sliderCard");
+        }
+        div.appendChild(img);
 
-      const img = document.createElement("img");
-      img.src = "https://assets.grab-tutorials.live/" + item.cover.replace(/^\/+/, "");
-      img.alt = item.title || "Tutorial";
-      img.loading = "lazy";
-      img.classList.add("cardMain");
-      if (item.title && item.title.toLowerCase().includes("slider")) {
-        img.classList.add("sliderCard");
-      }
-      div.appendChild(img);
+        if (item.gif) {
+          const gifImg = document.createElement("img");
+          gifImg.dataset.src = "https://assets.grab-tutorials.live/" + item.gif.replace(/^\/+/, "");
+          gifImg.alt = (item.title || "Tutorial") + " gif";
+          gifImg.className = (item.title ? item.title.replace(/\s+/g, '') : "card") + "Card gif";
+          gifImg.classList.add("gif");
+          gifImg.loading = "lazy";
+          gifImg.style.position = "absolute";
+          gifImg.style.top = "0";
+          gifImg.style.left = "0";
+          gifImg.style.width = "100%";
+          gifImg.style.height = "100%";
+          gifImg.style.zIndex = "2";
+          gifImg.style.pointerEvents = "none";
+          div.appendChild(gifImg);
 
-      if (item.gif) {
-        const gifImg = document.createElement("img");
-        gifImg.dataset.src = "https://assets.grab-tutorials.live/" + item.gif.replace(/^\/+/, "");
-        gifImg.alt = (item.title || "Tutorial") + " gif";
-        gifImg.className = (item.title ? item.title.replace(/\s+/g, '') : "card") + "Card gif";
-        gifImg.classList.add("gif");
-        gifImg.loading = "lazy";
-        gifImg.style.position = "absolute";
-        gifImg.style.top = "0";
-        gifImg.style.left = "0";
-        gifImg.style.width = "100%";
-        gifImg.style.height = "100%";
-        gifImg.style.zIndex = "2";
-        gifImg.style.pointerEvents = "none";
-        div.appendChild(gifImg);
+          div.addEventListener("mouseenter", () => {
+            gifImg.src = gifImg.dataset.src;
+          });
+          div.addEventListener("mouseleave", () => {
+            gifImg.removeAttribute("src");
+          });
+        }
 
-        div.addEventListener("mouseenter", () => {
-          gifImg.src = gifImg.dataset.src;
-        });
-        div.addEventListener("mouseleave", () => {
-          gifImg.removeAttribute("src");
-        });
-      }
+        if (item.dial) {
+          const dialImg = document.createElement("img");
+          dialImg.src = "https://assets.grab-tutorials.live/" + item.dial.replace(/^\/+/, "");
+          dialImg.alt = (item.title || "Tutorial") + " dial";
+          dialImg.id = "sliderDial";
+          dialImg.loading = "lazy";
+          div.appendChild(dialImg);
+        }
 
-      if (item.dial) {
-        const dialImg = document.createElement("img");
-        dialImg.src = "https://assets.grab-tutorials.live/" + item.dial.replace(/^\/+/, "");
-        dialImg.alt = (item.title || "Tutorial") + " dial";
-        dialImg.id = "sliderDial";
-        dialImg.loading = "lazy";
-        div.appendChild(dialImg);
-      }
-
-      container.appendChild(div);
-    });
+        container.appendChild(div);
+      });
+    }
   } catch (e) {
-    console.error(`Failed to fetch or render decks ${category} data:`, e);
+    console.error(`Failed to fetch or render decks for category ${category}:`, e);
   }
 }
 
-/**
- * @param {Object} groups
- */
-async function renderAllDecksCategories(groups) {
-  await renderDecksCategory(groups.playingGroup, "playing");
-  await renderDecksCategory(groups.uiGroup, "ui");
-  await renderDecksCategory(groups.bogGroup, "bog");
-  await renderDecksCategory(groups.basicsGroup, "basics");
-  await renderDecksCategory(groups.wristGroup, "wrist");
-  await renderDecksCategory(groups.blocksGroup, "blocks");
-  await renderDecksCategory(groups.beginnerGroup, "beginner");
-  await renderDecksCategory(groups.intermediateGroup, "intermediate");
-  await renderDecksCategory(groups.advancedGroup, "advanced");
-  await renderDecksCategory(groups.logicGroup, "logic");
-}
-
 window.fetchDecks = fetchDecks;
-window.renderDecksCategory = renderDecksCategory;
 window.renderAllDecksCategories = renderAllDecksCategories;
 
 document.addEventListener("DOMContentLoaded", () => {
@@ -110,7 +97,11 @@ document.addEventListener("DOMContentLoaded", () => {
     const playingGroup = document.querySelector('#BMenu .groupOneContainer .tutorialGroup');
     const uiGroup = document.querySelector('#BMenu .groupTwoContainer .tutorialGroup');
     const bogGroup = document.querySelector('#BMenu .groupThreeContainer .tutorialGroup');
-    window.renderAllDecksCategories({ playingGroup, uiGroup, bogGroup });
+    window.renderAllDecksCategories("basics", {
+      playing: playingGroup,
+      ui: uiGroup,
+      bog: bogGroup
+    });
   });
 
   document.getElementById("E").addEventListener("click", () => {
@@ -118,7 +109,12 @@ document.addEventListener("DOMContentLoaded", () => {
     const uiGroup = document.querySelector('#EMenu .groupTwoContainer .tutorialGroup');
     const wristGroup = document.querySelector('#EMenu .groupThreeContainer .tutorialGroup');
     const blocksGroup = document.querySelector('#EMenu .groupFourContainer .tutorialGroup');
-    window.renderAllDecksCategories({ basicsGroup, uiGroup, wristGroup, blocksGroup });
+    window.renderAllDecksCategories("editor", {
+      basics: basicsGroup,
+      ui: uiGroup,
+      wrist: wristGroup,
+      blocks: blocksGroup
+    });
   });
 
   document.getElementById("A").addEventListener("click", () => {
@@ -126,7 +122,12 @@ document.addEventListener("DOMContentLoaded", () => {
     const beginnerGroup = document.querySelector('#AMenu .groupTwoContainer .tutorialGroup');
     const intermediateGroup = document.querySelector('#AMenu .groupThreeContainer .tutorialGroup');
     const advancedGroup = document.querySelector('#AMenu .groupFourContainer .tutorialGroup');
-    window.renderAllDecksCategories({ basicsGroup, beginnerGroup, intermediateGroup, advancedGroup });
+    window.renderAllDecksCategories("animation", {
+      basics: basicsGroup,
+      beginner: beginnerGroup,
+      intermediate: intermediateGroup,
+      advanced: advancedGroup
+    });
   });
 
   document.getElementById("T").addEventListener("click", () => {
@@ -135,7 +136,13 @@ document.addEventListener("DOMContentLoaded", () => {
     const intermediateGroup = document.querySelector('#TMenu .groupThreeContainer .tutorialGroup');
     const advancedGroup = document.querySelector('#TMenu .groupFourContainer .tutorialGroup');
     const logicGroup = document.querySelector('#TMenu .groupFiveContainer .tutorialGroup');
-    window.renderAllDecksCategories({ basicsGroup, beginnerGroup, intermediateGroup, advancedGroup, logicGroup });
+    window.renderAllDecksCategories("trigger", {
+      basics: basicsGroup,
+      beginner: beginnerGroup,
+      intermediate: intermediateGroup,
+      advanced: advancedGroup,
+      logic: logicGroup
+    });
   });
 
   document.body.addEventListener("mousedown", async function (e) {
@@ -145,11 +152,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const img = cardGroup.querySelector("img");
     if (!img) return;
 
-    const menuId = getCurrentMenuId();
-    const jsonSource = getJsonSourceByMenu(menuId);
-    if (!jsonSource) return;
-
-    const data = await jsonSource.fetchFn();
+    const data = await fetchDecks();
 
     let cover = img.src.replace(/^https?:\/\/[^\/]+\/assets\//, "");
     let found = findCardObj(data, cover, img.alt.replace(/\.svg$/i, ""));
@@ -159,34 +162,14 @@ document.addEventListener("DOMContentLoaded", () => {
     }
     if (!found) return;
 
-    renderCardDeck(found, jsonSource.cacheKey);
+    renderCardDeck(found);
   }, true);
 });
 
-function getJsonSourceByMenu(menuId) {
-  switch (menuId) {
-    case "BMenu": return { fetchFn: fetchBasics, cacheKey: "basics" };
-    case "EMenu": return { fetchFn: fetchEditor, cacheKey: "editor" };
-    case "AMenu": return { fetchFn: fetchAnimation, cacheKey: "animation" };
-    case "TMenu": return { fetchFn: fetchTrigger, cacheKey: "trigger" };
-    default: return null;
-  }
-}
-
-function getCurrentMenuId() {
-  const menus = ["BMenu", "EMenu", "AMenu", "TMenu"];
-  for (const id of menus) {
-    const el = document.getElementById(id);
-    if (el && el.style.display === "block") return id;
-  }
-  return null;
-}
-
 /**
  * @param {Object} cardObj
- * @param {string} jsonKey
  */
-function renderCardDeck(cardObj, jsonKey) {
+function renderCardDeck(cardObj) {
   const cardDecks = document.querySelector('[name="cardDecks"]');
   if (!cardDecks) return;
 
