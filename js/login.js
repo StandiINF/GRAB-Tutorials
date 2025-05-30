@@ -486,17 +486,6 @@ window.addEventListener('DOMContentLoaded', () => {
             });
         }
 
-        async function addPlaceholderToSection(groupContainer) {
-            const key = getSectionKey(groupContainer);
-            let data = await fetchSharedPlaceholders();
-            if (!data[key]) {
-                data[key] = true;
-                localStorage.setItem('sharedPlaceholders', JSON.stringify(data));
-                await saveSharedPlaceholders(data);
-                await syncPlaceholders();
-            }
-        }
-
         function attachAddBtnListeners() {
             document.querySelectorAll('.addPlaceholderBtn').forEach(btn => {
                 btn.onclick = async function(e) {
@@ -505,8 +494,14 @@ window.addEventListener('DOMContentLoaded', () => {
                     while (groupContainer && !groupContainer.classList.contains('groupContainer')) {
                         groupContainer = groupContainer.nextElementSibling;
                     }
-                    if (groupContainer) {
-                        await addPlaceholderToSection(groupContainer);
+                    if (!groupContainer) return;
+                    const key = getSectionKey(groupContainer);
+                    let data = await fetchSharedPlaceholders();
+                    if (!data[key]) {
+                        data[key] = true;
+                        localStorage.setItem('sharedPlaceholders', JSON.stringify(data));
+                        await saveSharedPlaceholders(data);
+                        await syncPlaceholders();
                     }
                 };
             });
