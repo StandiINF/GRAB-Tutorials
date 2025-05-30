@@ -148,7 +148,7 @@ async function renderAllDecksCategories(category, groups) {
         if (isMobile()) {
           dialImg.style.width = "27px";
           dialImg.style.height = "27px";
-          dialImg.style.left = "9px";
+          dialImg.style.left = "19px";
           dialImg.style.top = "82.5px";
         } else {
           dialImg.style.width = "50px";
@@ -160,6 +160,21 @@ async function renderAllDecksCategories(category, groups) {
         dialImg.style.zIndex = "1";
         dialImg.style.transition = "left 0.3s";
         dialImg.style.cursor = "pointer";
+
+        div.addEventListener("mouseenter", () => {
+          if (isMobile()) {
+            dialImg.style.left = "202px";
+          } else {
+            dialImg.style.left = "409px";
+          }
+        });
+        div.addEventListener("mouseleave", () => {
+          if (isMobile()) {
+            dialImg.style.left = "19px";
+          } else {
+            dialImg.style.left = "42px";
+          }
+        });
         div.appendChild(dialImg);
       }
 
