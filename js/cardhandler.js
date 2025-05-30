@@ -49,6 +49,45 @@ async function renderAllDecksCategories(category, groups) {
       }
       div.appendChild(img);
 
+      if (item.alt) {
+        let altImages = [];
+        if (typeof item.alt === "object") {
+          altImages = Object.values(item.alt);
+        } else if (typeof item.alt === "string") {
+          altImages = [item.alt];
+        }
+        if (altImages.length > 0) {
+          const altImgElements = [];
+          altImages.forEach((altPath, idx) => {
+            const altImg = document.createElement("img");
+            altImg.src = "https://assets.grab-tutorials.live/" + altPath.replace(/^\/+/, "");
+            altImg.alt = (item.title || "Tutorial") + " alt " + (idx + 1);
+            altImg.className = "altCardImage";
+            altImg.style.position = "absolute";
+            altImg.style.top = "0";
+            altImg.style.left = "0";
+            altImg.style.width = "100%";
+            altImg.style.height = "100%";
+            altImg.style.zIndex = "11";
+            altImg.style.pointerEvents = "none";
+            altImg.style.setProperty("opacity", "0", "important");
+            altImg.style.transition = "opacity 0.2s";
+            altImgElements.push(altImg);
+          });
+          altImgElements.forEach(altImg => div.appendChild(altImg));
+          div.addEventListener("mouseenter", () => {
+            altImgElements.forEach(img => img.style.setProperty("opacity", "0", "important"));
+            if (altImgElements.length > 0) {
+              const randomIdx = Math.floor(Math.random() * altImgElements.length);
+              altImgElements[randomIdx].style.setProperty("opacity", "1", "important");
+            }
+          });
+          div.addEventListener("mouseleave", () => {
+            altImgElements.forEach(img => img.style.setProperty("opacity", "0", "important"));
+          });
+        }
+      }
+
       if (item.gif) {
         const gifImg = document.createElement("img");
         gifImg.dataset.src = "https://assets.grab-tutorials.live/" + item.gif.replace(/^\/+/, "");
@@ -84,6 +123,37 @@ async function renderAllDecksCategories(category, groups) {
 
       container.appendChild(div);
     });
+
+    const placeholderMap = {
+      basics: ["playing"],
+      editor: ["basics"],
+      animation: ["basics", "beginner", "intermediate", "advanced"],
+      trigger: ["basics", "beginner", "intermediate", "advanced"]
+    };
+    const placeholderUrl = "https://assets.grab-tutorials.live/!assets/placeholder-discord-main.svg";
+    const placeholderAlt = "Can't find what you're looking for? Join Discord!";
+    if (placeholderMap[category]) {
+      for (const subcat of placeholderMap[category]) {
+        const container = groups[subcat];
+        if (container) {
+          if (!container.querySelector(`img[src="${placeholderUrl}"]`)) {
+            const div = document.createElement("div");
+            div.classList.add("cardGroup", "placeholder");
+            div.style.position = "relative";
+            const img = document.createElement("img");
+            img.src = placeholderUrl;
+            img.alt = placeholderAlt;
+            img.loading = "lazy";
+            img.classList.add("cardMain");
+            div.addEventListener("click", () => {
+              window.open("https://discord.gg/J3yDuye6Uz", "_blank");
+            });
+            div.appendChild(img);
+            container.appendChild(div);
+          }
+        }
+      }
+    }
   } catch (e) {
     console.error(`Failed to fetch or render decks for category ${category}:`, e);
   }
@@ -148,6 +218,7 @@ document.addEventListener("DOMContentLoaded", () => {
   document.body.addEventListener("mousedown", async function (e) {
     const cardGroup = e.target.closest(".cardGroup");
     if (!cardGroup) return;
+    if (cardGroup.classList.contains("placeholder")) return;
 
     const img = cardGroup.querySelector("img");
     if (!img) return;
