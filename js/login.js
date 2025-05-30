@@ -9,7 +9,6 @@ window.addEventListener('DOMContentLoaded', () => {
     const loginwithbuttonElement = document.getElementById('loginwithbutton');
   
     let sessionId = localStorage.getItem('sessionId');
-    let discordLinkStatusInterval = null;
   
     async function showDiscordLinkSection(sessionId) {
         const discordLinkSection = document.getElementById('discordLinkSection');
@@ -404,4 +403,127 @@ window.addEventListener('DOMContentLoaded', () => {
             proceedWithSession(sessionId);
         }
     }
+
+    (function() {
+        const placeholderCardHTML = `
+            <div class="cardGroup placeholderCard" style="position:relative;">
+                <img src="https://assets.grab-tutorials.live/!assets/placeholder.svg" alt="Placeholder" class="cardMain" loading="lazy" style="opacity:0.7;">
+                <div style="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);color:#fff;font-size:1.2rem;font-family:'Nunito',sans-serif;text-shadow:0 1px 4px #000a;">Can't find what you're looking for?</div>
+            </div>
+        `;
+
+        function getSectionKey(groupContainer) {
+            const menu = groupContainer.closest('.menu');
+            const menuId = menu ? menu.id : '';
+            const groupTextBox = groupContainer.querySelector('.groupTextBox [name]');
+            const subcat = groupTextBox ? groupTextBox.getAttribute('name') : '';
+            return menuId + ':' + subcat;
+        }
+
+        function updateAddBtnsVisibility() {
+            const alias = localStorage.getItem('alias');
+            document.querySelectorAll('.addPlaceholderBtn').forEach(btn => {
+                btn.style.display = (alias === 'Standi') ? 'inline-block' : 'none';
+            });
+        }
+
+        async function fetchSharedPlaceholders() {
+            try {
+                const res = await fetch('https://api.grab-tutorials.live/getPlaceholders', { cache: 'no-store' });
+                if (!res.ok) return {};
+                return await res.json();
+            } catch {
+                return {};
+            }
+        }
+
+        async function saveSharedPlaceholders(placeholders) {
+            const sessionId = localStorage.getItem('sessionId');
+            if (!sessionId) return;
+            try {
+                await fetch('https://api.grab-tutorials.live/setPlaceholders', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ sessionId, placeholders })
+                });
+            } catch {}
+        }
+
+        async function syncPlaceholders() {
+            const data = await fetchSharedPlaceholders();
+            localStorage.setItem('sharedPlaceholders', JSON.stringify(data));
+            document.querySelectorAll('.groupContainer').forEach(group => {
+                const key = getSectionKey(group);
+                const tutorialGroup = group.querySelector('.tutorialGroup');
+                if (!tutorialGroup) return;
+                tutorialGroup.querySelectorAll('.placeholderCard').forEach(e => e.remove());
+                if (data[key]) {
+                    tutorialGroup.insertAdjacentHTML('beforeend', placeholderCardHTML);
+                }
+            });
+        }
+
+        async function addPlaceholderToSection(groupContainer) {
+            const key = getSectionKey(groupContainer);
+            let data = await fetchSharedPlaceholders();
+            if (!data[key]) {
+                data[key] = true;
+                localStorage.setItem('sharedPlaceholders', JSON.stringify(data));
+                await saveSharedPlaceholders(data);
+                await syncPlaceholders();
+            }
+        }
+
+        function attachAddBtnListeners() {
+            document.querySelectorAll('.addPlaceholderBtn').forEach(btn => {
+                btn.onclick = async function(e) {
+                    e.stopPropagation();
+                    const groupContainer = btn.closest('.groupContainer');
+                    await addPlaceholderToSection(groupContainer);
+                };
+            });
+        }
+
+        function listenForAlias() {
+            const origSetItem = localStorage.setItem;
+            localStorage.setItem = function(key, value) {
+                origSetItem.apply(this, arguments);
+                if (key === 'sessionId' || key === 'alias') {
+                    setTimeout(updateAddBtnsVisibility, 100);
+                }
+            };
+            setTimeout(() => {
+                fetch('https://api.grab-tutorials.live/getAlias?sessionId=' + encodeURIComponent(localStorage.getItem('sessionId') || ''), {credentials:'include'})
+                .then(r => r.json()).then(d => {
+                    if (d && d.alias) {
+                        localStorage.setItem('alias', d.alias);
+                        updateAddBtnsVisibility();
+                    }
+                }).catch(()=>{});
+            }, 1000);
+        }
+
+        window.addEventListener('storage', function(e) {
+            if (e.key === 'sharedPlaceholders') {
+                syncPlaceholders();
+            }
+        });
+
+        document.addEventListener('DOMContentLoaded', function() {
+            updateAddBtnsVisibility();
+            attachAddBtnListeners();
+            syncPlaceholders();
+            listenForAlias();
+        });
+
+        document.addEventListener('click', function(e) {
+            if (
+                e.target &&
+                e.target.closest &&
+                e.target.closest('#menuButtons')
+            ) {
+                setTimeout(syncPlaceholders, 300);
+            }
+        });
+    })();
 });
