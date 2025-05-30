@@ -500,11 +500,9 @@ window.addEventListener('DOMContentLoaded', () => {
         }
 
         function attachAddBtnListeners() {
-            // For each addPlaceholderBtn, find the next .groupContainer sibling
             document.querySelectorAll('.addPlaceholderBtn').forEach(btn => {
                 btn.onclick = async function(e) {
                     e.stopPropagation();
-                    // The groupContainer is the nextElementSibling (skip text nodes)
                     let groupContainer = btn.nextElementSibling;
                     while (groupContainer && !groupContainer.classList.contains('groupContainer')) {
                         groupContainer = groupContainer.nextElementSibling;
