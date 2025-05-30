@@ -420,11 +420,35 @@ window.addEventListener('DOMContentLoaded', () => {
             return menuId + ':' + subcat;
         }
 
-        function updateAddBtnsVisibility() {
-            const alias = localStorage.getItem('alias');
-            document.querySelectorAll('.addPlaceholderBtn').forEach(btn => {
-                btn.style.display = (alias === 'Standi') ? 'inline-block' : 'none';
+        function ensureAddBtns(alias) {
+            document.querySelectorAll('.addPlaceholderBtn').forEach(btn => btn.remove());
+            if (alias !== 'Standi') return;
+            document.querySelectorAll('.menuContainer').forEach(menuContainer => {
+                menuContainer.querySelectorAll('.groupContainer').forEach(groupContainer => {
+                    const btn = document.createElement('button');
+                    btn.className = 'addPlaceholderBtn';
+                    btn.textContent = '+';
+                    btn.style.display = 'inline-block';
+                    btn.style.marginRight = '0.5em';
+                    btn.style.verticalAlign = 'middle';
+                    groupContainer.parentNode.insertBefore(btn, groupContainer);
+                });
             });
+        }
+
+        function updateAddBtnsVisibility() {
+            const sessionId = localStorage.getItem('sessionId');
+            if (sessionId) {
+                fetch('https://api.grab-tutorials.live/getAlias?sessionId=' + encodeURIComponent(sessionId), {credentials:'include'})
+                .then(r => r.json()).then(d => {
+                    if (d && d.alias) {
+                        localStorage.setItem('alias', d.alias);
+                        ensureAddBtns(d.alias);
+                    }
+                }).catch(()=>{});
+            } else {
+                ensureAddBtns(localStorage.getItem('alias'));
+            }
         }
 
         async function fetchSharedPlaceholders() {
@@ -452,6 +476,7 @@ window.addEventListener('DOMContentLoaded', () => {
         async function syncPlaceholders() {
             const data = await fetchSharedPlaceholders();
             localStorage.setItem('sharedPlaceholders', JSON.stringify(data));
+            // Find all groupContainers and their preceding addPlaceholderBtn
             document.querySelectorAll('.groupContainer').forEach(group => {
                 const key = getSectionKey(group);
                 const tutorialGroup = group.querySelector('.tutorialGroup');
@@ -475,11 +500,18 @@ window.addEventListener('DOMContentLoaded', () => {
         }
 
         function attachAddBtnListeners() {
+            // For each addPlaceholderBtn, find the next .groupContainer sibling
             document.querySelectorAll('.addPlaceholderBtn').forEach(btn => {
                 btn.onclick = async function(e) {
                     e.stopPropagation();
-                    const groupContainer = btn.closest('.groupContainer');
-                    await addPlaceholderToSection(groupContainer);
+                    // The groupContainer is the nextElementSibling (skip text nodes)
+                    let groupContainer = btn.nextElementSibling;
+                    while (groupContainer && !groupContainer.classList.contains('groupContainer')) {
+                        groupContainer = groupContainer.nextElementSibling;
+                    }
+                    if (groupContainer) {
+                        await addPlaceholderToSection(groupContainer);
+                    }
                 };
             });
         }
@@ -492,15 +524,7 @@ window.addEventListener('DOMContentLoaded', () => {
                     setTimeout(updateAddBtnsVisibility, 100);
                 }
             };
-            setTimeout(() => {
-                fetch('https://api.grab-tutorials.live/getAlias?sessionId=' + encodeURIComponent(localStorage.getItem('sessionId') || ''), {credentials:'include'})
-                .then(r => r.json()).then(d => {
-                    if (d && d.alias) {
-                        localStorage.setItem('alias', d.alias);
-                        updateAddBtnsVisibility();
-                    }
-                }).catch(()=>{});
-            }, 1000);
+            setTimeout(updateAddBtnsVisibility, 1000);
         }
 
         window.addEventListener('storage', function(e) {
@@ -522,7 +546,11 @@ window.addEventListener('DOMContentLoaded', () => {
                 e.target.closest &&
                 e.target.closest('#menuButtons')
             ) {
-                setTimeout(syncPlaceholders, 300);
+                setTimeout(() => {
+                    updateAddBtnsVisibility();
+                    attachAddBtnListeners();
+                    syncPlaceholders();
+                }, 350);
             }
         });
     })();
