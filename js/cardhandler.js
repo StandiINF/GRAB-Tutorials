@@ -146,10 +146,20 @@ async function renderAllDecksCategories(category, groups) {
         dialImg.id = "sliderDial";
         dialImg.loading = "lazy";
         if (isMobile()) {
-          dialImg.style.width = "100%";
-          dialImg.style.height = "100%";
-          dialImg.style.objectFit = "contain";
+          dialImg.style.width = "27px";
+          dialImg.style.height = "27px";
+          dialImg.style.left = "9px";
+          dialImg.style.top = "82.5px";
+        } else {
+          dialImg.style.width = "50px";
+          dialImg.style.height = "50px";
+          dialImg.style.left = "42px";
+          dialImg.style.top = "168px";
         }
+        dialImg.style.position = "absolute";
+        dialImg.style.zIndex = "1";
+        dialImg.style.transition = "left 0.3s";
+        dialImg.style.cursor = "pointer";
         div.appendChild(dialImg);
       }
 
