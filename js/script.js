@@ -14,40 +14,6 @@ const helpEight = document.getElementById("helpEight");
 
 let lastPressedCard = null;
 
-const patchNotesContainer = document.getElementById("patchNotesContainer");
-const patchNotesToggle = document.getElementById("patchNotesToggle");
-
-// patch notes appear thing
-
-patchNotesToggle.addEventListener("click", () => {
-    if (patchNotesContainer.style.top === "0px") {
-        patchNotesContainer.style.top = "-100%";
-        patchNotesToggle.innerText = "Patch Notes";
-        setTimeout(() => { 
-            patchNotesContainer.style.display = "none";
-        }, 100);
-    } else {
-        patchNotesContainer.style.display = "block";
-        setTimeout(() => {
-            patchNotesContainer.style.top = "0px";
-            patchNotesToggle.innerText = "Close";
-        }, 10);
-    }
-});
-
-patchNotesToggle.style.display = "none";
-
-// open / close when press numpad +
-
-document.addEventListener("keydown", (event) => {
-    if (patchNotesToggle.style.display === "block" && (event.key === "P" || event.key === "p")) {
-        patchNotesToggle.click();
-    }
-    if (event.code === "NumpadAdd") {
-        patchNotesToggle.style.display = patchNotesToggle.style.display === "block" ? "none" : "block";
-    }
-});
-
 // menu opening / closing
 
 function openMenu(menuId) {
