@@ -279,11 +279,6 @@ cursor: pointer;
     .tutorialGroup {
         border-radius: 15px !important;
     }
-
-    .placeholder {
-        width: 250px;
-        height: auto;
-    }
 }
 
 .groupOneContainer {

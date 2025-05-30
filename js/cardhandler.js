@@ -5,6 +5,22 @@ const cache = {
 
 const deckDomCache = new Map();
 
+function isMobile() {
+  return window.innerWidth <= 767;
+}
+
+function applyMobileCardStyles(div, img) {
+  if (isMobile()) {
+    div.style.width = "250px";
+    div.style.height = "130px";
+    if (img) {
+      img.style.width = "100%";
+      img.style.height = "100%";
+      img.style.objectFit = "contain";
+    }
+  }
+}
+
 async function fetchDecks() {
   if (cache.decks) return cache.decks;
   const res = await fetch(decksUrl);
@@ -47,6 +63,7 @@ async function renderAllDecksCategories(category, groups) {
       if (item.title && item.title.toLowerCase().includes("slider")) {
         img.classList.add("sliderCard");
       }
+      applyMobileCardStyles(div, img);
       div.appendChild(img);
 
       if (item.alt) {
@@ -72,6 +89,11 @@ async function renderAllDecksCategories(category, groups) {
             altImg.style.pointerEvents = "none";
             altImg.style.setProperty("opacity", "0", "important");
             altImg.style.transition = "opacity 0.2s";
+            if (isMobile()) {
+              altImg.style.width = "100%";
+              altImg.style.height = "100%";
+              altImg.style.objectFit = "contain";
+            }
             altImgElements.push(altImg);
           });
           altImgElements.forEach(altImg => div.appendChild(altImg));
@@ -102,6 +124,11 @@ async function renderAllDecksCategories(category, groups) {
         gifImg.style.height = "100%";
         gifImg.style.zIndex = "2";
         gifImg.style.pointerEvents = "none";
+        if (isMobile()) {
+          gifImg.style.width = "100%";
+          gifImg.style.height = "100%";
+          gifImg.style.objectFit = "contain";
+        }
         div.appendChild(gifImg);
 
         div.addEventListener("mouseenter", () => {
@@ -118,6 +145,11 @@ async function renderAllDecksCategories(category, groups) {
         dialImg.alt = (item.title || "Tutorial") + " dial";
         dialImg.id = "sliderDial";
         dialImg.loading = "lazy";
+        if (isMobile()) {
+          dialImg.style.width = "100%";
+          dialImg.style.height = "100%";
+          dialImg.style.objectFit = "contain";
+        }
         div.appendChild(dialImg);
       }
 
@@ -140,11 +172,13 @@ async function renderAllDecksCategories(category, groups) {
             const div = document.createElement("div");
             div.classList.add("cardGroup", "placeholder");
             div.style.position = "relative";
+            applyMobileCardStyles(div);
             const img = document.createElement("img");
             img.src = placeholderUrl;
             img.alt = placeholderAlt;
             img.loading = "lazy";
             img.classList.add("cardMain");
+            applyMobileCardStyles(div, img);
             div.addEventListener("click", () => {
               window.open("https://discord.gg/J3yDuye6Uz", "_blank");
             });
@@ -311,6 +345,11 @@ function renderCardDeck(cardObj) {
 
     img.className = cardClass.trim();
     img.loading = "lazy";
+    if (isMobile()) {
+      img.style.width = "250px";
+      img.style.height = "130px";
+      img.style.objectFit = "contain";
+    }
     container.appendChild(img);
   });
   container.style.display = "block";
