@@ -575,7 +575,6 @@ fetch('https://assets.grab-tutorials.live/decks.json')
     });
     console.log(`Total decks: ${totalDecks}`);
     console.log(`Total cards: ${totalCards}`);
-    console.log(`To open Patch Notes, press Numpad +`);
   })
   .catch(() => {
     console.log("Could not fetch decks.json for deck/card count.");
