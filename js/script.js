@@ -597,8 +597,20 @@ function hasTouch() {
     } catch (ex) {}
   }
 
-const cardElements = document.querySelectorAll('.card, .cardOne');
-const cardGroups = document.querySelectorAll('.cardGroup:not(.FeedbackLink)');
-console.log(`Total cards: ${cardElements.length}`);
-console.log(`Total decks: ${cardGroups.length}`);
-console.log(`To open Patch Notes, press Numpad +`);
+fetch('https://assets.grab-tutorials.live/decks.json')
+  .then(res => res.json())
+  .then(decks => {
+    const totalDecks = decks.length;
+    let totalCards = 0;
+    decks.forEach(deck => {
+      if (deck.cards && typeof deck.cards === "object") {
+        totalCards += Object.keys(deck.cards).length;
+      }
+    });
+    console.log(`Total decks: ${totalDecks}`);
+    console.log(`Total cards: ${totalCards}`);
+    console.log(`To open Patch Notes, press Numpad +`);
+  })
+  .catch(() => {
+    console.log("Could not fetch decks.json for deck/card count.");
+  });
