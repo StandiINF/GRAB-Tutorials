@@ -336,7 +336,7 @@ img {
     left: 99%;
     top: 50%;
     transform: translate(-50%, -50%);
-    transition: transform 0.3s, left 0.3s, top 0.3s;
+    transition: transform 0.5s cubic-bezier(0.4,0,0.2,1), left 0.5s cubic-bezier(0.4,0,0.2,1);
     pointer-events: auto;
 }
 
@@ -345,7 +345,7 @@ img {
     height: auto;
     position: absolute;
     top: 50%;
-    transition: transform 0.3s, left 0.3s, top 0.3s;
+    transition: transform 0.5s cubic-bezier(0.4,0,0.2,1), left 0.5s cubic-bezier(0.4,0,0.2,1);
     left: 50%;
     transform: translate(-50%, -50%) scale(1.4);
     pointer-events: none;
