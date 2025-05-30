@@ -407,8 +407,7 @@ window.addEventListener('DOMContentLoaded', () => {
     (function() {
         const placeholderCardHTML = `
             <div class="cardGroup placeholderCard" style="position:relative;">
-                <img src="https://assets.grab-tutorials.live/!assets/placeholder.svg" alt="Placeholder" class="cardMain" loading="lazy" style="opacity:0.7;">
-                <div style="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);color:#fff;font-size:1.2rem;font-family:'Nunito',sans-serif;text-shadow:0 1px 4px #000a;">Can't find what you're looking for?</div>
+                <img src="https://assets.grab-tutorials.live/!assets/placeholder-discord-main.svg" alt="Placeholder" class="cardMain" loading="lazy" style="opacity:0.7;">
             </div>
         `;
 
@@ -476,7 +475,6 @@ window.addEventListener('DOMContentLoaded', () => {
         async function syncPlaceholders() {
             const data = await fetchSharedPlaceholders();
             localStorage.setItem('sharedPlaceholders', JSON.stringify(data));
-            // Find all groupContainers and their preceding addPlaceholderBtn
             document.querySelectorAll('.groupContainer').forEach(group => {
                 const key = getSectionKey(group);
                 const tutorialGroup = group.querySelector('.tutorialGroup');
