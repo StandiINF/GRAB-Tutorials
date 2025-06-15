@@ -245,11 +245,11 @@ cursor: pointer;
     height: 100%;
     z-index: 2;
     pointer-events: none;
-    display: none; /* Hide by default */
+    display: none;
 }
 
 .cardGroup:hover img.gif {
-    display: block; /* Show on hover */
+    display: block;
 }
 
 .cardGroup:hover {
@@ -262,8 +262,8 @@ cursor: pointer;
         height: auto;
 
         img {
-            image-rendering: optimizeQuality;
             image-rendering: -webkit-optimize-contrast;
+            image-rendering: optimizeQuality;
         }
     }
 
@@ -367,6 +367,7 @@ cursor: pointer;
 #menuButtons {
     display: flex;
     justify-content: center;
+    align-items: stretch;
     gap: 1rem;
     position: fixed;
     z-index: 9999;
@@ -378,20 +379,20 @@ cursor: pointer;
     padding-top: 20px;
     top: 10px;
     clip: rect(0px, auto, auto, 0px);
-}
-
-#menuButtons::after {
-    content: '';
-    position: absolute;
-    left: 0;
+    overflow-x: auto;
+    overflow-y: hidden;
+    white-space: nowrap;
     width: 100%;
-    height: 5px;
-    bottom: -1px;
-    background: var(--button-gradient);
-    pointer-events: none;
+    scrollbar-width: none;
+    scroll-behavior: auto;
+    touch-action: pan-x;
+}
+#menuButtons::-webkit-scrollbar {
+    display: none;
 }
 
 #menuButtons button {
+    display: inline-block;
     padding: 0.5rem 1rem;
     font-size: 1rem;
     font-family: 'nunito', sans-serif;
@@ -421,10 +422,18 @@ cursor: pointer;
 @media (max-width: 767px) {
     #menuButtons {
         gap: 0.2rem;
+        padding-left: 0;
+        padding-right: 0;
         padding-top: 3px;
-        top: 5px;
+        top: 28px;
+        overflow-x: auto;
+        overflow-y: hidden;
+        white-space: nowrap;
+        touch-action: pan-x;
+        scroll-behavior: auto;
+        justify-content: flex-start;
+        align-items: stretch;
     }
-
     #menuButtons button {
         height: 40px !important;
         font-size: 0.57rem;
@@ -500,6 +509,16 @@ cursor: pointer;
 #T:hover {
     background-color: rgb(199, 123, 0);
     box-shadow: 0 0 10px rgb(199, 123, 0);
+}
+
+#M {
+    background: #3aa14a;
+    pointer-events: none;
+}
+
+#C {
+    background: #624d92;
+    pointer-events: none;
 }
 
 .menuContainer {
@@ -626,4 +645,9 @@ cursor: pointer;
     justify-content: center;
     align-items: center;
     height: 100%;
+}
+
+#discordLinkSection {
+    display: none;
+    margin-top: 2em;
 }
