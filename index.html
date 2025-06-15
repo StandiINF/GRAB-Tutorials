@@ -22,7 +22,6 @@
     <meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:title" content="GRAB Tutorials">
     <meta name="twitter:description" content="A growing hub of GRAB VR tutorials — from beginner tips to pro tricks.">
-    <meta name="twitter:image" content="https://assets.grab-tutorials.live/!assets/favicon.png">
 </head>
 <body>
     <div id="MMenuGradient"></div>
@@ -32,6 +31,8 @@
             <button id="E" onclick="openMenu('EMenu')" type="button">Editor</button>
             <button id="A" onclick="openMenu('AMenu')" type="button">Animation</button>
             <button id="T" onclick="openMenu('TMenu')" type="button">Trigger</button>
+            <button id="M" onclick="openMenu('TMenu')" type="button">Soon</button>
+            <button id="C" onclick="openMenu('TMenu')" type="button">Soon</button>
             <button id="L" onclick="openMenu('LMenu')" type="button"><span id="loginText">Login with Meta</span></button>
         </div>
     </div>
@@ -39,8 +40,6 @@
     <div id="mainContainer">
 
         <div id="mainContent">
-            <img src="https://assets.grab-tutorials.live/!assets/demo_logo.png" alt="demo_logo.png" loading="eager">
-
             <h1>Everything GRAB, condensed into a deck of cards.</h1>
 
             <h2>Site by Standi</h2>
@@ -49,16 +48,16 @@
 
         <div id="bottomLinks">
             <div id="links">
-                <a href="https://discord.gg/J3yDuye6Uz" target="_blank">
+                <a href="https://discord.gg/J3yDuye6Uz" target="_blank" rel="noopener">
                     <img src="https://assets.grab-tutorials.live/!assets/discord.svg" alt="discord.svg" id="discord" loading="eager">
                 </a>
-                <a href="https://grabvr.quest/levels/" target="_blank">
+                <a href="https://grabvr.quest/levels/" target="_blank" rel="noopener">
                     <img src="https://assets.grab-tutorials.live/!assets/grab-site.png" alt="grab-site.png" loading="eager">
                 </a>
-                <a href="https://grab-tools.live" target="_blank">
+                <a href="https://grab-tools.live" target="_blank" rel="noopener">
                     <img src="https://assets.grab-tutorials.live/!assets/grab-tools.png" alt="grab-tools.png" loading="eager">
                 </a>
-                <a href="https://wiki.grab-tools.live/wiki/Main_Page" target="_blank">
+                <a href="https://wiki.grab-tools.live/wiki/Main_Page" target="_blank" rel="noopener">
                     <img src="https://assets.grab-tutorials.live/!assets/grab-wiki.png" alt="grab-wiki.png" loading="eager">
                 </a>
             </div>
@@ -223,7 +222,7 @@
             <h2 id="loggedin">You aren't currently logged in.</h2>
             <h4 id="loginwithbutton">Login with the button below.</h4>
             <button id="loginMeta">Login</button>
-            <div id="discordLinkSection" style="display:none; margin-top:2em;"></div>
+            <div id="discordLinkSection"></div>
         </div>
     </div>
 
@@ -258,8 +257,8 @@
         <!-- Card decks -->
     </div>
 
-    <script src="js/login.js"></script>
-    <script src="js/script.js"></script>
-    <script src="js/cardhandler.js"></script>
+    <script src="login.js"></script>
+    <script src="script.js"></script>
+    <script src="cardhandler.js"></script>
 </body>
 </html>
