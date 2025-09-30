@@ -145,7 +145,8 @@ img {
     content: "GRAB Tutorials is a fan-made tutorial site for GRAB VR, we’re not officially connected to SlinDev in any way.";
     position: absolute;
     bottom: 6rem;
-    left: 0.5rem;
+    left: 50%;
+    transform: translateX(-50%);
     font-family: var(--font);
     font-size: 1rem;
     color: white;
@@ -491,3 +492,4 @@ img {
 .indexEleven {
     z-index: -10;
 }
+
