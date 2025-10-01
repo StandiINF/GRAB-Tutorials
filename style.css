@@ -94,9 +94,9 @@ img {
             h2 {
                 font-size: 1.1rem;
             }
-            
         }
     }
+
     #bottomLinks {
         padding: 1rem 0;
         box-sizing: border-box;
@@ -126,6 +126,7 @@ img {
                 }
             }
         }
+
         &::after {
             content: "^ Have feedback? Join our Discord!";
             position: absolute;
@@ -473,3 +474,5 @@ img {
 .indexEleven {
     z-index: -10;
 }
+
+
