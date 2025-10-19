@@ -172,6 +172,7 @@ function closeMenu() {
 window.addEventListener('load', function () {
     try {
         const path = (window.location.pathname || '').toLowerCase();
+        const parts = path.split('/').filter(Boolean);
         const mapping = {
             '/basics': 'B',
             '/editor': 'E',
@@ -179,14 +180,46 @@ window.addEventListener('load', function () {
             '/trigger': 'T',
             '/login': 'L'
         };
-        for (const [seg, btnId] of Object.entries(mapping)) {
-            if (path.includes(seg)) {
+        if (parts.length > 0) {
+            const base = '/' + parts[0];
+            const btnId = mapping[base];
+            if (btnId) {
                 const btn = document.getElementById(btnId);
                 if (btn) {
                     window.__initialPathNavigation = true;
                     btn.click();
                 }
-                break;
+
+                if (parts.length > 1 && window.fetchDecks && window.renderCardDeck) {
+                    (async () => {
+                        const slug = parts[1];
+                        const normalize = s => (s || '').toString().toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '');
+                        try {
+                            const decks = await window.fetchDecks();
+                            const found = decks.find(item => {
+                                if (!item || !item.title) return false;
+                                const title = item.title.toString();
+                                return normalize(title) === slug
+                                    || title.toLowerCase() === slug
+                                    || (item.slug && item.slug.toLowerCase() === slug)
+                                    || title.toLowerCase().includes(slug);
+                            });
+
+                            if (found) {
+                                window.renderCardDeck(found);
+                                try {
+                                    history.replaceState({ menuId: PATH_TO_MENU[base] }, '', path);
+                                } catch (e) {}
+                            } else {
+                                try {
+                                    history.replaceState({}, '', base);
+                                } catch (e) {}
+                            }
+                        } catch (e) {
+                            try { history.replaceState({}, '', base); } catch (e) {}
+                        }
+                    })();
+                }
             }
         }
     } catch (e) {

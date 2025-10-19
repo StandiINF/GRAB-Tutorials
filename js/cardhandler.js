@@ -293,6 +293,15 @@ document.addEventListener("DOMContentLoaded", () => {
     if (!found) return;
 
     renderCardDeck(found);
+    try {
+      const normalize = s => (s || '').toString().toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '');
+      const category = (found.category || '').toString().toLowerCase() || 'basics';
+      const slug = normalize(found.title || found.slug || '');
+      const desiredPath = '/' + category + (slug ? '/' + slug : '');
+      const menuId = (window.PATH_TO_MENU && window.PATH_TO_MENU['/' + category]) || undefined;
+      history.pushState({ menuId: menuId }, '', desiredPath);
+    } catch (e) { }
+
   }, true);
 });
 
