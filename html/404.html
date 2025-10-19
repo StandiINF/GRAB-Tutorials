@@ -1,0 +1,27 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="robots" content="noindex">
+  <title>Redirecting…</title>
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+</head>
+<body>
+  <script>
+    (function () {
+      const origPath = location.pathname + location.search + location.hash;
+      fetch('/index.html').then(function(res){ return res.text(); }).then(function(html){
+        document.open();
+        document.write(html);
+        document.close();
+        try {
+          history.replaceState({}, '', origPath);
+        } catch (e) { }
+      }).catch(function(err){
+        try { location.replace('/'); } catch(e){}
+      });
+    })();
+  </script>
+  <p>Redirecting…</p>
+</body>
+</html>
