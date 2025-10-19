@@ -408,7 +408,16 @@ window.closeTutorial = function() {
         }
       }
     });
+
+    try {
+      const parts = (location.pathname || '').split('/').filter(Boolean);
+      if (parts.length >= 2) {
+        const base = '/' + parts[0];
+        history.replaceState({}, '', base);
+      }
+    } catch (e) { }
   }, 350);
+
   window._originalCloseTutorial();
 };
 

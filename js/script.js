@@ -180,47 +180,98 @@ window.addEventListener('load', function () {
             '/trigger': 'T',
             '/login': 'L'
         };
-        if (parts.length > 0) {
-            const base = '/' + parts[0];
-            const btnId = mapping[base];
-            if (btnId) {
-                const btn = document.getElementById(btnId);
-                if (btn) {
-                    window.__initialPathNavigation = true;
-                    btn.click();
-                }
 
-                if (parts.length > 1 && window.fetchDecks && window.renderCardDeck) {
-                    (async () => {
-                        const slug = parts[1];
-                        const normalize = s => (s || '').toString().toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '');
-                        try {
-                            const decks = await window.fetchDecks();
-                            const found = decks.find(item => {
-                                if (!item || !item.title) return false;
-                                const title = item.title.toString();
-                                return normalize(title) === slug
-                                    || title.toLowerCase() === slug
-                                    || (item.slug && item.slug.toLowerCase() === slug)
-                                    || title.toLowerCase().includes(slug);
-                            });
+        if (parts.length === 0) {
+            return;
+        }
 
-                            if (found) {
-                                window.renderCardDeck(found);
-                                try {
-                                    history.replaceState({ menuId: PATH_TO_MENU[base] }, '', path);
-                                } catch (e) {}
-                            } else {
-                                try {
-                                    history.replaceState({}, '', base);
-                                } catch (e) {}
-                            }
-                        } catch (e) {
+        const base = '/' + parts[0];
+        const btnId = mapping[base];
+        if (btnId) {
+            const btn = document.getElementById(btnId);
+            if (btn) {
+                window.__initialPathNavigation = true;
+                btn.click();
+            }
+
+            if (parts.length > 1 && window.fetchDecks && window.renderCardDeck) {
+                (async () => {
+                    const slug = parts[1];
+                    const normalize = s => (s || '').toString().toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '');
+                    try {
+                        const decks = await window.fetchDecks();
+                        const found = decks.find(item => {
+                            if (!item || !item.title) return false;
+                            const title = item.title.toString();
+                            return normalize(title) === slug
+                                || title.toLowerCase() === slug
+                                || (item.slug && item.slug.toLowerCase() === slug)
+                                || title.toLowerCase().includes(slug);
+                        });
+
+                        if (found) {
+                            window.renderCardDeck(found);
+                            try { history.replaceState({ menuId: PATH_TO_MENU[base] }, '', path); } catch (e) {}
+                        } else {
                             try { history.replaceState({}, '', base); } catch (e) {}
                         }
-                    })();
-                }
+                    } catch (e) {
+                        try { history.replaceState({}, '', base); } catch (e) {}
+                    }
+                })();
             }
+            return;
+        }
+
+        if (parts.length === 1 && window.fetchDecks && window.renderCardDeck) {
+            (async () => {
+                const slug = parts[0];
+                const normalize = s => (s || '').toString().toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '');
+                try {
+                    const decks = await window.fetchDecks();
+                    const found = decks.find(item => {
+                        if (!item || !item.title) return false;
+                        const title = item.title.toString();
+                        const itemSlugCandidates = [
+                            normalize(title),
+                            (item.slug || '').toString().toLowerCase(),
+                            title.toLowerCase()
+                        ];
+                        return itemSlugCandidates.includes(slug) || title.toLowerCase().includes(slug);
+                    });
+
+                    if (found) {
+                        const cat = (found.category || '').toString().toLowerCase();
+                        const catBase = '/' + (cat || 'basics');
+                        const menuId = PATH_TO_MENU[catBase];
+                        if (menuId) {
+                            const btn = document.getElementById(menuId.replace('Menu','').toUpperCase());
+                            if (btn) {
+                                window.__initialPathNavigation = true;
+                                btn.click();
+                                setTimeout(() => {
+                                    window.renderCardDeck(found);
+                                    try {
+                                        const desired = catBase + '/' + (normalize(found.title || found.slug || ''));
+                                        history.replaceState({ menuId: PATH_TO_MENU[catBase] }, '', desired);
+                                    } catch (e) {}
+                                }, 120);
+                                return;
+                            }
+                        }
+                        window.renderCardDeck(found);
+                        try {
+                            const desired = '/' + (found.category || 'basics') + '/' + normalize(found.title || found.slug || '');
+                            history.replaceState({ menuId: PATH_TO_MENU['/' + (found.category || 'basics')] }, '', desired);
+                        } catch (e) {}
+                    } else {
+                        try { history.replaceState({}, '', '/'); } catch (e) {}
+                    }
+                } catch (e) {
+                    try { history.replaceState({}, '', '/'); } catch (e) {}
+                }
+            })();
+            return;
         }
     } catch (e) {
         console.error('Menu auto-open error:', e);
