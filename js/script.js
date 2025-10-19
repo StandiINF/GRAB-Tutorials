@@ -14,6 +14,17 @@ const helpEight = document.getElementById("helpEight");
 
 let lastPressedCard = null;
 
+const MENU_PATHS = {
+    TMenu: '/trigger',
+    BMenu: '/basics',
+    AMenu: '/animation',
+    EMenu: '/editor',
+    LMenu: '/login'
+};
+const PATH_TO_MENU = Object.fromEntries(Object.entries(MENU_PATHS).map(([k,v]) => [v, k]));
+
+window.__initialPathNavigation = false;
+
 // menu opening / closing
 
 function openMenu(menuId) {
@@ -61,6 +72,16 @@ function openMenu(menuId) {
 
                 currentMenu.style.pointerEvents = 'auto';
                 menuButtons.style.pointerEvents = "auto";
+
+                const desiredPath = MENU_PATHS[id] || '/';
+                try {
+                    if (window.__initialPathNavigation) {
+                        history.replaceState({ menuId: id }, '', desiredPath);
+                        window.__initialPathNavigation = false;
+                    } else if (location.pathname !== desiredPath) {
+                        history.pushState({ menuId: id }, '', desiredPath);
+                    }
+                } catch (e) { }
             } else {
                 currentMenu.style.pointerEvents = 'none';
                 currentMenu.style.zIndex = '';
@@ -93,6 +114,12 @@ function openMenu(menuId) {
         mMenu.style.setProperty("--menu-gradient", "");
         menuButtons.style.setProperty("--button-gradient", "linear-gradient(to top, #2a3439, transparent)");
         menuButtons.style.pointerEvents = "auto";
+
+        try {
+            if (location.pathname !== '/') {
+                history.pushState({}, '', '/');
+            }
+        } catch (e) { }
         return;
     }
 
@@ -139,6 +166,57 @@ function closeMenu() {
         menu.style.display = 'none';
     });
 }
+
+// url opening hi
+
+window.addEventListener('load', function () {
+    try {
+        const path = (window.location.pathname || '').toLowerCase();
+        const mapping = {
+            '/basics': 'B',
+            '/editor': 'E',
+            '/animation': 'A',
+            '/trigger': 'T',
+            '/login': 'L'
+        };
+        for (const [seg, btnId] of Object.entries(mapping)) {
+            if (path.includes(seg)) {
+                const btn = document.getElementById(btnId);
+                if (btn) {
+                    window.__initialPathNavigation = true;
+                    btn.click();
+                }
+                break;
+            }
+        }
+    } catch (e) {
+        console.error('Menu auto-open error:', e);
+    }
+});
+
+window.addEventListener('popstate', function(event) {
+    try {
+        const stateMenuId = event.state && event.state.menuId;
+        if (stateMenuId) {
+            openMenu(stateMenuId);
+            return;
+        }
+        const path = (window.location.pathname || '').toLowerCase();
+        let opened = false;
+        for (const [p, mid] of Object.entries(PATH_TO_MENU)) {
+            if (path.includes(p)) {
+                openMenu(mid);
+                opened = true;
+                break;
+            }
+        }
+        if (!opened) {
+            closeMenu();
+        }
+    } catch (e) {
+        console.error('popstate handling error:', e);
+    }
+});
 
 // safety nets to prevent accidental closing
 
