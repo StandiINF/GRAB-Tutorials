@@ -480,6 +480,17 @@ function closeTutorial() {
             card.style.pointerEvents = 'auto';
         }, 300);
     });
+
+    try {
+        const parts = (location.pathname || '').split('/').filter(Boolean);
+        if (parts.length >= 2) {
+            const base = '/' + parts[0];
+            history.replaceState({}, '', base);
+        } else if (parts.length === 1) {
+            history.replaceState({}, '', '/');
+        }
+    } catch (e) {
+    }
 }
 
 // card flicking
