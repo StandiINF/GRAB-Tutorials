@@ -415,12 +415,20 @@ function closeTutorial() {
                 secretMessage.style.opacity = 0;
             }
 
-            const elements = container.querySelectorAll(".card");
+            const elements = container.querySelectorAll(".card, .cardOne");
+            elements.forEach(element => {
+                try { if (element.dataset && element.dataset.__origTransform !== undefined) delete element.dataset.__origTransform; } catch(e) {}
+                try { element.style.transform = ''; element.style.transition = ''; } catch(e) {}
+            });
+
             elements.forEach(element => {
                 element.classList.remove("active", "activeTwo");
                 element.style.zIndex = '';
                 element.style.pointerEvents = 'auto';
             });
+
+            try { container.dataset.animating = '1'; } catch(e) {}
+            setTimeout(() => { try { delete container.dataset.animating; } catch(e) {} }, 600);
 
             let [currentNum, total] = num.innerText.split('/').map(Number);
 
@@ -499,13 +507,49 @@ document.body.addEventListener("click", function(event) {
     const cardContainer = event.target.closest(".cardContainer");
     if (!cardContainer || cardContainer.style.display === "none") return;
 
+    if (cardContainer.dataset && cardContainer.dataset.animating === '1') return;
+
     if (event.target === cardContainer) {
         closeTutorial();
         return;
     }
 
-    const card = event.target.closest(".card, .cardOne");
-    if (!card) return;
+        const card = event.target.closest(".card, .cardOne");
+        if (!card) return;
+
+        try { cardContainer.dataset.animating = '1'; } catch(e) {}
+
+        try {
+            const clearInline = (el) => {
+                if (!el) return;
+                try { if (el.dataset && el.dataset.__origTransform !== undefined) delete el.dataset.__origTransform; } catch (e) {}
+                try { el.style.transform = ''; el.style.transition = ''; } catch (e) {}
+            };
+            clearInline(card);
+            const container = card.closest('.cardContainer');
+            if (container) {
+                const active = container.querySelector('.card.active');
+                const cardOne = container.querySelector('.cardOne');
+                clearInline(active);
+                clearInline(cardOne);
+            }
+        } catch (e) {}
+        (function watchEnd() {
+            try {
+                const clear = () => { try { delete cardContainer.dataset.animating; } catch(e) {} };
+                let cleared = false;
+                const handler = (ev) => {
+                    if (ev.propertyName && /transform|left|width|height/.test(ev.propertyName)) {
+                        if (cleared) return;
+                        cleared = true;
+                        clear();
+                        cardContainer.querySelectorAll('.card, .cardOne').forEach(c => c.removeEventListener('transitionend', handler));
+                    }
+                };
+                cardContainer.querySelectorAll('.card, .cardOne').forEach(c => c.addEventListener('transitionend', handler));
+                setTimeout(() => { if (!cleared) { cleared = true; clear(); } }, 600);
+            } catch (e) {}
+        })();
 
     if (card.classList.contains("cardOne") && !card.classList.contains("active")) {
         return;
@@ -664,9 +708,30 @@ document.querySelectorAll('.tutorialGroup').forEach(group => {
     }, { passive: false });
   });  
 
-document.getElementById("help").addEventListener("click", function() {
-    this.classList.toggle("active");
-});
+(function setupHelpHover() {
+    const helpEl = document.getElementById("help");
+    if (!helpEl) return;
+
+    helpEl.addEventListener('mouseenter', function () {
+        try {
+            if (this.classList.contains('active')) return;
+            this.style.transition = this.style.transition || 'transform 0.32s cubic-bezier(0.4,0,0.2,1)';
+            this.style.transform = 'translate(-50%,72%)';
+            this.style.cursor = 'pointer';
+        } catch (e) {}
+    });
+    helpEl.addEventListener('mouseleave', function () {
+        try {
+            if (this.classList.contains('active')) return;
+            this.style.transform = 'translate(-50%,80%)';
+        } catch (e) {}
+    });
+
+    helpEl.addEventListener('click', function () {
+        try { this.style.transform = ''; this.style.transition = ''; } catch (e) {}
+        this.classList.toggle('active');
+    });
+})();
 
 document.querySelectorAll('.cardContainer').forEach(container => {
     container.addEventListener('click', function(event) {
@@ -752,3 +817,70 @@ fetch('https://assets.grab-tutorials.live/decks.json')
   .catch(() => {
     console.log("Could not fetch decks.json for deck/card count.");
   });
+
+(function setupCardHoverMotion(){
+    function getScaleSuffix(el) {
+        if (el.classList.contains('cardOne') && !el.classList.contains('active')) return ' scale(1.4)';
+        if (el.classList.contains('card') && el.classList.contains('active')) return ' scale(1.4)';
+        return '';
+    }
+
+    function computeHoverTransform(el) {
+        const scale = getScaleSuffix(el);
+        if (el.classList.contains('cardOne')) {
+            if (el.classList.contains('active')) return 'translate(-40%,-50%)' + scale;
+            return 'translate(-50%,-50%)' + scale;
+        }
+        if (el.classList.contains('activeTwo')) {
+            return 'translate(-40%,-50%)' + scale;
+        }
+        if (!el.classList.contains('active')) {
+            return 'translate(-60%,-50%)' + scale;
+        }
+        return null;
+    }
+
+    function onCardMouseEnter(e) {
+        const el = e.currentTarget;
+        try {
+            const desired = computeHoverTransform(el);
+            if (!desired) return;
+            if (el.dataset.__origTransform === undefined) {
+                el.dataset.__origTransform = el.style.transform || '';
+            }
+            el.style.transition = el.style.transition || 'transform 0.35s cubic-bezier(0.4,0,0.2,1)';
+            el.style.transform = desired;
+        } catch (err) {}
+    }
+
+    function onCardMouseLeave(e) {
+        const el = e.currentTarget;
+        try {
+            const orig = el.dataset.__origTransform;
+            if (orig !== undefined) {
+                el.style.transform = orig;
+                delete el.dataset.__origTransform;
+            }
+        } catch (err) {}
+    }
+
+    function attachTo(el) {
+        if (!el || el.__hoverAttached) return;
+        el.addEventListener('mouseenter', onCardMouseEnter);
+        el.addEventListener('mouseleave', onCardMouseLeave);
+        el.__hoverAttached = true;
+    }
+
+    document.querySelectorAll('.card, .cardOne').forEach(attachTo);
+
+    const mo = new MutationObserver(muts => {
+        muts.forEach(m => {
+            m.addedNodes && m.addedNodes.forEach(node => {
+                if (!(node instanceof HTMLElement)) return;
+                if (node.matches && (node.matches('.card') || node.matches('.cardOne'))) attachTo(node);
+                node.querySelectorAll && node.querySelectorAll('.card, .cardOne').forEach(attachTo);
+            });
+        });
+    });
+    mo.observe(document.body, { childList: true, subtree: true });
+})();

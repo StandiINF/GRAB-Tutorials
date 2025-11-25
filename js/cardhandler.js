@@ -241,13 +241,11 @@ async function renderAllDecksCategories(category, groups) {
               a.addEventListener('touchstart', stop, true);
               a.addEventListener('click', stop, true);
 
-              // Suggest download behavior to the browser.
               try { a.setAttribute('download', ''); } catch (e) {}
             } catch (ex) {}
           }
         }
       } catch (ex) {
-        // non-fatal, continue rendering
       }
     });
 
