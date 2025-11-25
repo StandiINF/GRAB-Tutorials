@@ -179,6 +179,76 @@ async function renderAllDecksCategories(category, groups) {
       }
 
       container.appendChild(div);
+      try {
+        if (item.download && div) {
+          const existing = div.querySelector(`a[data-download="${item.download}"]`);
+          if (!existing) {
+            const a = document.createElement('a');
+            a.href = item.download;
+            a.target = '_blank';
+            a.rel = 'noopener noreferrer';
+            a.setAttribute('data-download', item.download);
+            a.className = 'cardDownloadButton';
+            a.setAttribute('aria-label', (item.title ? item.title + ' download' : 'Download'));
+            const icon = document.createElement('img');
+            icon.src = 'https://assets.grab-tutorials.live/!assets/download-file.svg';
+            icon.alt = (item.title ? item.title + ' download' : 'Download');
+            icon.loading = 'lazy';
+            icon.style.display = 'block';
+            icon.style.pointerEvents = 'none';
+            icon.style.width = isMobile() ? '30px' : '34px';
+            icon.style.height = 'auto';
+            icon.style.transform = 'translateZ(0)';
+            icon.style.willChange = 'transform';
+            icon.style.backfaceVisibility = 'hidden';
+            icon.style.imageRendering = 'auto';
+            a.appendChild(icon);
+              Object.assign(a.style, {
+              position: 'absolute',
+              top: isMobile() ? '6px' : '8px',
+              right: isMobile() ? '6px' : '8px',
+              background: 'rgba(75, 75, 75, 0.3)',
+              color: '#fff',
+              width: isMobile() ? '40px' : '48px',
+              height: isMobile() ? '40px' : '48px',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              padding: '0',
+              borderRadius: '50%',
+              textDecoration: 'none',
+              fontSize: isMobile() ? '0.75rem' : '0.85rem',
+              zIndex: '10000020',
+              boxShadow: '0 2px 8px rgba(0,0,0,0.35)',
+              border: 'none',
+              outline: 'none',
+              pointerEvents: 'auto',
+              transform: 'translateZ(0)',
+              transition: 'transform 0.12s ease, box-shadow 0.12s ease, background-color 0.12s ease',
+            });
+            div.appendChild(a);
+            try {
+              a.addEventListener('mouseenter', () => {
+                div.classList.add('force-hover');
+              });
+              a.addEventListener('mouseleave', () => {
+                div.classList.remove('force-hover');
+              });
+
+              const stop = (ev) => { try { ev.stopPropagation(); } catch (e) {} };
+              a.addEventListener('mousedown', stop, true);
+              a.addEventListener('pointerdown', stop, true);
+              a.addEventListener('touchstart', stop, true);
+              a.addEventListener('click', stop, true);
+
+              // Suggest download behavior to the browser.
+              try { a.setAttribute('download', ''); } catch (e) {}
+            } catch (ex) {}
+          }
+        }
+      } catch (ex) {
+        // non-fatal, continue rendering
+      }
     });
 
     const placeholderMap = {
@@ -275,6 +345,10 @@ document.addEventListener("DOMContentLoaded", () => {
   });
 
   document.body.addEventListener("mousedown", async function (e) {
+    try {
+      if (e.target && e.target.closest && e.target.closest('a[data-download]')) return;
+    } catch (err) {}
+
     const cardGroup = e.target.closest(".cardGroup");
     if (!cardGroup) return;
     if (cardGroup.classList.contains("placeholder")) return;

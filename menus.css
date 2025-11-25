@@ -259,6 +259,33 @@ cursor: pointer;
     transform: scale(1.02);
 }
 
+.cardGroup.force-hover {
+    transform: scale(1.02);
+}
+
+.cardGroup.force-hover img.gif {
+    display: block;
+}
+
+.cardDownloadButton {
+    cursor: pointer;
+}
+
+.cardDownloadButton:hover {
+    transform: scale(1.08);
+    background: rgba(0,0,0,0.45);
+    box-shadow: 0 8px 18px rgba(0,0,0,0.22);
+}
+
+.cardDownloadButton:active {
+    transform: scale(0.98);
+}
+
+.cardDownloadButton:focus {
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(255,255,255,0.04);
+}
+
 @media (max-width: 767px) {
     .cardGroup {
         width: 250px;
