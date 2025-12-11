@@ -253,7 +253,8 @@ async function renderAllDecksCategories(category, groups) {
       basics: ["playing"],
       editor: ["basics"],
       animation: ["basics", "beginner", "intermediate", "advanced"],
-      trigger: ["basics", "beginner", "intermediate", "advanced"]
+      trigger: ["basics", "beginner", "intermediate", "advanced"],
+      gasm: ["beginner", "intermediate", "advanced"]
     };
     const placeholderUrl = "https://assets.grab-tutorials.live/!assets/placeholder-discord-main.svg";
     const placeholderAlt = "Can't find what you're looking for? Join Discord!";
@@ -341,6 +342,26 @@ document.addEventListener("DOMContentLoaded", () => {
       logic: logicGroup
     });
   });
+
+  const cBtn = document.getElementById("C");
+  if (cBtn) {
+    cBtn.addEventListener("click", () => {
+      const basicsGroup = document.querySelector('#GMenu .groupOneContainer .tutorialGroup');
+      const uiGroup = document.querySelector('#GMenu .groupTwoContainer .tutorialGroup');
+      const blocksGroup = document.querySelector('#GMenu .groupThreeContainer .tutorialGroup');
+      const beginnerGroup = document.querySelector('#GMenu .groupFourContainer .tutorialGroup');
+      const intermediateGroup = document.querySelector('#GMenu .groupFiveContainer .tutorialGroup');
+      const advancedGroup = document.querySelector('#GMenu .groupSixContainer .tutorialGroup');
+      window.renderAllDecksCategories("gasm", {
+        basics: basicsGroup,
+        ui: uiGroup,
+        blocks: blocksGroup,
+        beginner: beginnerGroup,
+        intermediate: intermediateGroup,
+        advanced: advancedGroup
+      });
+    });
+  }
 
   document.body.addEventListener("mousedown", async function (e) {
     try {

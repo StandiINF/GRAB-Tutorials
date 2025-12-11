@@ -91,6 +91,10 @@ cursor: pointer;
     cursor: pointer;
 }
 
+#GMenu .groupSixContainer {
+    margin-bottom: 200px;
+}
+
 #TMenu .groupFiveContainer {
     margin-bottom: 200px;
 }
@@ -341,6 +345,25 @@ cursor: pointer;
     }
 }
 
+#GMenu .groupOneContainer h2 {
+    color: #8277e4;
+}
+#GMenu .groupTwoContainer h2 {
+    color: #77e480;
+}
+#GMenu .groupThreeContainer h2 {
+    color: #dde477;
+}
+#GMenu .groupFourContainer h2 {
+    color: #77e480;
+}
+#GMenu .groupFiveContainer h2 {
+    color: #dde477;
+}
+#GMenu .groupSixContainer h2 {
+    color: #e47777;
+}
+
 .placeholder {
     position: relative;
     cursor: pointer;
@@ -400,7 +423,7 @@ cursor: pointer;
     align-items: stretch;
     gap: 1rem;
     position: fixed;
-    z-index: 9999;
+    z-index: 10002;
     transform: none;
     --button-gradient: linear-gradient(to top, #2a3439, transparent);
     height: 34px !important;
@@ -416,6 +439,7 @@ cursor: pointer;
     scrollbar-width: none;
     scroll-behavior: auto;
     touch-action: pan-x;
+    pointer-events: auto;
 }
 #menuButtons::-webkit-scrollbar {
     display: none;
@@ -507,9 +531,10 @@ cursor: pointer;
     background: #888888;
 }
 
+/* GASM button hover */
 #C:hover {
-    background-color: rgb(70, 130, 180);
-    box-shadow: 0 0 10px rgb(70, 130, 180);
+    background-color: rgb(95, 180, 100);
+    box-shadow: 0 0 10px rgb(95, 180, 100);
 }
 
 #L {
@@ -547,8 +572,20 @@ cursor: pointer;
 }
 
 #C {
-    background: #624d92;
+    background: rgb(115, 210, 120);
+    pointer-events: auto;
+}
+
+#D {
+    background: #666666;
     pointer-events: none;
+    opacity: 0.8;
+    cursor: default;
+}
+#D:hover {
+    background: #666666;
+    box-shadow: none;
+    cursor: default;
 }
 
 .menuContainer {

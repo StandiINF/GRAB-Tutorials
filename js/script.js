@@ -19,6 +19,7 @@ const MENU_PATHS = {
     BMenu: '/basics',
     AMenu: '/animation',
     EMenu: '/editor',
+    GMenu: '/gasm',
     LMenu: '/login'
 };
 const PATH_TO_MENU = Object.fromEntries(Object.entries(MENU_PATHS).map(([k,v]) => [v, k]));
@@ -28,8 +29,8 @@ window.__initialPathNavigation = false;
 // menu opening / closing
 
 function openMenu(menuId) {
-    const menus = ["TMenu", "BMenu", "AMenu", "EMenu", "LMenu"];
-    const buttons = ["T", "B", "A", "E", "L"];
+    const menus = ["TMenu", "BMenu", "AMenu", "EMenu", "GMenu", "LMenu"];
+    const buttons = ["T", "B", "A", "E", "C", "L"];
     let userColour = localStorage.getItem('hexColor') || "#888888";
     let userColourSecondary = localStorage.getItem('hexColorSecondary') || "#888888";
     const menu = document.getElementById(menuId);
@@ -41,6 +42,7 @@ function openMenu(menuId) {
             BMenu: { background: "rgb(144, 207, 144)", gradient: "linear-gradient(to top, rgba(177, 65, 65, 0) 0%, rgb(144, 207, 144) 100%)", buttonGradient: "linear-gradient(to top, rgb(144, 207, 144), transparent)" },
             AMenu: { background: "#638DDD", gradient: "linear-gradient(to top, rgba(177, 65, 65, 0) 0%, #638DDD 100%)", buttonGradient: "linear-gradient(to top, #638DDD, transparent)" },
             EMenu: { background: "rgb(124, 72, 72)", gradient: "linear-gradient(to top, rgba(177, 65, 65, 0) 0%, rgb(124, 72, 72) 100%)", buttonGradient: "linear-gradient(to top, rgb(124, 72, 72), transparent)" },
+            GMenu: { background: "rgb(115, 210, 120)", gradient: "linear-gradient(to top, rgba(177, 65, 65, 0) 0%, rgb(115, 210, 120) 100%)", buttonGradient: "linear-gradient(to top, rgb(115, 210, 120), transparent)" },
             LMenu: { background: colour, gradient: `linear-gradient(to top, rgba(177, 65, 65, 0) 0%, ${colour} 100%)`, buttonGradient: `linear-gradient(to top, ${colour}, transparent)` },
         };
         menus.forEach((id, index) => {
@@ -57,6 +59,7 @@ function openMenu(menuId) {
                 else if (id === "BMenu") button.style.background = "rgb(144, 207, 144)";
                 else if (id === "AMenu") button.style.background = "#638DDD";
                 else if (id === "EMenu") button.style.background = "rgb(124, 72, 72)";
+                else if (id === "GMenu") button.style.background = "rgb(115, 210, 120)";
                 else if (id === "LMenu") button.style.background = secondaryColour;
 
                 const mMenu = document.getElementById("MMenu");
@@ -159,7 +162,7 @@ function openMenu(menuId) {
 }
 
 function closeMenu() {
-    const menus = ["TMenu", "BMenu", "AMenu", "EMenu", "LMenu"];
+    const menus = ["TMenu", "BMenu", "AMenu", "EMenu", "GMenu", "LMenu"];
     menus.forEach(menuId => {
         const menu = document.getElementById(menuId);
         menu.style.pointerEvents = 'none';
@@ -178,6 +181,7 @@ window.addEventListener('load', function () {
             '/editor': 'E',
             '/animation': 'A',
             '/trigger': 'T',
+            '/gasm': 'C',
             '/login': 'L'
         };
 
@@ -305,24 +309,49 @@ window.addEventListener('popstate', function(event) {
 // safety nets to prevent accidental closing
 
 function moveSafetyNets(container) {
+    const safetyNetsRoot = document.getElementById("safetyNets");
     const safetyNetMiddle = document.getElementById("safetyNetMiddle");
     const safetyNetRight = document.getElementById("safetyNetRight");
-    if (safetyNetMiddle && safetyNetMiddle.parentNode !== container) {
-        container.appendChild(safetyNetMiddle);
+    const safetyNetLeft = document.getElementById("safetyNetLeft");
+
+    // Append the middle and right safety nets into the tutorial container when possible.
+    // If the provided container is not in the DOM (defensive), fall back to the global safetyNets root.
+    const target = (container && container.appendChild) ? container : safetyNetsRoot || document.body;
+
+    if (safetyNetMiddle && safetyNetMiddle.parentNode !== target) {
+        target.appendChild(safetyNetMiddle);
     }
-    if (safetyNetRight && safetyNetRight.parentNode !== container) {
-        container.appendChild(safetyNetRight);
+    if (safetyNetRight && safetyNetRight.parentNode !== target) {
+        target.appendChild(safetyNetRight);
+    }
+
+    // Keep the left safety net out at the root so it's available as a global fallback.
+    if (safetyNetLeft && safetyNetsRoot && safetyNetLeft.parentNode !== safetyNetsRoot) {
+        safetyNetsRoot.appendChild(safetyNetLeft);
     }
 }
 
 function oneCardSafetyNet(container) {
+    const safetyNetsRoot = document.getElementById("safetyNets");
     const oneCard = document.getElementById("oneCard");
-    if (oneCard && oneCard.parentNode !== container) {
-        container.appendChild(oneCard);
-    }
     const safetyNetMiddle = document.getElementById("safetyNetMiddle");
-    if (safetyNetMiddle && safetyNetMiddle.parentNode !== oneCard) {
+    const safetyNetRight = document.getElementById("safetyNetRight");
+    const safetyNetLeft = document.getElementById("safetyNetLeft");
+
+    const target = (container && container.appendChild) ? container : safetyNetsRoot || document.body;
+    if (oneCard && oneCard.parentNode !== target) {
+        target.appendChild(oneCard);
+    }
+
+    if (safetyNetMiddle && oneCard && safetyNetMiddle.parentNode !== oneCard) {
         oneCard.appendChild(safetyNetMiddle);
+    }
+
+    if (safetyNetRight && safetyNetsRoot && safetyNetRight.parentNode !== safetyNetsRoot) {
+        safetyNetsRoot.appendChild(safetyNetRight);
+    }
+    if (safetyNetLeft && safetyNetsRoot && safetyNetLeft.parentNode !== safetyNetsRoot) {
+        safetyNetsRoot.appendChild(safetyNetLeft);
     }
 }
 

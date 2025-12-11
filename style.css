@@ -370,16 +370,21 @@ img {
     cursor: pointer;
 }
 
-.card:not(.active):hover, .cardOne:not(.active):hover {
+.card:not(.active):hover {
     transform: translate(-60%, -50%) !important;
     cursor: pointer !important;
 }
-.card:not(.active), .cardOne:not(.active) {
+
+.cardOne:not(.active) {
+    pointer-events: none !important;
+    cursor: default !important;
+}
+.card:not(.active) {
     cursor: pointer !important;
 }
 
 .card.activeTwo:hover {
-    transform: translate(-40%, -50%);
+    transform: translate(-40%, -50%) !important;
     cursor: pointer;
 }  
 
