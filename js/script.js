@@ -229,8 +229,7 @@ window.addEventListener('load', function () {
                             const title = item.title.toString();
                             return normalize(title) === slug
                                 || title.toLowerCase() === slug
-                                || (item.slug && item.slug.toLowerCase() === slug)
-                                || title.toLowerCase().includes(slug);
+                                || (item.slug && item.slug.toLowerCase() === slug);
                         });
 
                         if (found) {
@@ -261,7 +260,7 @@ window.addEventListener('load', function () {
                             (item.slug || '').toString().toLowerCase(),
                             title.toLowerCase()
                         ];
-                        return itemSlugCandidates.includes(slug) || title.toLowerCase().includes(slug);
+                        return itemSlugCandidates.includes(slug);
                     });
 
                     if (found) {
