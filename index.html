@@ -29,19 +29,56 @@
             <button id="E" onclick="openMenu('EMenu')" type="button">Editor</button>
             <button id="A" onclick="openMenu('AMenu')" type="button">Animation</button>
             <button id="T" onclick="openMenu('TMenu')" type="button">Trigger</button>
-            <button id="C" onclick="openMenu('GMenu')" type="button">GASM</button>
-            <button id="D" type="button">Soon</button>
+            <button id="G" onclick="openMenu('GMenu')" type="button">GASM</button>
+            <button class="soon" type="button">Soon</button>
+            <button class="soon" type="button">Soon</button>
             <button id="L" onclick="openMenu('LMenu')" type="button"><span id="loginText">Login with Meta</span></button>
+        </div>
+        <div id="searchBar">
+            <img id="searchBtn" src="https://assets.grab-tutorials.live/!assets/search-btn.svg">
+            <input id="searchBox" type="text" placeholder="Search keywords..." value="" autocomplete="off">
         </div>
     </div>
 
     <div id="mainContainer">
-
         <div id="mainContent">
-            <h1>Everything GRAB, condensed into a deck of cards.</h1>
-
-            <h2>Site by Standi</h2>
-            <h2>With help from K1dfun, vestria, SuperMeow, and .index</h2>
+            <div id="leftContainer">
+                <h1 id="patchNotes">Patch Notes</h1>
+                <div id="patchContainer">
+                    
+                </div>
+            </div>
+            <div id="middleContainer">
+                <h1 id="title">GRAB Tutorials</h1>
+                <img id="gtlogo" src="https://assets.grab-tutorials.live/!assets/grab-tutorials-logo.svg" alt="GRAB Tutorials logo">
+            </div>
+            <div id="rightContainer">
+                <h1 id="credits">Credits</h1>
+                <div id="developer">
+                    <p class="creditsPerson">Standi</p>
+                    <p class="creditsDid">Developer</p>
+                </div>
+                <div class="divider"></div>
+                <div id="code">
+                    <p class="creditsPerson">.Index</p>
+                    <p class="creditsDid">Code</p>
+                </div>
+                <div class="divider"></div>
+                <div id="decks">
+                    <div>
+                        <p class="creditsPerson">J4CKC4</p>
+                        <p class="creditsDid">Decks</p>
+                    </div>
+                    <div>
+                        <p class="creditsPerson">SuperMeow</p>
+                        <p class="creditsDid">Decks</p>
+                    </div>
+                    <div>
+                        <p class="creditsPerson">vestria</p>
+                        <p class="creditsDid">Decks</p>
+                    </div>
+                </div>
+            </div>
         </div>
 
         <div id="bottomLinks">
@@ -52,17 +89,17 @@
                 <a href="https://grabvr.quest/levels/" target="_blank" rel="noopener">
                     <img src="https://assets.grab-tutorials.live/!assets/grab-site.png" alt="grab-site.png" loading="eager">
                 </a>
-                <a href="https://grab-tools.live" target="_blank" rel="noopener">
+                <a href="https://grabvr.tools" target="_blank" rel="noopener">
                     <img src="https://assets.grab-tutorials.live/!assets/grab-tools.png" alt="grab-tools.png" loading="eager">
                 </a>
                 <a href="https://wiki.grab-tools.live/wiki/Main_Page" target="_blank" rel="noopener">
                     <img src="https://assets.grab-tutorials.live/!assets/grab-wiki.png" alt="grab-wiki.png" loading="eager">
                 </a>
-                <a href="https://youtube.com/@grabtutorials" target="_blank" rel="noopener">
-                    <img src="https://assets.grab-tutorials.live/!assets/youtube.png" alt="youtube.png" loading="eager" style="width: 3.9rem; height: 3.4rem; margin-top: -2px;">
+                <a href="https://youtube.com/@grabtutorials" target="_blank" rel="noopener" style="width: 48px;">
+                    <img src="https://assets.grab-tutorials.live/!assets/youtube.png" alt="youtube.png" loading="eager" style="position: relative; width: 3.9rem; height: 3.4rem; margin-top: -2px; left: 1.5px;">
                 </a>
                 <a href="https://tiktok.com/@grabtutorials" target="_blank" rel="noopener">
-                    <img src="https://assets.grab-tutorials.live/!assets/tiktok.svg" alt="tiktok.svg" loading="eager">
+                    <img src="https://assets.grab-tutorials.live/!assets/tiktok.svg" alt="tiktok.svg" loading="eager" style="transform: scale(1.15);">
                 </a>
             </div>
         </div>
@@ -281,6 +318,14 @@
             <h4 id="loginwithbutton">Login with the button below.</h4>
             <button id="loginMeta">Login</button>
             <div id="discordLinkSection"></div>
+        </div>
+    </div>
+
+    <div id="SMenu" class="menu">
+        <div id="searchContainer" class="menuContainer">
+            <div id="searchResultsGrid">
+                <!-- show search results -->
+            </div>
         </div>
     </div>
 

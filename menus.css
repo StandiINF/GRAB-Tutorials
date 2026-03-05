@@ -1,15 +1,14 @@
 /*MARK: MENUS*/
 
 #MMenu {
-    height: 64px;
-    width: 100%;
+    height: 0px;
+    width: 100vw;
     position: fixed;
     top: 0;
     left: 0;
     opacity: 1;
     z-index: 10000;
     transition: background 0.3s ease, color 0.3s ease, opacity 0.3s ease;
-    pointer-events: auto;
     box-sizing: border-box;
     display: flex;
     flex-direction: column;
@@ -43,6 +42,247 @@
 
 #MMenu .menuText {
     bottom: 10px;
+}
+
+#searchBar {
+    position: absolute;
+    width: 15vw;
+    height: 1.5vw;
+    right: 1.5vw;
+    background-color: rgba(0, 0, 0, 0.5);
+    border-radius: 100px;
+    transform: translateY(-.5vw);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 10010;
+    transition: width 0.3s ease, right 0.3s ease, background-color 0.3s ease;
+    min-width: fit-content;
+    pointer-events: all;
+}
+
+#searchBtn {
+    position: absolute;
+    left: .5vw;
+    height: 15px; width: auto;
+    opacity: 1;
+    cursor: pointer;
+    transition: opacity 0.3s ease;
+}
+
+#searchBox {
+    position: absolute;
+    width: 13vw;
+    overflow: hidden;
+    font-family: 'nunito', sans-serif;
+    font: 500;
+    color: rgba(255, 255, 255, 1);
+    left: 2vw;
+    background: none;
+    border: none;
+    outline: none;
+    transform: translateY(.05vw);
+    transition: opacity 0.3s ease, width 0.3s ease;
+}
+
+#searchBox::placeholder {
+    color: rgb(200, 200, 200);
+    font-style: italic;
+}
+
+@media (max-width: 1024px) {
+    #searchBar {
+        width: 20vw;
+        height: 2vw;
+        right: 1rem;
+    }
+    
+    #searchBtn {
+        height: 18px;
+    }
+    
+    #searchBox {
+        width: 18vw;
+        left: 2.2vw;
+    }
+}
+
+@media (max-width: 767px) {
+    #searchBar {
+        position: fixed;
+        top: 85px;
+        right: 1rem;
+        left: auto;
+        width: 24px;
+        height: 24px;
+        transform: none;
+        border-radius: 0;
+        background-color: transparent;
+        justify-content: center;
+        align-items: center;
+        padding: 0;
+        z-index: 10020;
+        pointer-events: auto;
+    }
+    
+    #searchBar.expanded {
+        width: 90vw;
+        left: 50%;
+        transform: translateX(-50%);
+        border-radius: 100px;
+        background-color: rgba(0, 0, 0, 0.5);
+        height: 45px;
+    }
+    
+    #searchBtn {
+        position: static;
+        height: 24px;
+        width: auto;
+        margin: 0;
+        opacity: 1;
+        pointer-events: all;
+        cursor: pointer;
+    }
+    
+    #searchBox {
+        position: static;
+        width: 0;
+        height: 0;
+        overflow: hidden;
+        opacity: 0;
+        pointer-events: none;
+        margin: 0;
+        padding: 0;
+        font-size: 14px;
+    }
+    
+    #searchBar.expanded #searchBox {
+        width: 80vw;
+        height: auto;
+        opacity: 1;
+        pointer-events: auto;
+        overflow: visible;
+        transform: none;
+        padding-left: 7.5px;
+    }
+
+    #searchBar.expanded #searchBtn {
+        padding-left: 10px;
+    }
+}
+
+#patchNotes,
+#credits {
+    padding-top: 35px;
+    font-size: 2.5vw !important;
+}
+
+#leftContainer {
+    position: absolute;
+    float: left;
+    left: 1vw;
+    transform: translateY(10%);
+    background-color: rgba(0,0,0,.3);
+    border-radius: 25px;
+    width: 25vw;
+    height: 35vw;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: stretch;
+    padding: 1rem;
+    box-sizing: border-box;
+}
+
+.added {
+    position: relative;
+    font-size: calc(18 / 1440 * 100vw);
+    padding-top: 1vw;
+    right: 9vw;
+}
+
+.list {
+    text-align: left;
+    list-style-position: inside;
+    padding-top: 1vw;
+    padding-left: 1vw;
+    font-size: .8vw;
+}
+
+#title {
+    font-size: 3.5vw !important;
+}
+
+#gtlogo {
+    height: 15vw !important;
+    width: auto !important;
+}
+
+#rightContainer {
+    position: absolute;
+    float: right;
+    right: 1vw;
+    transform: translateY(10%);
+    background-color: rgba(0,0,0,.3);
+    border-radius: 25px;
+    width: 25vw;
+    height: 35vw;
+    justify-content: center;
+    overflow: scroll;
+}
+
+#patchContainer {
+    width: 100%;
+    flex: 1 1 auto;
+    overflow-y: auto;
+    border-bottom-left-radius: 18px;
+    border-bottom-right-radius: 18px;
+}
+
+#decks {
+    display: flex;
+    justify-content: center;
+}
+
+#decks > div {
+    flex: 1;
+}
+
+.creditsPerson {
+    font-size: calc(18 / 1440 * 100vw);
+    font-weight: bold;
+    padding-top: 1vw;
+
+}
+
+.creditsDid {
+    font-size: calc(14 / 1440 * 100vw);
+    opacity: 0.5;
+    padding-bottom: 1vw;
+}
+
+.divider {
+    position: absolute;
+    width: 90%;
+    height: 3px;
+    border-radius: 90px;
+    background-color: rgba(100,100,100,.3);
+    transform: translate(6.25%, -50%);
+}
+
+@media (max-width: 767px) {
+    #leftContainer,
+    #rightContainer {
+        display: none;
+    }
+
+    #gtlogo {
+        height: 50vw !important;
+        width: auto !important;
+    }
+    #title {
+        font-size: 11.6vw !important;
+    }
 }
 
 #trackerGroup:hover #trackerTrigger {
@@ -153,9 +393,10 @@ cursor: pointer;
 
 .cardMain {
     width: 100%;
-    height: auto;
+    height: 100%;
     z-index: 0;
     position: relative;
+    object-fit: contain;
 }
 
 .groupText {
@@ -236,7 +477,7 @@ cursor: pointer;
     cursor: pointer;
     display: inline;
     width: 500px;
-    height: auto;
+    height: 250px;
     z-index: 2;
     flex-shrink: 0;
     transition: transform 0.3s ease;
@@ -532,7 +773,7 @@ cursor: pointer;
 }
 
 /* GASM button hover */
-#C:hover {
+#G:hover {
     background-color: rgb(95, 180, 100);
     box-shadow: 0 0 10px rgb(95, 180, 100);
 }
@@ -571,18 +812,18 @@ cursor: pointer;
     pointer-events: none;
 }
 
-#C {
+#G {
     background: rgb(115, 210, 120);
     pointer-events: auto;
 }
 
-#D {
+.soon {
     background: #666666;
     pointer-events: none;
     opacity: 0.8;
     cursor: default;
 }
-#D:hover {
+.soon:hover {
     background: #666666;
     box-shadow: none;
     cursor: default;
@@ -719,3 +960,92 @@ cursor: pointer;
     margin-top: 2em;
 }
 
+#searchContainer {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+}
+
+#searchResultsGrid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, 280px);
+    gap: 1.5rem;
+    padding: 2rem 2rem 75px 2rem;
+    width: 100%;
+    height: 100%;
+    overflow-y: auto;
+    box-sizing: border-box;
+    justify-content: center;
+    align-content: flex-start;
+}
+
+#searchResultsGrid .searchCardItem {
+    position: relative;
+    width: 280px;
+    height: 157.5px;
+    aspect-ratio: 16 / 9;
+    border-radius: 12px;
+    overflow: hidden;
+    cursor: pointer;
+    transition: transform 0.3s ease;
+    flex-shrink: 0;
+    user-select: none;
+}
+
+#searchResultsGrid .searchCardItem:hover {
+    transform: scale(1.05);
+}
+
+
+#searchResultsGrid .searchCardItem img {
+    width: 100%;
+    height: 100%;
+    display: block;
+}
+
+#searchResultsGrid .backDeckBtn {
+    grid-column: 1 / -1;
+    padding: 12px 24px;
+    margin-top: 10px;
+    background: rgba(115, 210, 120, 0.8);
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: bold;
+    transition: background 0.2s ease;
+}
+
+#searchResultsGrid .backDeckBtn:hover {
+    background: rgba(115, 210, 120, 1);
+}
+
+@media screen and (max-width: 1024px) {
+    #searchResultsGrid {
+        grid-template-columns: repeat(auto-fit, 200px);
+        gap: 1rem;
+        padding: 1.5rem;
+        padding-bottom: 90px;
+    }
+    
+    #searchResultsGrid .searchCardItem {
+        width: 200px;
+        height: 112.5px;
+    }
+}
+
+@media screen and (max-width: 767px) {
+    #searchResultsGrid {
+        grid-template-columns: repeat(auto-fit, 150px);
+        gap: 0.75rem;
+        padding: 1rem;
+        padding-bottom: 100px;
+    }
+    
+    #searchResultsGrid .searchCardItem {
+        width: 150px;
+        height: 84.375px;
+    }
+}

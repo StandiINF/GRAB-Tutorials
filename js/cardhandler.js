@@ -343,7 +343,7 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   });
 
-  const cBtn = document.getElementById("C");
+  const cBtn = document.getElementById("G");
   if (cBtn) {
     cBtn.addEventListener("click", () => {
       const basicsGroup = document.querySelector('#GMenu .groupOneContainer .tutorialGroup');

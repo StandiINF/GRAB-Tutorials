@@ -97,49 +97,43 @@ img {
             
         }
     }
-    #bottomLinks {
-        padding: 1rem 0;
-        box-sizing: border-box;
-        justify-self: flex-end;
-        position: relative;
+}
 
-        #links {
-            display: flex;
-            flex-direction: row;
-            justify-content: center;
-            gap: 1rem;
-            padding-bottom: 1rem;
+#bottomLinks {
+    box-sizing: border-box;
+    justify-self: flex-end;
+    position: relative;
+}
 
-            a {
-                font-size: 1.5rem;
-                color: rgb(255, 255, 255);
-                font-weight: 500;
+#links {
+    display: flex;
+    flex: 1;
+    gap: 16px;
+    flex-direction: row;
+    justify-content: center;
+    padding-bottom: 1rem;
+}
 
-                img {
-                    width: 3rem;
-                    height: 3rem;
-                    transition: scale 0.3s ease;
+#links > a {
+    font-size: 1.5rem;
+    color: rgb(255, 255, 255);
+    font-weight: 500;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    object-fit: cover;
+}
 
-                    &:hover {
-                        scale: 1.1;
-                    }
-                }
-            }
-        }
-        &::after {
-            content: "^ Have feedback? Join our Discord!";
-            position: absolute;
-            bottom: 1rem;
-            left: 0;
-            width: 0;
-            height: 1rem;
-            white-space: nowrap;
-            overflow: visible;
-            font-size: small;
-            text-align: left;
-        }
+#links > a > img {
+    width: 3rem;
+    height: 3rem;
+    transition: scale 0.3s ease;
+
+    &:hover {
+        scale: 1.1;
     }
 }
+
 
 /*END HOME*/
 

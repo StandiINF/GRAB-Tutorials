@@ -133,7 +133,6 @@ window.addEventListener('DOMContentLoaded', () => {
 
   const setupLoginButton = () => {
     const isMobile = window.innerWidth <= 767;
-    loginTextEl.textContent = isMobile ? 'Login' : 'Login with Meta';
     loginMetaEl.onclick = () => {
       window.location.href = 'https://auth.oculus.com/sso/?organization_id=638365782695092&redirect_uri=https%3A%2F%2Fgrab-tutorials.live%2F';
     };
@@ -165,7 +164,6 @@ window.addEventListener('DOMContentLoaded', () => {
         localStorage.removeItem('hexColor');
         localStorage.removeItem('hexColorSecondary');
         loginTextEl.textContent = 'Login with Meta';
-        loginMetaEl.textContent = 'Login';
         loggedInEl.style.display = 'block';
         loginWithBtnEl.style.display = 'block';
         applyColours('#888888', '#888888');

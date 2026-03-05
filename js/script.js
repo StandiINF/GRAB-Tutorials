@@ -12,6 +12,10 @@ const helpSix = document.getElementById("helpSix");
 const helpSeven = document.getElementById("helpSeven");
 const helpEight = document.getElementById("helpEight");
 
+let previouslyOpened = null;
+
+const decksJSON = "https://assets.grab-tutorials.live/decks.json";
+
 let lastPressedCard = null;
 
 const MENU_PATHS = {
@@ -23,6 +27,13 @@ const MENU_PATHS = {
     LMenu: '/login'
 };
 const PATH_TO_MENU = Object.fromEntries(Object.entries(MENU_PATHS).map(([k,v]) => [v, k]));
+const CATEGORY_TO_MENU = {
+    'trigger': 'TMenu',
+    'basics': 'BMenu',
+    'animation': 'AMenu',
+    'editor': 'EMenu',
+    'gasm': 'GMenu'
+};
 
 window.__initialPathNavigation = false;
 
@@ -30,11 +41,19 @@ window.__initialPathNavigation = false;
 
 function openMenu(menuId) {
     const menus = ["TMenu", "BMenu", "AMenu", "EMenu", "GMenu", "LMenu"];
-    const buttons = ["T", "B", "A", "E", "C", "L"];
+    const buttons = ["T", "B", "A", "E", "G", "L"];
     let userColour = localStorage.getItem('hexColor') || "#888888";
     let userColourSecondary = localStorage.getItem('hexColorSecondary') || "#888888";
     const menu = document.getElementById(menuId);
     const menuButtons = document.getElementById("menuButtons");
+    previouslyOpened = menuId;
+
+    const sMenu = document.getElementById("SMenu");
+    if (sMenu) {
+        sMenu.style.display = 'none';
+        sMenu.style.zIndex = '';
+        sMenu.style.pointerEvents = 'none';
+    }
 
     function applyMenuColours(colour, secondaryColour) {
         const colors = {
@@ -163,6 +182,7 @@ function openMenu(menuId) {
 
 function closeMenu() {
     const menus = ["TMenu", "BMenu", "AMenu", "EMenu", "GMenu", "LMenu"];
+    previouslyOpened = null;
     menus.forEach(menuId => {
         const menu = document.getElementById(menuId);
         menu.style.pointerEvents = 'none';
@@ -181,7 +201,7 @@ window.addEventListener('load', function () {
             '/editor': 'E',
             '/animation': 'A',
             '/trigger': 'T',
-            '/gasm': 'C',
+            '/gasm': 'G',
             '/login': 'L'
         };
 
@@ -313,9 +333,6 @@ function moveSafetyNets(container) {
     const safetyNetMiddle = document.getElementById("safetyNetMiddle");
     const safetyNetRight = document.getElementById("safetyNetRight");
     const safetyNetLeft = document.getElementById("safetyNetLeft");
-
-    // Append the middle and right safety nets into the tutorial container when possible.
-    // If the provided container is not in the DOM (defensive), fall back to the global safetyNets root.
     const target = (container && container.appendChild) ? container : safetyNetsRoot || document.body;
 
     if (safetyNetMiddle && safetyNetMiddle.parentNode !== target) {
@@ -325,7 +342,6 @@ function moveSafetyNets(container) {
         target.appendChild(safetyNetRight);
     }
 
-    // Keep the left safety net out at the root so it's available as a global fallback.
     if (safetyNetLeft && safetyNetsRoot && safetyNetLeft.parentNode !== safetyNetsRoot) {
         safetyNetsRoot.appendChild(safetyNetLeft);
     }
@@ -913,3 +929,396 @@ fetch('https://assets.grab-tutorials.live/decks.json')
     });
     mo.observe(document.body, { childList: true, subtree: true });
 })();
+
+async function searchDecks() {
+    var input = document.getElementById("searchBox").value.toLowerCase().trim();
+    
+    if (!input) {
+        closeAllMenus();
+        try { history.replaceState({}, '', '/'); } catch (e) {}
+        return;
+    }
+    
+    const searchTerms = input.split(/\s+/).filter(t => t);
+    
+    try {
+        const response = await fetch("https://assets.grab-tutorials.live/decks.json");
+        const decks = await response.json();
+        
+        const matchingCards = [];
+        const seenCovers = new Set();
+        
+        decks.forEach(deck => {
+            if (deck.cards && typeof deck.cards === "object") {
+                Object.values(deck.cards).forEach(card => {
+                    if (card.terms) {
+                        const termsList = card.terms
+                            .replace(/,/g, " ")
+                            .split(/\s+/)
+                            .filter(t => t)
+                            .map(t => t.toLowerCase());
+                        
+                        let matchCount = 0;
+                        searchTerms.forEach(searchTerm => {
+                            if (termsList.some(term => term === searchTerm)) {
+                                matchCount++;
+                            }
+                        });
+                        
+                        if (matchCount > 0) {
+                            const cover = card.cover || deck.cover;
+                            if (cover && !seenCovers.has(cover)) {
+                                seenCovers.add(cover);
+                                matchingCards.push({
+                                    title: card.title || "Untitled",
+                                    cover: cover,
+                                    deckTitle: deck.title || deck.id,
+                                    category: deck.category,
+                                    slug: deck.slug,
+                                    matchCount: matchCount
+                                });
+                            }
+                        }
+                    }
+                });
+            }
+        });
+        
+        matchingCards.sort((a, b) => b.matchCount - a.matchCount);
+        
+        openSearchMenu(matchingCards);
+        try {
+            const query = encodeURIComponent(input);
+            const newUrl = '/search?=' + query;
+            try { history.replaceState({}, '', newUrl); } catch (e) {}
+        } catch (e) {}
+        
+    } catch (error) {
+        console.error("Error searching decks:", error);
+    }
+}
+function openSearchMenu(cards) {
+    closeAllMenus();
+        const sMenu = document.getElementById("SMenu");
+        const searchGrid = document.getElementById("searchResultsGrid");        
+        if (!sMenu || !searchGrid) {
+            return;
+        }
+        
+        searchGrid.innerHTML = "";
+    
+    const categoryOrder = ['basics', 'editor', 'animation', 'trigger', 'gasm'];
+    const categoryColors = {
+        basics: 'rgb(144, 207, 144)',
+        editor: 'rgb(124, 72, 72)',
+        animation: '#638DDD',
+        trigger: 'rgb(248, 153, 0)',
+        gasm: 'rgb(115, 210, 120)'
+    };
+    
+    const groupedCards = {};
+    categoryOrder.forEach(cat => {
+        groupedCards[cat] = [];
+    });
+    
+    cards.forEach(card => {
+        const category = (card.category || 'basics').toLowerCase();
+        if (!groupedCards[category]) {
+            groupedCards[category] = [];
+        }
+        groupedCards[category].push(card);
+    });
+    
+    Object.keys(groupedCards).forEach(category => {
+        groupedCards[category].sort((a, b) => (b.matchCount || 0) - (a.matchCount || 0));
+    });
+    
+    categoryOrder.forEach(category => {
+        if (groupedCards[category].length > 0) {
+            const headerDiv = document.createElement("div");
+            headerDiv.style.gridColumn = '1 / -1';
+            headerDiv.style.marginTop = category === 'basics' ? '0' : '1.5rem';
+            headerDiv.style.marginBottom = '0.5rem';
+            headerDiv.style.paddingLeft = '2rem';
+            headerDiv.style.paddingBottom = '0.5rem';
+            headerDiv.style.borderBottom = `2px solid ${categoryColors[category] || '#888888'}`;
+            
+            const titleH2 = document.createElement("h2");
+            titleH2.textContent = category === 'gasm' ? 'GASM' : category.charAt(0).toUpperCase() + category.slice(1);
+            titleH2.style.color = categoryColors[category] || '#888888';
+            titleH2.style.fontSize = '1.3rem';
+            titleH2.style.fontFamily = "'nunito', sans-serif";
+            titleH2.style.fontWeight = '600';
+            titleH2.style.margin = '0';
+            
+            headerDiv.appendChild(titleH2);
+            searchGrid.appendChild(headerDiv);
+            
+            groupedCards[category].forEach(card => {
+                if (card.cover) {
+                    const cardItem = document.createElement("div");
+                    cardItem.className = "searchCardItem";
+                    
+                    const img = document.createElement("img");
+                    const imageUrl = "https://assets.grab-tutorials.live/" + card.cover.replace(/^\/+/, "");
+                    img.src = imageUrl;
+                    img.alt = card.title;
+                    img.loading = "lazy";
+                    
+                    img.onerror = () => {
+                        console.error(`Failed to load image: ${imageUrl}`);
+                    };
+                    
+                    cardItem.appendChild(img);
+                    
+                    cardItem.addEventListener("click", () => {
+                        openDeckFromSearch(card);
+                    });
+                    
+                    searchGrid.appendChild(cardItem);
+                }
+            });
+        }
+    });
+    
+    const mMenu = document.getElementById("MMenu");
+    mMenu.style.background = "";
+    mMenu.style.setProperty("--menu-gradient", "");
+    
+    const menuButtons = document.getElementById("menuButtons");
+    menuButtons.style.setProperty("--button-gradient", "linear-gradient(to top, rgb(115, 210, 120), transparent)");    
+    
+    const backButtonContainer = document.createElement("div");
+    backButtonContainer.style.position = 'absolute';
+    backButtonContainer.style.top = '1rem';
+    backButtonContainer.style.left = '1rem';
+    backButtonContainer.style.zIndex = '1001';
+    backButtonContainer.style.cursor = 'pointer';
+    
+    const backButton = document.createElement("img");
+    backButton.src = 'https://assets.grab-tutorials.live/!assets/back-btn.svg';
+    backButton.alt = 'Back';
+    backButton.style.width = '2rem';
+    backButton.style.height = '2rem';
+    
+    backButtonContainer.appendChild(backButton);
+    backButtonContainer.addEventListener('click', () => {
+        closeSearchMenu();
+        if (previouslyOpened !== null) {
+            openMenu(previouslyOpened);
+        }
+    });
+    
+    searchGrid.appendChild(backButtonContainer);
+    
+    sMenu.style.display = 'block';
+    sMenu.style.zIndex = 1000;
+    sMenu.style.pointerEvents = 'auto';
+}
+
+function closeSearchMenu() {
+    const sMenu = document.getElementById("SMenu");
+    if (sMenu) {
+        sMenu.style.display = 'none';
+        sMenu.style.zIndex = '';
+        sMenu.style.pointerEvents = 'none';
+    }
+    const searchBox = document.getElementById("searchBox");
+    if (searchBox) {
+        searchBox.value = '';
+    }
+    try { history.replaceState({}, '', '/'); } catch (e) {}
+}
+
+async function expandDeckCards(deckCard, searchTerms) {
+    try {
+        const decks = await window.fetchDecks();
+        const normalize = s => (s || '').toString().toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '');
+        const matchedDeck = decks.find(deck => {
+            const t = (deck.title || '').toString();
+            return normalize(t) === normalize(deckCard.deckTitle) || t.toLowerCase() === deckCard.deckTitle.toLowerCase() || (deck.id && deck.id.toLowerCase() === deckCard.deckTitle.toLowerCase());
+        });
+        
+        if (!matchedDeck || !matchedDeck.cards) return;
+        
+        const searchGrid = document.getElementById("searchResultsGrid");
+        if (!searchGrid) return;
+        
+        searchGrid.innerHTML = "";
+        
+        Object.values(matchedDeck.cards).forEach(card => {
+            if (card.terms) {
+                const termsList = card.terms
+                    .replace(/,/g, " ")
+                    .split(/\s+/)
+                    .filter(t => t)
+                    .map(t => t.toLowerCase());
+                
+                if (searchTerms.every(searchTerm => termsList.some(term => term === searchTerm))) {
+                    const cardEl = document.createElement("div");
+                    cardEl.className = "searchCardItem";
+                    
+                    const img = document.createElement("img");
+                    const cardCover = card.cover || matchedDeck.cover;
+                    if (cardCover) {
+                        const imageUrl = "https://assets.grab-tutorials.live/" + cardCover.replace(/^\/+/, "");
+                        img.src = imageUrl;
+                        img.alt = card.title;
+                        img.loading = "lazy";
+                        cardEl.appendChild(img);
+                        searchGrid.appendChild(cardEl);
+                    }
+                }
+            }
+        });
+        
+        const backBtn = document.createElement("button");
+        backBtn.className = "backDeckBtn";
+        backBtn.textContent = "Back";
+        backBtn.addEventListener("click", () => {
+            openSearchMenu([deckCard]);
+        });
+        searchGrid.appendChild(backBtn);
+        
+    } catch (e) {
+        console.error("Error expanding deck:", e);
+    }
+}
+
+function closeAllMenus() {
+    const menus = ["TMenu", "BMenu", "AMenu", "EMenu", "GMenu", "LMenu", "SMenu"];
+    const buttons = ["T", "B", "A", "E", "G", "L"];
+
+    for (let i = 0; i < menus.length; i++) {
+        if (document.getElementById(menus[i]).style.display === "block") {
+            previouslyOpened = menus[i];
+        }
+    }
+    
+    const mMenu = document.getElementById("MMenu");
+    mMenu.style.background = "";
+    mMenu.style.setProperty("--menu-gradient", "");
+    
+    menus.forEach((id, index) => {
+        const menu = document.getElementById(id);
+        if (menu) {
+            menu.style.display = 'none';
+            menu.style.zIndex = '';
+            menu.style.pointerEvents = 'none';
+        }
+        if (index < buttons.length) {
+            const button = document.getElementById(buttons[index]);
+            if (button) button.classList.remove("active");
+        }
+    });
+}
+
+async function openDeckFromSearch(card) {
+    try {
+        if (!window.fetchDecks || !window.renderCardDeck) return;
+        
+        const sMenu = document.getElementById("SMenu");
+        if (sMenu) sMenu.style.display = 'none';
+        
+        const decks = await window.fetchDecks();
+        const normalize = s => (s || '').toString().toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '');
+        const matchedDeck = decks.find(deck => {
+            const t = (deck.title || '').toString();
+            return normalize(t) === normalize(card.deckTitle) || t.toLowerCase() === card.deckTitle.toLowerCase() || (deck.id && deck.id.toLowerCase() === card.deckTitle.toLowerCase());
+        });
+        
+        if (!matchedDeck) return;
+        
+        const cat = (card.category || matchedDeck.category || 'basics').toLowerCase();
+        const menuId = CATEGORY_TO_MENU[cat];
+        if (!menuId) return;
+        
+        const buttonId = menuId.replace('Menu', '');
+        const btn = document.getElementById(buttonId);
+        
+        if (btn) {
+            window.__initialPathNavigation = true;
+            btn.click();
+            setTimeout(() => {
+                window.renderCardDeck(matchedDeck);
+                const deckSlug = normalize(matchedDeck.title || matchedDeck.slug || '');
+                const fullPath = '/' + cat + '/' + deckSlug;
+                try {
+                    history.pushState({ menuId: menuId }, '', fullPath);
+                } catch (e) {}
+            }, 120);
+        }
+        
+    } catch (e) {}
+}
+
+document.addEventListener("DOMContentLoaded", () => {
+    const searchBox = document.getElementById("searchBox");
+    const searchBtn = document.getElementById("searchBtn");
+    const searchBar = document.getElementById("searchBar");
+
+    (function restoreSearchFromUrl(){
+        try {
+            let q = '';
+            const params = new URLSearchParams(window.location.search);
+            if (params.has('q')) q = params.get('q');
+            else if (params.has('search')) q = params.get('search');
+            else if ((window.location.pathname || '').toLowerCase().startsWith('/search') && window.location.search && window.location.search.startsWith('?=')) q = decodeURIComponent(window.location.search.slice(2));
+            if (q && searchBox) {
+                searchBox.value = q;
+                setTimeout(() => { if (typeof searchDecks === 'function') searchDecks(); }, 10);
+            }
+        } catch (e) {}
+    })();
+    
+    function isMobile() {
+        return window.innerWidth <= 767;
+    }
+    
+    if (searchBox) {
+        searchBox.addEventListener("keypress", (e) => {
+            if (e.key === "Enter") {
+                e.preventDefault();
+                searchDecks();
+            }
+        });
+    }
+    
+    if (searchBtn) {
+        searchBtn.addEventListener("click", (e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            
+            if (isMobile()) {
+                searchBar.classList.toggle("expanded");
+                if (searchBar.classList.contains("expanded")) {
+                    setTimeout(() => searchBox.focus(), 100);
+                }
+            } else {
+                searchDecks();
+            }
+        });
+    }
+    
+    if (searchBox) {
+        searchBox.addEventListener("keydown", (e) => {
+            if (e.key === "Escape") {
+                searchBar.classList.remove("expanded");
+            }
+        });
+    }
+
+    document.addEventListener("click", (e) => {
+        if (isMobile() && searchBar && searchBox && searchBtn && searchBar.classList.contains("expanded")) {
+            if (!searchBar.contains(e.target) && !searchBtn.contains(e.target) && !searchBox.contains(e.target)) {
+                searchBar.classList.remove("expanded");
+            }
+        }
+    });
+});
+
+fetch("https://assets.grab-tutorials.live/patch-notes.txt")
+  .then(res => res.text())
+  .then(html => {
+    document.getElementById("patchContainer").innerHTML += html;
+  })
