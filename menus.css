@@ -198,7 +198,7 @@
     position: relative;
     font-size: calc(18 / 1440 * 100vw);
     padding-top: 1vw;
-    right: 9vw;
+    text-align: left;
 }
 
 .list {
