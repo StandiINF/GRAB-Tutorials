@@ -485,13 +485,6 @@ cursor: pointer;
     backface-visibility: hidden;
 }
 
-.blank-card {
-    display: inline-block;
-    aspect-ratio: 2 / 1;
-    height: auto;
-    border-radius: 25px;
-}
-
 .cardGroup img.gif {
     position: absolute;
     top: 0;

@@ -282,26 +282,6 @@ async function renderAllDecksCategories(category, groups) {
         }
       }
     }
-
-    const subcats = Object.keys(groups);
-    if (subcats.length > 0) {
-      const selected = [];
-      const available = [...subcats];
-      for (let i = 0; i < Math.min(2, available.length); i++) {
-        const randomIndex = Math.floor(Math.random() * available.length);
-        selected.push(available.splice(randomIndex, 1)[0]);
-      }
-      selected.forEach(subcat => {
-        const tutorialGroup = groups[subcat];
-        if (tutorialGroup) {
-          const blankCard = document.createElement('div');
-          blankCard.className = 'cardGroup blank-card';
-          blankCard.style.cssText = 'background-color: black;';
-          applyMobileCardStyles(blankCard);
-          tutorialGroup.appendChild(blankCard);
-        }
-      });
-    }
   } catch (e) {
     console.error(`Failed to fetch or render decks for category ${category}:`, e);
   }
