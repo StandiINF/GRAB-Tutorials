@@ -825,18 +825,6 @@ cursor: pointer;
     pointer-events: auto;
 }
 
-.soon {
-    background: #666666;
-    pointer-events: none;
-    opacity: 0.8;
-    cursor: default;
-}
-.soon:hover {
-    background: #666666;
-    box-shadow: none;
-    cursor: default;
-}
-
 .menuContainer {
     display: none;
     flex-direction: column;
