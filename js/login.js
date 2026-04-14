@@ -134,7 +134,13 @@ window.addEventListener('DOMContentLoaded', () => {
   const setupLoginButton = () => {
     const isMobile = window.innerWidth <= 767;
     loginMetaEl.onclick = () => {
-      window.location.href = 'https://auth.oculus.com/sso/?organization_id=638365782695092&redirect_uri=https%3A%2F%2Fgrab-tutorials.live%2F';
+      window.location.href =
+      "https://auth.oculus.com/sso/?" +
+      new URLSearchParams({
+        organization_id: "638365782695092",
+        redirect_uri: "https://grab-tutorials.live/",
+        response_type: "token"
+      });
     };
     hideDiscordLinkSection();
     localStorage.removeItem('hexColor');
