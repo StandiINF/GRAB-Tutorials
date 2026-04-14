@@ -28,13 +28,16 @@ window.addEventListener('DOMContentLoaded', () => {
   };
 
   const handleFragment = async () => {
-    const hash = window.location.hash.substring(1);
-    if (!hash) return false;
+    const fragment = window.location.hash.substring(1);
+    if (!fragment) return false;
 
-    const params = new URLSearchParams(hash);
-    const accessToken = params.get('access_token');
+    let decoded;
 
-    if (!accessToken) return false;
+    try {
+      decoded = JSON.parse(atob(fragment));
+    } catch {
+      return false;
+    }
 
     window.history.replaceState(null, '', window.location.pathname);
 
@@ -42,7 +45,7 @@ window.addEventListener('DOMContentLoaded', () => {
       const data = await fetchJSON('https://api.grab-tutorials.live/login', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ access_token: accessToken })
+        body: JSON.stringify(decoded)
       });
 
       if (data.sessionId) {
@@ -50,8 +53,8 @@ window.addEventListener('DOMContentLoaded', () => {
         proceedWithSession(data.sessionId);
       }
 
-    } catch (err) {
-      console.error("Login failed:", err);
+    } catch (e) {
+      console.error(e);
       setupLoginButton();
     }
 

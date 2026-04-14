@@ -485,6 +485,13 @@ cursor: pointer;
     backface-visibility: hidden;
 }
 
+.blank-card {
+    display: inline-block;
+    aspect-ratio: 2 / 1;
+    height: auto;
+    border-radius: 25px;
+}
+
 .cardGroup img.gif {
     position: absolute;
     top: 0;
@@ -532,10 +539,18 @@ cursor: pointer;
 }
 
 @media (max-width: 767px) {
-    .cardGroup {
+    .cardGroup,
+    .placeholder,
+    .blank-card {
         width: 250px;
         height: auto;
+    }
 
+    .blank-card {
+        border-radius: 12px;
+    }
+
+    .cardGroup {
         img {
             image-rendering: -webkit-optimize-contrast;
             image-rendering: optimizeQuality;
