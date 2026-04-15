@@ -112,17 +112,17 @@ function openMenu(menuId) {
             }
         });
         const lButton = document.getElementById('L');
+        const primaryColour = colour || "#888888";
+        const secondaryColourToUse = secondaryColour || "#888888";
         if (lButton) {
-            const lMenuColor = colour || secondaryColour || "#888888";
-            if (menuId === "LMenu") {
-                lButton.style.background = lMenuColor;
-                document.documentElement.style.setProperty('--lmenu-color', lMenuColor);
-            } else {
-                const sessionId = localStorage.getItem('sessionId');
-                if (sessionId && lMenuColor) {
-                    lButton.style.background = lMenuColor;
-                    document.documentElement.style.setProperty('--lmenu-color', lMenuColor);
-                }
+            lButton.style.background = secondaryColourToUse;
+        }
+        if (menuId === "LMenu") {
+            document.documentElement.style.setProperty('--lmenu-color', primaryColour);
+        } else {
+            const sessionId = localStorage.getItem('sessionId');
+            if (sessionId) {
+                document.documentElement.style.setProperty('--lmenu-color', primaryColour);
             }
         }
     }
@@ -167,12 +167,13 @@ function initializeColors() {
 }
 
 function updateColors() {
-    const userColour = localStorage.getItem('hexColour') || localStorage.getItem('hexColourSecondary') || "#888888";
+    const userColour = localStorage.getItem('hexColour') || "#888888";
+    const userColourSecondary = localStorage.getItem('hexColourSecondary') || "#888888";
     const lButton = document.getElementById('L');
     const lMenu = document.getElementById('LMenu');
 
     if (lButton) {
-        lButton.style.background = userColour;
+        lButton.style.background = userColourSecondary;
     }
     if (lMenu) {
         lMenu.style.background = userColour;
