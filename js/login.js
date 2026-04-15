@@ -68,7 +68,6 @@ window.addEventListener("DOMContentLoaded", () => {
         localStorage.setItem("hexColourSecondary", data.hexColourSecondary);
       }
 
-      // Update colors in UI
       if (window.updateColors) {
         window.updateColors();
       }
@@ -79,7 +78,16 @@ window.addEventListener("DOMContentLoaded", () => {
       loggedInEl.style.display = "none";
       loginWithBtnEl.style.display = "none";
 
-      loginMetaEl.onclick = () => {
+      loginMetaEl.onclick = async () => {
+        try {
+          await fetch(`https://api.grab-tutorials.live/logout?sessionId=${encodeURIComponent(sessionId)}`, {
+            method: 'GET',
+            credentials: 'include',
+          });
+        } catch (err) {
+          console.log("Logout request failed:", err);
+        }
+
         localStorage.removeItem("sessionId");
         localStorage.removeItem("hexColour");
         localStorage.removeItem("hexColourSecondary");
