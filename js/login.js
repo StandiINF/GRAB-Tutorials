@@ -30,39 +30,6 @@ window.addEventListener("DOMContentLoaded", () => {
 
   const delay = (ms) => new Promise((r) => setTimeout(r, ms));
 
-  const normalizeToHex = (color) => {
-    if (!color) return null;
-
-    if (typeof color === "string" && color.startsWith("#")) {
-      return color;
-    }
-
-    let parts = color;
-
-    if (typeof color === "string") {
-      parts = color.trim().split(/\s+/).map(Number);
-    }
-
-    if (!Array.isArray(parts) || parts.length < 3) return null;
-
-    const to255 = (v) => {
-      const num = Math.max(0, Math.min(1, Number(v)));
-      return Math.round(num * 255);
-    };
-
-    const r = to255(parts[0]);
-    const g = to255(parts[1]);
-    const b = to255(parts[2]);
-
-    return (
-      "#" +
-      [r, g, b]
-        .map((v) => v.toString(16).padStart(2, "0"))
-        .join("")
-        .toUpperCase()
-    );
-  };
-
   const setupLoginButton = () => {
     loginTextEl.textContent = "Login with Meta";
 
@@ -93,15 +60,12 @@ window.addEventListener("DOMContentLoaded", () => {
 
       sessionId = sid;
       localStorage.setItem("sessionId", sid);
-
-      const primary = normalizeToHex(data.hexColor);
-      const secondary = normalizeToHex(data.hexColorSecondary);
-
-      if (primary) {
-        localStorage.setItem("hexColor", primary);
+      
+      if (data.hexColor) {
+        localStorage.setItem("hexColor", data.hexColor);
       }
-      if (secondary) {
-        localStorage.setItem("hexColorSecondary", secondary);
+      if (data.hexColorSecondary) {
+        localStorage.setItem("hexColorSecondary", data.hexColorSecondary);
       }
 
       loginTextEl.textContent = data.alias;
@@ -112,9 +76,6 @@ window.addEventListener("DOMContentLoaded", () => {
 
       loginMetaEl.onclick = () => {
         localStorage.removeItem("sessionId");
-        localStorage.removeItem("hexColor");
-        localStorage.removeItem("hexColorSecondary");
-
         sessionId = null;
         setupLoginButton();
 
