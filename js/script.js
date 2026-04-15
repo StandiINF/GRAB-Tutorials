@@ -162,21 +162,22 @@ function closeMenu() {
 
 // Initialize colors on page load
 function initializeColors() {
-    const userColourSecondary = localStorage.getItem('hexColourSecondary') || "#888888";
-    const lButton = document.getElementById('L');
-    if (lButton && userColourSecondary && userColourSecondary !== "#888888") {
-        lButton.style.background = userColourSecondary;
-        document.documentElement.style.setProperty('--lmenu-color', userColourSecondary);
-    }
+    updateColors();
 }
 
 function updateColors() {
     const userColourSecondary = localStorage.getItem('hexColourSecondary') || "#888888";
     const lButton = document.getElementById('L');
+    const lMenu = document.getElementById('LMenu');
+
     if (lButton) {
         lButton.style.background = userColourSecondary;
-        document.documentElement.style.setProperty('--lmenu-color', userColourSecondary);
     }
+    if (lMenu) {
+        lMenu.style.background = userColourSecondary;
+    }
+
+    document.documentElement.style.setProperty('--lmenu-color', userColourSecondary);
 }
 
 document.addEventListener("DOMContentLoaded", initializeColors);
