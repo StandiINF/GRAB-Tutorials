@@ -42,8 +42,8 @@ window.__initialPathNavigation = false;
 function openMenu(menuId) {
     const menus = ["TMenu", "BMenu", "AMenu", "EMenu", "GMenu", "LMenu"];
     const buttons = ["T", "B", "A", "E", "G", "L"];
-    let userColour = localStorage.getItem('hexColour') || "#888888";
-    let userColourSecondary = localStorage.getItem('hexColourSecondary') || "#888888";
+    let userColour = localStorage.getItem('primaryColour') || "#888888";
+    let userColourSecondary = localStorage.getItem('secondaryColour') || "#888888";
     const menu = document.getElementById(menuId);
     const menuButtons = document.getElementById("menuButtons");
     previouslyOpened = menuId;
@@ -166,8 +166,8 @@ function initializeColors() {
 }
 
 function updateColors() {
-    const userColour = localStorage.getItem('hexColour') || "#888888";
-    const userColourSecondary = localStorage.getItem('hexColourSecondary') || "#888888";
+    const userColour = localStorage.getItem('primaryColour') || "#888888";
+    const userColourSecondary = localStorage.getItem('secondaryColour') || "#888888";
     const lButton = document.getElementById('L');
     const lMenu = document.getElementById('LMenu');
     const mMenu = document.getElementById('MMenu');
