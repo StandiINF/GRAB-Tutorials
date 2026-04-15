@@ -57,23 +57,23 @@ window.addEventListener("DOMContentLoaded", () => {
         )}`
       );
 
-      if (!data.alias) throw new Error("Invalid session");
+      if (!data.user_name) throw new Error("Invalid session");
 
       sessionId = sid;
       localStorage.setItem("sessionId", sid);
       
-      if (data.hexColour) {
-        localStorage.setItem("hexColour", data.hexColour);
+      if (data.primaryColour) {
+        localStorage.setItem("primaryColour", data.primaryColour);
       }
-      if (data.hexColourSecondary) {
-        localStorage.setItem("hexColourSecondary", data.hexColourSecondary);
+      if (data.secondaryColour) {
+        localStorage.setItem("secondaryColour", data.secondaryColour);
       }
 
       if (window.updateColors) {
         window.updateColors();
       }
 
-      loginTextEl.textContent = data.alias;
+      loginTextEl.textContent = data.user_name;
       loginMetaEl.textContent = "Logout";
 
       loggedInEl.style.display = "none";
@@ -90,8 +90,8 @@ window.addEventListener("DOMContentLoaded", () => {
         }
 
         localStorage.removeItem("sessionId");
-        localStorage.removeItem("hexColour");
-        localStorage.removeItem("hexColourSecondary");
+        localStorage.removeItem("primaryColour");
+        localStorage.removeItem("secondaryColour");
         sessionId = null;
         setupLoginButton();
 
@@ -106,8 +106,8 @@ window.addEventListener("DOMContentLoaded", () => {
     } catch (err) {
       console.log(err);
       localStorage.removeItem("sessionId");
-      localStorage.removeItem("hexColour");
-      localStorage.removeItem("hexColourSecondary");
+      localStorage.removeItem("primaryColour");
+      localStorage.removeItem("secondaryColour");
       setupLoginButton();
       
       // Reset colors to default
@@ -149,8 +149,8 @@ window.addEventListener("DOMContentLoaded", () => {
     } catch (err) {
       console.error("Login failed:", err);
       localStorage.removeItem("sessionId");
-      localStorage.removeItem("hexColour");
-      localStorage.removeItem("hexColourSecondary");
+      localStorage.removeItem("primaryColour");
+      localStorage.removeItem("secondaryColour");
       setupLoginButton();
       
       // Reset colors to default
