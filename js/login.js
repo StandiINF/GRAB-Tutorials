@@ -32,6 +32,7 @@ window.addEventListener("DOMContentLoaded", () => {
 
   const setupLoginButton = () => {
     loginTextEl.textContent = "Login with Meta";
+    loginMetaEl.textContent = "Login";
 
     loginMetaEl.onclick = () => {
       const params = new URLSearchParams({
