@@ -115,10 +115,12 @@ function openMenu(menuId) {
         if (lButton) {
             if (menuId === "LMenu") {
                 lButton.style.background = secondaryColour;
+                document.documentElement.style.setProperty('--lmenu-color', secondaryColour);
             } else {
                 const sessionId = localStorage.getItem('sessionId');
                 if (sessionId && secondaryColour && secondaryColour !== "#888888") {
                     lButton.style.background = secondaryColour;
+                    document.documentElement.style.setProperty('--lmenu-color', secondaryColour);
                 }
             }
         }
@@ -157,6 +159,18 @@ function closeMenu() {
         menu.style.display = 'none';
     });
 }
+
+// Initialize colors on page load
+function initializeColors() {
+    const userColourSecondary = localStorage.getItem('hexColorSecondary') || "#888888";
+    const lButton = document.getElementById('L');
+    if (lButton && userColourSecondary && userColourSecondary !== "#888888") {
+        lButton.style.background = userColourSecondary;
+        document.documentElement.style.setProperty('--lmenu-color', userColourSecondary);
+    }
+}
+
+document.addEventListener("DOMContentLoaded", initializeColors);
 
 // url opening hi
 
