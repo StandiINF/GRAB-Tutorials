@@ -161,7 +161,6 @@ function closeMenu() {
     });
 }
 
-// Initialize colors on page load
 function initializeColors() {
     updateColors();
 }
@@ -171,6 +170,7 @@ function updateColors() {
     const userColourSecondary = localStorage.getItem('hexColourSecondary') || "#888888";
     const lButton = document.getElementById('L');
     const lMenu = document.getElementById('LMenu');
+    const mMenu = document.getElementById('MMenu');
 
     if (lButton) {
         lButton.style.background = userColourSecondary;
@@ -180,6 +180,11 @@ function updateColors() {
     }
 
     document.documentElement.style.setProperty('--lmenu-color', userColour);
+
+    if (lMenu && lMenu.style.display === 'block' && mMenu) {
+        mMenu.style.background = userColour;
+        mMenu.style.setProperty('--menu-gradient', `linear-gradient(to top, rgba(177, 65, 65, 0) 0%, ${userColour} 100%)`);
+    }
 }
 
 document.addEventListener("DOMContentLoaded", initializeColors);
