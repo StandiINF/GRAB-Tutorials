@@ -145,38 +145,6 @@ function openMenu(menuId) {
         return;
     }
 
-    if (
-        (menuId === "LMenu" || localStorage.getItem('sessionId')) &&
-        (!localStorage.getItem('hexColor') || !localStorage.getItem('hexColorSecondary'))
-    ) {
-        const sessionId = localStorage.getItem('sessionId');
-        if (sessionId) {
-            fetch(`https://api.grab-tutorials.live/getAlias?sessionId=${encodeURIComponent(sessionId)}`, {
-                method: 'GET',
-                credentials: 'include',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-            })
-            .then(response => response.ok ? response.json() : null)
-            .then(data => {
-                if (data && data.hexColor) {
-                    userColour = data.hexColor;
-                    localStorage.setItem('hexColor', userColour);
-                }
-                if (data && data.hexColorSecondary) {
-                    userColourSecondary = data.hexColorSecondary;
-                    localStorage.setItem('hexColorSecondary', userColourSecondary);
-                }
-                applyMenuColours(userColour, userColourSecondary);
-            })
-            .catch(() => {
-                applyMenuColours(userColour, userColourSecondary);
-            });
-            return;
-        }
-    }
-
     applyMenuColours(userColour, userColourSecondary);
 }
 
