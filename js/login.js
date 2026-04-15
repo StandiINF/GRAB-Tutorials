@@ -61,11 +61,16 @@ window.addEventListener("DOMContentLoaded", () => {
       sessionId = sid;
       localStorage.setItem("sessionId", sid);
       
-      if (data.hexColor) {
-        localStorage.setItem("hexColor", data.hexColor);
+      if (data.hexColour) {
+        localStorage.setItem("hexColour", data.hexColour);
       }
-      if (data.hexColorSecondary) {
-        localStorage.setItem("hexColorSecondary", data.hexColorSecondary);
+      if (data.hexColourSecondary) {
+        localStorage.setItem("hexColourSecondary", data.hexColourSecondary);
+      }
+
+      // Update colors in UI
+      if (window.updateColors) {
+        window.updateColors();
       }
 
       loginTextEl.textContent = data.alias;
@@ -76,8 +81,15 @@ window.addEventListener("DOMContentLoaded", () => {
 
       loginMetaEl.onclick = () => {
         localStorage.removeItem("sessionId");
+        localStorage.removeItem("hexColour");
+        localStorage.removeItem("hexColourSecondary");
         sessionId = null;
         setupLoginButton();
+
+        // Reset colors to default
+        if (window.updateColors) {
+          window.updateColors();
+        }
 
         loggedInEl.style.display = "block";
         loginWithBtnEl.style.display = "block";
@@ -85,7 +97,14 @@ window.addEventListener("DOMContentLoaded", () => {
     } catch (err) {
       console.log(err);
       localStorage.removeItem("sessionId");
+      localStorage.removeItem("hexColour");
+      localStorage.removeItem("hexColourSecondary");
       setupLoginButton();
+      
+      // Reset colors to default
+      if (window.updateColors) {
+        window.updateColors();
+      }
     }
   };
 
@@ -120,7 +139,15 @@ window.addEventListener("DOMContentLoaded", () => {
       }
     } catch (err) {
       console.error("Login failed:", err);
+      localStorage.removeItem("sessionId");
+      localStorage.removeItem("hexColour");
+      localStorage.removeItem("hexColourSecondary");
       setupLoginButton();
+      
+      // Reset colors to default
+      if (window.updateColors) {
+        window.updateColors();
+      }
     }
 
     return true;

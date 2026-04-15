@@ -42,8 +42,8 @@ window.__initialPathNavigation = false;
 function openMenu(menuId) {
     const menus = ["TMenu", "BMenu", "AMenu", "EMenu", "GMenu", "LMenu"];
     const buttons = ["T", "B", "A", "E", "G", "L"];
-    let userColour = localStorage.getItem('hexColor') || "#888888";
-    let userColourSecondary = localStorage.getItem('hexColorSecondary') || "#888888";
+    let userColour = localStorage.getItem('hexColour') || "#888888";
+    let userColourSecondary = localStorage.getItem('hexColourSecondary') || "#888888";
     const menu = document.getElementById(menuId);
     const menuButtons = document.getElementById("menuButtons");
     previouslyOpened = menuId;
@@ -162,7 +162,7 @@ function closeMenu() {
 
 // Initialize colors on page load
 function initializeColors() {
-    const userColourSecondary = localStorage.getItem('hexColorSecondary') || "#888888";
+    const userColourSecondary = localStorage.getItem('hexColourSecondary') || "#888888";
     const lButton = document.getElementById('L');
     if (lButton && userColourSecondary && userColourSecondary !== "#888888") {
         lButton.style.background = userColourSecondary;
@@ -170,7 +170,17 @@ function initializeColors() {
     }
 }
 
+function updateColors() {
+    const userColourSecondary = localStorage.getItem('hexColourSecondary') || "#888888";
+    const lButton = document.getElementById('L');
+    if (lButton) {
+        lButton.style.background = userColourSecondary;
+        document.documentElement.style.setProperty('--lmenu-color', userColourSecondary);
+    }
+}
+
 document.addEventListener("DOMContentLoaded", initializeColors);
+window.updateColors = updateColors;
 
 // url opening hi
 
