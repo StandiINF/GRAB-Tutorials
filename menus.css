@@ -331,7 +331,7 @@ cursor: pointer;
     cursor: pointer;
 }
 
-#GMenu .groupSixContainer {
+#GMenu .groupEightContainer {
     margin-bottom: 200px;
 }
 
@@ -564,53 +564,73 @@ cursor: pointer;
     }
 }
 
-.groupOneContainer {
-    h2 {
-        color: #8277e4;
-    }
+.groupOneContainer h2 { /* Basics */
+    color: #47c543;
 }
 
-.groupTwoContainer {
-    h2 {
-        color: #77e480;
-    }
+.groupTwoContainer h2 { /* Beginner */
+    color: #90d129;
 }
 
-.groupThreeContainer {
-    h2 {
-        color: #dde477;
-    }
+.groupThreeContainer h2 { /* Intermediate */
+    color: #d1c029;
 }
 
-.groupFourContainer {
-    h2 {
-        color: #e47777;
-    }
+.groupFourContainer h2 { /* Advanced */
+    color: #d12929;
 }
 
-.groupFiveContainer {
-    h2 {
-        color: #77dde4;
-    }
+#BMenu .groupTwoContainer h2,
+#EMenu .groupTwoContainer h2,
+#EMenu .groupThreeContainer h2,
+#GMenu .groupTwoContainer h2 { /* UI */
+    color: #8dc1df !important;
 }
 
-#GMenu .groupOneContainer h2 {
-    color: #8277e4;
+#BMenu .groupOneContainer h2 { /* Playing */
+    color: #cc6680 !important;
 }
-#GMenu .groupTwoContainer h2 {
-    color: #77e480;
+
+#BMenu .groupThreeContainer h2 { /* Best of GRAB */
+    color: #f0cb29 !important;
 }
-#GMenu .groupThreeContainer h2 {
-    color: #dde477;
+
+
+
+#EMenu .groupFourContainer h2 { /* Blocks */
+    color: #af4444 !important;
 }
-#GMenu .groupFourContainer h2 {
-    color: #77e480;
+
+
+
+#TMenu .groupFiveContainer h2 { /* Logic */
+    color: #77dde4; 
 }
-#GMenu .groupFiveContainer h2 {
-    color: #dde477;
+
+
+
+#GMenu .groupThreeContainer h2 { /* Program Blocks */
+    color: #8d9dc7 !important;
 }
-#GMenu .groupSixContainer h2 {
-    color: #e47777;
+
+#GMenu .groupFourContainer h2 { /* Blocks */
+    color: #929299 !important;
+}
+
+#GMenu .groupFiveContainer h2 { /* Signs */
+    color: #e99e58 !important;
+}
+
+#GMenu .groupSixContainer h2 { /* Triggers */
+    color: #f89900 !important;
+}
+
+#GMenu .groupSevenContainer h2 { /* Lights */
+    color: #eee351 !important;
+}
+
+#GMenu .groupEightContainer h2 { /* Players */
+    color: #da99eb !important;
 }
 
 .placeholder {

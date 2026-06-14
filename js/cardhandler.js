@@ -254,7 +254,7 @@ async function renderAllDecksCategories(category, groups) {
       editor: ["basics"],
       animation: ["basics", "beginner", "intermediate", "advanced"],
       trigger: ["basics", "beginner", "intermediate", "advanced"],
-      gasm: ["beginner", "intermediate", "advanced"]
+      gasm: ["blocks", "signs", "triggers", "lights", "players"]
     };
     const placeholderUrl = "https://assets.grab-tutorials.live/!assets/placeholder-discord-main.svg";
     const placeholderAlt = "Can't find what you're looking for? Join Discord!";
@@ -348,17 +348,21 @@ document.addEventListener("DOMContentLoaded", () => {
     cBtn.addEventListener("click", () => {
       const basicsGroup = document.querySelector('#GMenu .groupOneContainer .tutorialGroup');
       const uiGroup = document.querySelector('#GMenu .groupTwoContainer .tutorialGroup');
-      const blocksGroup = document.querySelector('#GMenu .groupThreeContainer .tutorialGroup');
-      const beginnerGroup = document.querySelector('#GMenu .groupFourContainer .tutorialGroup');
-      const intermediateGroup = document.querySelector('#GMenu .groupFiveContainer .tutorialGroup');
-      const advancedGroup = document.querySelector('#GMenu .groupSixContainer .tutorialGroup');
+      const programBlocksGroup = document.querySelector('#GMenu .groupThreeContainer .tutorialGroup');
+      const blocksGroup = document.querySelector('#GMenu .groupFourContainer .tutorialGroup');
+      const signsGroup = document.querySelector('#GMenu .groupFiveContainer .tutorialGroup');
+      const triggersGroup = document.querySelector('#GMenu .groupSixContainer .tutorialGroup');
+      const lightsGroup = document.querySelector('#GMenu .groupSevenContainer .tutorialGroup');
+      const playersGroup = document.querySelector('#GMenu .groupEightContainer .tutorialGroup');
       window.renderAllDecksCategories("gasm", {
         basics: basicsGroup,
         ui: uiGroup,
+        programBlocks: programBlocksGroup,
         blocks: blocksGroup,
-        beginner: beginnerGroup,
-        intermediate: intermediateGroup,
-        advanced: advancedGroup
+        signs: signsGroup,
+        triggers: triggersGroup,
+        lights: lightsGroup,
+        players: playersGroup
       });
     });
   }
