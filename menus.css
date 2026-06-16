@@ -331,28 +331,12 @@ cursor: pointer;
     cursor: pointer;
 }
 
+#EMenu .groupFourContainer,
+#BMenu .groupThreeContainer,
+#AMenu .groupFourContainer,
+#TMenu .groupFiveContainer,
 #GMenu .groupEightContainer {
-    margin-bottom: 200px;
-}
-
-#TMenu .groupFiveContainer {
-    margin-bottom: 200px;
-}
-
-#AMenu .groupFourContainer {
-    margin-bottom: 200px;
-}
-
-#BMenu .groupThreeContainer {
-    margin-bottom: 200px;
-}
-
-#EMenu .groupFourContainer {
-    margin-bottom: 200px;
-}
-
-.menuContainer[style*="display: block"] {
-    opacity: 1;
+    margin-bottom: 136px;
 }
 
 .menu::before {
@@ -437,10 +421,13 @@ cursor: pointer;
     width: 90%;
     height: 260px;
     position: relative;
-    left: 45%;
+    left: 47.5%;
     transform: translate(-50%, 100px);
     margin-bottom: 130px;
     box-sizing: border-box;
+    scroll-margin-top: 169px;
+
+    scrollbar-width: none;
 }
 
 .tutorialGroup {
@@ -458,6 +445,8 @@ cursor: pointer;
     align-items: flex-start;
     justify-content: flex-start;
     gap: 20px;
+
+    scrollbar-width: none;
 }
 
 .tutorialGroup > div {
@@ -847,15 +836,17 @@ cursor: pointer;
 
 .menuContainer {
     display: none;
+    position: fixed;
+    top: 64px;
+    left: 0;
+    right: 0;
+    height: calc(100% - 64px);
+    width: 100%;
     flex-direction: column;
     align-items: center;
     justify-content: flex-start;
-    width: 100%;
-    height: 100%;
-    position: relative;
-    overflow: scroll;
+    overflow: auto;
     background: linear-gradient(43deg, rgba(4,47,27,1) 0%, rgba(8,26,44,1) 100%);
-    top: 64px;
 }
 
 .menuContainer[style*="display: block"] {
@@ -878,6 +869,9 @@ cursor: pointer;
     justify-content: center;
     overflow: hidden;
     box-sizing: border-box;
+
+    scrollbar-width: 10px !important;
+    scrollbar-color: rgba(255, 255, 255, 0.2) transparent !important;
 }
 
 .menu[style*="display: block"] {
@@ -1063,5 +1057,150 @@ cursor: pointer;
     #searchResultsGrid .searchCardItem {
         width: 150px;
         height: 84.375px;
+    }
+}
+
+.scroller {
+
+    position: fixed;
+    left: 10px;
+    z-index: 10002;
+    top: 50%;
+    transform: translateY(-50%);
+
+    .scrollerButtons {
+        display: flex;
+        flex-direction: column;
+        flex-wrap: nowrap;
+        gap: 25px;
+        overflow: hidden;
+    }
+}
+
+.scrollerBtn {
+    background: none;
+    border: none;
+    position: relative;
+    padding: 10px;
+    pointer-events: auto;
+    cursor: pointer;
+    text-align: left;
+
+    font-family: 'nunito', sans-serif;
+    font-weight: 700;
+    font-size: 15px;
+
+    transition: all 0.3s ease-in-out;
+
+    color: rgba(255, 255, 255, 0.4);
+}
+
+.scrollerBtn:hover {
+    color: rgba(255, 255, 255, 0.8);
+    transform: translateX(10px);
+}
+
+.scrollerBtn:hover::before {
+    opacity: 0.8;
+}
+
+.scrollerBtn::before {
+    overflow: auto;
+    content: '';
+    position: absolute;
+    left: 0px;
+    width: 2.5px;
+    height: 110%;
+    z-index: 10001;
+    border-radius: 50px;
+    top: 50%;
+    transform: translateY(-50%);
+    opacity: 0.65;
+
+    transition: all 0.3s ease-in-out;
+}
+
+#basicsA::before,
+#basicsE::before,
+#basicsT::before,
+#basicsGASM::before {
+    background: #47c543;
+}
+
+#UIB::before,
+#UIE::before,
+#wristE::before,
+#uiGASM::before {
+    background: #8dc1df;
+}
+
+#programBlocksGASM::before {
+    background: #8d9dc7;
+}
+
+#blocksGASM::before {
+    background: #929299;
+}
+
+#signsGASM::before {
+    background: #e99e58;
+}
+
+#triggersGASM::before {
+    background: #f89900;
+}
+
+#lightsGASM::before {
+    background: #eee351;
+}
+
+#playersGASM::before {
+    background: #da99eb;
+}
+
+
+
+#beginnerA::before,
+#beginnerT::before {
+    background: #90d129;
+}
+
+#intermediateA::before,
+#intermediateT::before {
+    background: #d1c029;
+}
+
+#advancedA::before,
+#advancedT::before {
+    background: #d12929;
+}
+
+#logicT::before {
+    background: #77dde4;
+}
+
+
+
+#blocksE::before {
+    background: #af4444;
+}
+
+
+
+#playingB::before {
+    background: #cc6680;
+}
+
+#BOGB::before {
+    background: #f0cb29;
+}
+
+@media (max-width: 767px) {
+    .scroller {
+        display: none;
+    }
+
+    .groupContainer {
+        left: 45%;
     }
 }

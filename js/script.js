@@ -1316,6 +1316,12 @@ document.addEventListener("DOMContentLoaded", () => {
     });
 });
 
+function scrollCategories(element) {
+    var scrollTo = document.getElementById(element);
+
+    scrollTo.scrollIntoView({behavior: "smooth"});
+}
+
 fetch("https://assets.grab-tutorials.live/patch-notes.txt")
   .then(res => res.text())
   .then(html => {

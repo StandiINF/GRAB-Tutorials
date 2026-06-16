@@ -108,8 +108,15 @@
 
     <div id="BMenu" class="menu">
 
+        <div class="scroller">
+            <div class="scrollerButtons">
+                <button onclick="scrollCategories('BPlaying')" class="scrollerBtn" id="playingB">Playing</button>
+                <button onclick="scrollCategories('BUI')" class="scrollerBtn" id="UIB">UI / Menu</button>
+                <button onclick="scrollCategories('BBOG')" class="scrollerBtn" id="BOGB">Best of GRAB</button>
+            </div>
+        </div> 
         <div id="basicsContainer" class="menuContainer">
-            <div class="groupOneContainer groupContainer">
+            <div id="BPlaying" class="groupOneContainer groupContainer">
                 <div class="groupTextBox" name="playing">
                     <h2 class="groupText">Playing</h2>
                 </div>
@@ -117,7 +124,7 @@
 
                 </div>
             </div>
-            <div class="groupTwoContainer groupContainer">
+            <div id="BUI" class="groupTwoContainer groupContainer">
                 <div class="groupTextBox">
                     <h2 class="groupText" name="ui">UI / Menu</h2>
                 </div>
@@ -125,7 +132,7 @@
 
                 </div>
             </div>
-            <div class="groupThreeContainer groupContainer">
+            <div id="BBOG" class="groupThreeContainer groupContainer">
                 <div class="groupTextBox">
                     <h2 class="groupText" name="bog">Best of GRAB</h2>
                 </div>
@@ -138,8 +145,16 @@
 
     <div id="EMenu" class="menu">
 
+        <div class="scroller">
+            <div class="scrollerButtons">
+                <button onclick="scrollCategories('EBasics')" class="scrollerBtn" id="basicsE">Basics</button>
+                <button onclick="scrollCategories('EUI')" class="scrollerBtn" id="UIE">Editor UI</button>
+                <button onclick="scrollCategories('EWrist')" class="scrollerBtn" id="wristE">Wrist Menu</button>
+                <button onclick="scrollCategories('EBlocks')" class="scrollerBtn" id="blocksE">Blocks</button>
+            </div>
+        </div> 
         <div id="editorContainer" class="menuContainer">
-            <div class="groupOneContainer groupContainer">
+            <div id="EBasics" class="groupOneContainer groupContainer">
                 <div class="groupTextBox">
                     <h2 class="groupText" name="basics">Basics</h2>
                 </div>
@@ -147,7 +162,7 @@
                     
                 </div>
             </div>
-            <div class="groupTwoContainer groupContainer">
+            <div id="EUI" class="groupTwoContainer groupContainer">
                 <div class="groupTextBox">
                     <h2 class="groupText" name="ui">Editor UI</h2>
                 </div>
@@ -155,7 +170,7 @@
                     
                 </div>
             </div>
-            <div class="groupThreeContainer groupContainer">
+            <div id="EWrist" class="groupThreeContainer groupContainer">
                 <div class="groupTextBox">
                     <h2 class="groupText" name="wrist">Wrist Menu</h2>
                 </div>
@@ -163,7 +178,7 @@
 
                 </div>
             </div>
-            <div class="groupFourContainer groupContainer">
+            <div id="EBlocks" class="groupFourContainer groupContainer">
                 <div class="groupTextBox">
                     <h2 class="groupText" name="blocks">Blocks</h2>
                 </div>
@@ -176,8 +191,16 @@
 
     <div id="AMenu" class="menu">
 
+        <div class="scroller">
+            <div class="scrollerButtons">
+                <button onclick="scrollCategories('ABasics')" class="scrollerBtn" id="basicsA">Basics</button>
+                <button onclick="scrollCategories('ABeginner')" class="scrollerBtn" id="beginnerA">Beginner</button>
+                <button onclick="scrollCategories('AIntermediate')" class="scrollerBtn" id="intermediateA">Intermediate</button>
+                <button onclick="scrollCategories('AAdvanced')" class="scrollerBtn" id="advancedA">Advanced</button>
+            </div>
+        </div> 
         <div id="animationContainer" class="menuContainer">
-            <div class="groupOneContainer groupContainer">
+            <div id="ABasics" class="groupOneContainer groupContainer">
                 <div class="groupTextBox">
                     <h2 class="groupText" name="basics">Basics</h2>
                 </div>
@@ -185,7 +208,7 @@
 
                 </div>
             </div>
-            <div class="groupTwoContainer groupContainer">
+            <div id="ABeginner" class="groupTwoContainer groupContainer">
                 <div class="groupTextBox">
                     <h2 class="groupText" name="beginner">Beginner</h2>
                 </div>
@@ -193,7 +216,7 @@
 
                 </div>
             </div>
-            <div class="groupThreeContainer groupContainer">
+            <div id="AIntermediate" class="groupThreeContainer groupContainer">
                 <div class="groupTextBox">
                     <h2 class="groupText" name="intermediate">Intermediate</h2>
                 </div>
@@ -201,7 +224,7 @@
 
                 </div>
             </div>
-            <div class="groupFourContainer groupContainer">
+            <div id="AAdvanced" class="groupFourContainer groupContainer">
                 <div class="groupTextBox">
                     <h2 class="groupText" name="advanced">Advanced</h2>
                 </div>
@@ -214,8 +237,17 @@
 
     <div id="TMenu" class="menu">
 
+        <div class="scroller">
+            <div class="scrollerButtons">
+                <button onclick="scrollCategories('TBasics')" class="scrollerBtn" id="basicsT">Basics</button>
+                <button onclick="scrollCategories('TBeginner')" class="scrollerBtn" id="beginnerT">Beginner</button>
+                <button onclick="scrollCategories('TIntermediate')" class="scrollerBtn" id="intermediateT">Intermediate</button>
+                <button onclick="scrollCategories('TAdvanced')" class="scrollerBtn" id="advancedT">Advanced</button>
+                <button onclick="scrollCategories('TLogic')" class="scrollerBtn" id="logicT">Logic</button>
+            </div>
+        </div> 
         <div id="triggerContainer" class="menuContainer">
-            <div class="groupOneContainer groupContainer">
+            <div id="TBasics" class="groupOneContainer groupContainer">
                 <div class="groupTextBox">
                     <h2 class="groupText" name="basics">Basics</h2>
                 </div>
@@ -223,7 +255,7 @@
 
                 </div>
             </div>
-            <div class="groupTwoContainer groupContainer">
+            <div id="TBeginner" class="groupTwoContainer groupContainer">
                 <div class="groupTextBox">
                     <h2 class="groupText" name="beginner">Beginner</h2>
                 </div>
@@ -231,7 +263,7 @@
 
                 </div>
             </div>
-            <div class="groupThreeContainer groupContainer">
+            <div id="TIntermediate" class="groupThreeContainer groupContainer">
                 <div class="groupTextBox">
                     <h2 class="groupText" name="intermediate">Intermediate</h2>
                 </div>
@@ -239,7 +271,7 @@
 
                 </div>
             </div>
-            <div class="groupFourContainer groupContainer">
+            <div id="TAdvanced" class="groupFourContainer groupContainer">
                 <div class="groupTextBox">
                     <h2 class="groupText" name="advanced">Advanced</h2>
                 </div>
@@ -247,7 +279,7 @@
 
                 </div>
             </div>
-            <div class="groupFiveContainer groupContainer">
+            <div id="TLogic" class="groupFiveContainer groupContainer">
                 <div class="groupTextBox">
                     <h2 class="groupText" name="logic">Logic</h2>
                 </div>
@@ -260,8 +292,20 @@
 
     <div id="GMenu" class="menu">
 
+        <div class="scroller">
+            <div class="scrollerButtons">
+                <button onclick="scrollCategories('GASMBasics')" class="scrollerBtn" id="basicsGASM">Basics</button>
+                <button onclick="scrollCategories('GASMUI / Menu')" class="scrollerBtn" id="uiGASM">UI / Menu</button>
+                <button onclick="scrollCategories('GASMProgram Blocks')" class="scrollerBtn" id="programBlocksGASM">Program Blocks</button>
+                <button onclick="scrollCategories('GASMBlocks')" class="scrollerBtn" id="blocksGASM">Blocks</button>
+                <button onclick="scrollCategories('GASMSigns')" class="scrollerBtn" id="signsGASM">Signs</button>
+                <button onclick="scrollCategories('GASMTriggers')" class="scrollerBtn" id="triggersGASM">Triggers</button>
+                <button onclick="scrollCategories('GASMLights')" class="scrollerBtn" id="lightsGASM">Lights</button>
+                <button onclick="scrollCategories('GASMPlayers')" class="scrollerBtn" id="playersGASM">Players</button>
+            </div>
+        </div> 
         <div id="gasmContainer" class="menuContainer">
-            <div class="groupOneContainer groupContainer">
+            <div id="GASMBasics" class="groupOneContainer groupContainer">
                 <div class="groupTextBox">
                     <h2 class="groupText">Basics</h2>
                 </div>
@@ -269,7 +313,7 @@
 
                 </div>
             </div>
-            <div class="groupTwoContainer groupContainer">
+            <div id="GASMUI / Menu" class="groupTwoContainer groupContainer">
                 <div class="groupTextBox">
                     <h2 class="groupText">UI / Menu</h2>
                 </div>
@@ -277,7 +321,7 @@
 
                 </div>
             </div>
-            <div class="groupThreeContainer groupContainer">
+            <div id="GASMProgram Blocks" class="groupThreeContainer groupContainer">
                 <div class="groupTextBox">
                     <h2 class="groupText">Program Blocks</h2>
                 </div>
@@ -285,7 +329,7 @@
 
                 </div>
             </div>
-            <div class="groupFourContainer groupContainer">
+            <div id="GASMBlocks" class="groupFourContainer groupContainer">
                 <div class="groupTextBox">
                     <h2 class="groupText">Blocks</h2>
                 </div>
@@ -293,7 +337,7 @@
 
                 </div>
             </div>
-            <div class="groupFiveContainer groupContainer">
+            <div id="GASMSigns" class="groupFiveContainer groupContainer">
                 <div class="groupTextBox">
                     <h2 class="groupText">Signs</h2>
                 </div>
@@ -301,7 +345,7 @@
 
                 </div>
             </div>
-            <div class="groupSixContainer groupContainer">
+            <div id="GASMTriggers" class="groupSixContainer groupContainer">
                 <div class="groupTextBox">
                     <h2 class="groupText">Triggers</h2>
                 </div>
@@ -309,7 +353,7 @@
 
                 </div>
             </div>
-            <div class="groupSevenContainer groupContainer">
+            <div id="GASMLights" class="groupSevenContainer groupContainer">
                 <div class="groupTextBox">
                     <h2 class="groupText">Lights</h2>
                 </div>
@@ -317,7 +361,7 @@
 
                 </div>
             </div>
-            <div class="groupEightContainer groupContainer">
+            <div id="GASMPlayers" class="groupEightContainer groupContainer">
                 <div class="groupTextBox">
                     <h2 class="groupText">Players</h2>
                 </div>
