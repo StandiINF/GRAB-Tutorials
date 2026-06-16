@@ -1195,6 +1195,10 @@ cursor: pointer;
     background: #f0cb29;
 }
 
+#middleContainer {
+    width: 45%;
+}
+
 @media (max-width: 767px) {
     .scroller {
         display: none;
@@ -1203,8 +1207,8 @@ cursor: pointer;
     .groupContainer {
         left: 45%;
     }
-}
 
-#middleContainer {
-    width: 45%;
+    #middleContainer {
+        width: 85%;
+    }
 }
