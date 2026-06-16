@@ -1204,3 +1204,7 @@ cursor: pointer;
         left: 45%;
     }
 }
+
+#middleContainer {
+    width: 45%;
+}
